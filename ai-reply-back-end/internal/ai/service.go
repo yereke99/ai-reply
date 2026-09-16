@@ -1,0 +1,217 @@
+package ai
+
+import (
+	"context"
+	"errors"
+	"log/slog"
+	"strings"
+	"time"
+
+	"github.com/aireply/ai-reply-back-end/config"
+	"github.com/aireply/ai-reply-back-end/internal/domain"
+	"github.com/aireply/ai-reply-back-end/internal/repository"
+	"github.com/aireply/ai-reply-back-end/internal/subscriptions"
+	"github.com/aireply/ai-reply-back-end/internal/traits"
+)
+
+// Service — AI шлюзі: квота → провайдер → есеп.
+type Service struct {
+	repo     *repository.Store
+	subs     *subscriptions.Service
+	provider Provider
+	limits   config.Limits
+	log      *slog.Logger
+	clock    traits.Clock
+}
+
+// New — шлюз.
+func New(repo *repository.Store, subs *subscriptions.Service, provider Provider, limits config.Limits, log *slog.Logger) *Service {
+	return &Service{repo: repo, subs: subs, provider: provider, limits: limits, log: log, clock: traits.SystemClock{}}
+}
+
+// WithClock — тестке.
+func (s *Service) WithClock(c traits.Clock) *Service { s.clock = c; return s }
+
+// Request — бір жауап сұранысы. Мәтін тек жадта, тек осы шақыру ішінде болады.
+type Request struct {
+	User        domain.User
+	DeviceID    string
+	SourceText  string
+	Instruction string
+	Language    string
+	TemplateID  string
+	Profile     Profile
+	Template    Template
+	Business    WorkingHours
+	Platform    string
+	AppVersion  string
+}
+
+// Result — клиентке қайтатын нәтиже.
+type Result struct {
+	Text             string
+	DetectedLanguage string
+	Model            string
+	InputTokens      int
+	OutputTokens     int
+	DailyLimit       int
+	UsedToday        int
+	Remaining        int
+	ResetsAt         time.Time
+	LatencyMS        int
+}
+
+// Reply — негізгі сценарий.
+//
+// Order matters: quota is reserved BEFORE the provider call, so parallel
+// requests cannot oversubscribe a plan, and refunded when the provider fails,
+// so a user is never charged for a reply they did not receive. Neither the
+// source text nor the generated reply is written anywhere — not to the
+// database, not to the log, not to the usage event.
+func (s *Service) Reply(ctx context.Context, req Request) (Result, error) {
+	started := s.clock.Now()
+
+	source := strings.TrimSpace(req.SourceText)
+	if source == "" {
+		return Result{}, domain.ErrInvalidRequest
+	}
+	if traits.RuneLen(source) > s.limits.SourceTextChars {
+		return Result{}, domain.ErrInvalidRequest
+	}
+	req.Instruction = traits.Clamp(req.Instruction, s.limits.InstructionChars)
+
+	entitlement, err := s.subs.Entitlement(ctx, req.User.ID)
+	if err != nil {
+		return Result{}, err
+	}
+	date, month := s.subs.Keys(started)
+
+	if err := s.repo.ReserveQuota(ctx, req.User.ID, date, month,
+		entitlement.DailyLimit, entitlement.MonthlyLimit); err != nil {
+		s.record(ctx, req, entitlement, "error", errorCode(err), Completion{}, 0, source)
+		return Result{
+			DailyLimit: entitlement.DailyLimit,
+			UsedToday:  entitlement.UsedToday,
+			ResetsAt:   entitlement.ResetsAt,
+		}, err
+	}
+
+	prompt := BuildPrompt(PromptInput{
+		Message:      source,
+		Instruction:  req.Instruction,
+		TemplateID:   req.TemplateID,
+		AppLanguage:  req.Language,
+		Profile:      req.Profile,
+		Template:     req.Template,
+		WorkingHours: req.Business,
+	})
+
+	completion, providerErr := s.provider.Generate(ctx, prompt)
+	latency := int(s.clock.Now().Sub(started).Milliseconds())
+
+	if providerErr != nil {
+		// Жауап алынбады — бронды қайтарамыз (қайталау кезінде екі рет есептелмейді).
+		if err := s.repo.RefundQuota(ctx, req.User.ID, date, month); err != nil {
+			s.log.Error("quota refund failed", "user_id", req.User.ID, "error", err.Error())
+		}
+		s.record(ctx, req, entitlement, "error", errorCode(providerErr), Completion{ProviderMS: 0}, latency, source)
+		s.log.Warn("ai request failed", "user_id", req.User.ID, "code", errorCode(providerErr), "latency_ms", latency)
+		return Result{}, providerErr
+	}
+
+	cost := s.estimateCostMicros(ctx, completion)
+	if err := s.repo.AddTokens(ctx, req.User.ID, date, month,
+		completion.InputTokens, completion.OutputTokens, cost); err != nil {
+		s.log.Error("token accounting failed", "user_id", req.User.ID, "error", err.Error())
+	}
+	s.record(ctx, req, entitlement, "success", "", completion, latency, source)
+
+	usedToday := entitlement.UsedToday + 1
+	remaining := entitlement.DailyLimit - usedToday
+	if remaining < 0 {
+		remaining = 0
+	}
+
+	return Result{
+		Text:             completion.Text,
+		DetectedLanguage: DetectLanguage(completion.Text),
+		Model:            completion.Model,
+		InputTokens:      completion.InputTokens,
+		OutputTokens:     completion.OutputTokens,
+		DailyLimit:       entitlement.DailyLimit,
+		UsedToday:        usedToday,
+		Remaining:        remaining,
+		ResetsAt:         entitlement.ResetsAt,
+		LatencyMS:        latency,
+	}, nil
+}
+
+// record — оқиға метадерегі. source_text те, жауап та жазылмайды: тек ұзындығы.
+func (s *Service) record(ctx context.Context, req Request, ent domain.Entitlement,
+	status, code string, completion Completion, latency int, source string) {
+	model := completion.Model
+	if model == "" {
+		model = s.provider.Model()
+	}
+	event := domain.UsageEvent{
+		UserID:       req.User.ID,
+		DeviceID:     req.DeviceID,
+		PlanID:       ent.Plan.ID,
+		Model:        model,
+		Status:       status,
+		ErrorCode:    code,
+		InputTokens:  completion.InputTokens,
+		OutputTokens: completion.OutputTokens,
+		TotalTokens:  completion.InputTokens + completion.OutputTokens,
+		CostMicros:   s.estimateCostMicros(ctx, completion),
+		LatencyMS:    latency,
+		ProviderMS:   completion.ProviderMS,
+		Platform:     req.Platform,
+		AppVersion:   req.AppVersion,
+		Language:     domain.NormalizeLocale(req.Language),
+		SourceChars:  traits.RuneLen(source),
+		CreatedAt:    s.clock.Now(),
+	}
+	if err := s.repo.InsertUsageEvent(ctx, event); err != nil {
+		s.log.Error("usage event insert failed", "error", err.Error())
+	}
+}
+
+// estimateCostMicros — болжамды құн (микро-АҚШ доллары). Баға дерекқорда.
+func (s *Service) estimateCostMicros(ctx context.Context, c Completion) int64 {
+	if c.InputTokens == 0 && c.OutputTokens == 0 {
+		return 0
+	}
+	model := c.Model
+	if model == "" {
+		model = s.provider.Model()
+	}
+	pricing, err := s.repo.PricingFor(ctx, model, s.clock.Now())
+	if err != nil {
+		return 0
+	}
+	usd := float64(c.InputTokens)/1_000_000*pricing.InputPer1M +
+		float64(c.OutputTokens)/1_000_000*pricing.OutputPer1M
+	return int64(usd * 1_000_000)
+}
+
+func errorCode(err error) string {
+	switch {
+	case errors.Is(err, domain.ErrDailyLimit):
+		return "DAILY_LIMIT_REACHED"
+	case errors.Is(err, domain.ErrMonthlyLimit):
+		return "MONTHLY_LIMIT_REACHED"
+	case errors.Is(err, domain.ErrProviderTimeout):
+		return "AI_TIMEOUT"
+	case errors.Is(err, domain.ErrRateLimited):
+		return "RATE_LIMITED"
+	case errors.Is(err, domain.ErrEmptyCompletion):
+		return "AI_EMPTY_RESPONSE"
+	case errors.Is(err, domain.ErrProviderDown):
+		return "AI_PROVIDER_UNAVAILABLE"
+	case err == nil:
+		return ""
+	default:
+		return "INTERNAL_ERROR"
+	}
+}

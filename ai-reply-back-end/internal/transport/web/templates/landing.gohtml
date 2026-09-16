@@ -1,0 +1,162 @@
+{{define "title"}}AI Reply — {{call .T "app.tagline"}}{{end}}
+{{define "content"}}
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="badge"><span class="dot"></span>{{call .T "hero.badge"}}</span>
+      <h1>{{call .T "hero.title"}}</h1>
+      <p class="lede">{{call .T "hero.subtitle"}}</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#pricing">{{call .T "hero.cta_primary"}}</a>
+        <a class="btn btn-ghost" href="#how">{{call .T "hero.cta_secondary"}}</a>
+      </div>
+      <p class="hero-note">{{call .T "hero.note"}}</p>
+    </div>
+
+    <div id="hero-demo" class="hero-demo">
+      <demo></demo>
+    </div>
+  </div>
+</section>
+
+<section class="stats-section">
+  <div class="wrap">
+    <div id="stats-strip" class="stats-strip">
+      <div class="stat"><b><counter :value="8" suffix="s"></counter></b><span>{{call .T "stats.seconds"}}</span></div>
+      <div class="stat"><b><counter :value="4"></counter></b><span>{{call .T "stats.languages"}}</span></div>
+      <div class="stat"><b><counter :value="12"></counter></b><span>{{call .T "stats.countries"}}</span></div>
+      <div class="stat"><b><counter :value="7"></counter></b><span>{{call .T "stats.free"}}</span></div>
+      <div class="stat"><b><counter :value="0"></counter></b><span>{{call .T "stats.stored"}}</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-soft reveal" id="value">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>{{call .T "value.title"}}</h2>
+      <p class="section-sub">{{call .T "value.subtitle"}}</p>
+    </div>
+    <div class="grid grid-3">
+      <div class="card">
+        <div class="icon">{{template "icon_bolt"}}</div>
+        <h3>{{call .T "value.item1.title"}}</h3><p>{{call .T "value.item1.body"}}</p>
+      </div>
+      <div class="card">
+        <div class="icon">{{template "icon_chat"}}</div>
+        <h3>{{call .T "value.item2.title"}}</h3><p>{{call .T "value.item2.body"}}</p>
+      </div>
+      <div class="card">
+        <div class="icon">{{template "icon_globe"}}</div>
+        <h3>{{call .T "value.item3.title"}}</h3><p>{{call .T "value.item3.body"}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="reveal" id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>{{call .T "how.title"}}</h2>
+      <p class="section-sub">{{call .T "how.subtitle"}}</p>
+    </div>
+    <div class="grid grid-4">
+      <div class="card"><div class="step-num">1</div><h3>{{call .T "how.step1.title"}}</h3><p>{{call .T "how.step1.body"}}</p></div>
+      <div class="card"><div class="step-num">2</div><h3>{{call .T "how.step2.title"}}</h3><p>{{call .T "how.step2.body"}}</p></div>
+      <div class="card"><div class="step-num">3</div><h3>{{call .T "how.step3.title"}}</h3><p>{{call .T "how.step3.body"}}</p></div>
+      <div class="card"><div class="step-num">4</div><h3>{{call .T "how.step4.title"}}</h3><p>{{call .T "how.step4.body"}}</p></div>
+    </div>
+    <div class="grid grid-2" style="margin-top:20px">
+      <div class="card"><div class="icon">{{template "icon_keyboard"}}</div><h3>{{call .T "keyboard.title"}}</h3><p>{{call .T "keyboard.body"}}</p></div>
+      <div class="card"><div class="icon">{{template "icon_mic"}}</div><h3>{{call .T "voice.title"}}</h3><p>{{call .T "voice.body"}}</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="reveal section-soft" id="features">
+  <div class="wrap">
+    <div class="section-head"><h2>{{call .T "features.title"}}</h2></div>
+    <div class="grid grid-3">
+      <div class="card"><h3>{{call .T "features.f1.title"}}</h3><p>{{call .T "features.f1.body"}}</p></div>
+      <div class="card"><h3>{{call .T "features.f2.title"}}</h3><p>{{call .T "features.f2.body"}}</p></div>
+      <div class="card"><h3>{{call .T "features.f3.title"}}</h3><p>{{call .T "features.f3.body"}}</p></div>
+      <div class="card"><h3>{{call .T "features.f4.title"}}</h3><p>{{call .T "features.f4.body"}}</p></div>
+      <div class="card"><h3>{{call .T "features.f5.title"}}</h3><p>{{call .T "features.f5.body"}}</p></div>
+      <div class="card"><h3>{{call .T "features.f6.title"}}</h3><p>{{call .T "features.f6.body"}}</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="reveal" id="privacy">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>{{call .T "privacy.title"}}</h2>
+      <p class="section-sub">{{call .T "privacy.subtitle"}}</p>
+    </div>
+    <div class="privacy-list">
+      <div class="privacy-item"><span class="check">{{template "icon_check"}}</span><div><h3>{{call .T "privacy.p1.title"}}</h3><p>{{call .T "privacy.p1.body"}}</p></div></div>
+      <div class="privacy-item"><span class="check">{{template "icon_check"}}</span><div><h3>{{call .T "privacy.p2.title"}}</h3><p>{{call .T "privacy.p2.body"}}</p></div></div>
+      <div class="privacy-item"><span class="check">{{template "icon_check"}}</span><div><h3>{{call .T "privacy.p3.title"}}</h3><p>{{call .T "privacy.p3.body"}}</p></div></div>
+      <div class="privacy-item"><span class="check">{{template "icon_check"}}</span><div><h3>{{call .T "privacy.p4.title"}}</h3><p>{{call .T "privacy.p4.body"}}</p></div></div>
+    </div>
+    <p class="note">{{call .T "privacy.note"}}</p>
+  </div>
+</section>
+
+<section class="reveal section-soft" id="pricing">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>{{call .T "pricing.title"}}</h2>
+      <p class="section-sub">{{call .T "pricing.subtitle"}}</p>
+    </div>
+    <div class="plans">
+      {{range .Plans}}
+      <div class="plan{{if .Featured}} is-featured{{end}}">
+        <div class="plan-name">{{.Name}}</div>
+        <div class="plan-price">{{if .IsFree}}{{call $.T "pricing.free"}}{{else}}{{.PriceText}}{{end}}</div>
+        {{if not .IsFree}}<div class="plan-period">{{call $.T "pricing.per_month"}}</div>{{end}}
+        <p class="plan-desc">{{.Description}}</p>
+        <div class="plan-limit"><b>{{.DailyLimit}}</b><span>{{call $.T "pricing.per_day"}}</span></div>
+        <a class="btn {{if .Featured}}btn-primary{{else}}btn-ghost{{end}}" href="#download">{{call $.T "pricing.cta"}}</a>
+      </div>
+      {{end}}
+    </div>
+    <p class="note">{{call .T "pricing.note"}}</p>
+  </div>
+</section>
+
+<section class="reveal" id="faq">
+  <div class="wrap">
+    <div class="section-head"><h2>{{call .T "faq.title"}}</h2></div>
+    <div class="faq">
+      <details class="qa" open><summary>{{call .T "faq.q1"}}</summary><p>{{call .T "faq.a1"}}</p></details>
+      <details class="qa"><summary>{{call .T "faq.q2"}}</summary><p>{{call .T "faq.a2"}}</p></details>
+      <details class="qa"><summary>{{call .T "faq.q3"}}</summary><p>{{call .T "faq.a3"}}</p></details>
+      <details class="qa"><summary>{{call .T "faq.q4"}}</summary><p>{{call .T "faq.a4"}}</p></details>
+      <details class="qa"><summary>{{call .T "faq.q5"}}</summary><p>{{call .T "faq.a5"}}</p></details>
+      <details class="qa"><summary>{{call .T "faq.q6"}}</summary><p>{{call .T "faq.a6"}}</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="reveal" id="download">
+  <div class="wrap">
+    <div class="cta-box">
+      <h2>{{call .T "download.title"}}</h2>
+      <p>{{call .T "download.body"}}</p>
+      <div class="store-badges">
+        <span class="store"><small>{{call .T "download.soon"}}</small><b>App Store</b></span>
+        <span class="store"><small>{{call .T "download.soon"}}</small><b>Google Play</b></span>
+      </div>
+    </div>
+  </div>
+</section>
+{{end}}
+
+{{define "icon_bolt"}}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>{{end}}
+{{define "icon_chat"}}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>{{end}}
+{{define "icon_globe"}}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18z"/></svg>{{end}}
+{{define "icon_keyboard"}}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M8 14h8"/></svg>{{end}}
+{{define "icon_mic"}}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>{{end}}
+{{define "icon_check"}}<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>{{end}}

@@ -1,0 +1,19 @@
+{{define "admin_app"}}<!doctype html>
+<html lang="{{.Locale}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>AI Reply — {{call .T "admin.title"}}</title>
+<link rel="stylesheet" href="/static/admin.css">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<script id="boot" type="application/json">{{.Boot}}</script>
+<script src="/static/vendor/vue.global.prod.js"></script>
+<script src="/static/admin-app.js" defer></script>
+</head>
+<body>
+<div id="app" class="app-loading">
+  <div class="boot-spinner"><span></span></div>
+</div>
+</body>
+</html>{{end}}

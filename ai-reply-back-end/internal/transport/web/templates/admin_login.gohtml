@@ -1,0 +1,30 @@
+{{define "admin_login"}}<!doctype html>
+<html lang="{{.Locale}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>{{call .T "admin.login.title"}} — AI Reply</title>
+<link rel="stylesheet" href="/static/admin.css">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+<div class="login-wrap">
+  <form class="login-card" method="post" action="/admin/login">
+    <div class="mark">AI</div>
+    <h1>{{call .T "admin.login.title"}}</h1>
+    <p class="sub">{{call .T "admin.login.subtitle"}}</p>
+    {{if .Error}}<div class="notice notice-danger">{{.Error}}</div>{{end}}
+    <input type="hidden" name="csrf" value="{{.CSRF}}">
+    <label class="field"><span>{{call .T "admin.login.email"}}</span>
+      <input type="email" name="email" autocomplete="username" required autofocus></label>
+    <label class="field"><span>{{call .T "admin.login.password"}}</span>
+      <input type="password" name="password" autocomplete="current-password" required></label>
+    <button class="btn btn-primary" type="submit">{{call .T "admin.login.submit"}}</button>
+    <div class="lang" style="margin-top:18px; justify-content:center">
+      {{range .Locales}}<a href="?lang={{.}}" class="{{if eq . $.Locale}}is-active{{end}}">{{.}}</a>{{end}}
+    </div>
+  </form>
+</div>
+</body>
+</html>{{end}}

@@ -1,0 +1,10 @@
+# Секреттер мен жергілікті деректер ешқашан репозиторийге түспейді.
+.env
+*.db
+*.db-wal
+*.db-shm
+data/
+bin/
+tmp/
+.DS_Store
+coverage.out

@@ -1,0 +1,16 @@
+# Жергілікті іске қосу: cp .env.example .env && docker compose up --build
+services:
+  backend:
+    build: .
+    ports:
+      - "8080:8080"
+    env_file: .env
+    environment:
+      SQLITE_PATH: /app/data/aireply.db
+      APP_HOST: 0.0.0.0
+    volumes:
+      - aireply-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  aireply-data:

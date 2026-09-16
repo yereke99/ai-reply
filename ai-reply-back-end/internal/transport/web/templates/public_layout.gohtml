@@ -1,0 +1,51 @@
+{{define "public_layout"}}<!doctype html>
+<html lang="{{.Locale}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{template "title" .}}</title>
+<meta name="description" content="{{call .T "app.tagline"}}">
+<meta property="og:title" content="AI Reply — {{call .T "app.tagline"}}">
+<meta property="og:description" content="{{call .T "hero.subtitle"}}">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="/static/landing.css">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<script id="landing-data" type="application/json">{{.Boot}}</script>
+<script src="/static/vendor/vue.global.prod.js" defer></script>
+<script src="/static/landing.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/"><span class="logo-mark">AI</span> AI&nbsp;Reply</a>
+    <nav class="nav">
+      <a href="/#how">{{call .T "nav.how"}}</a>
+      <a href="/#features">{{call .T "nav.features"}}</a>
+      <a href="/#privacy">{{call .T "nav.privacy"}}</a>
+      <a href="/#pricing">{{call .T "nav.pricing"}}</a>
+      <a href="/#faq">{{call .T "nav.faq"}}</a>
+    </nav>
+    <div class="header-right">
+      <div class="lang">
+        {{range .Locales}}<a href="?lang={{.}}" class="{{if eq . $.Locale}}is-active{{end}}">{{.}}</a>{{end}}
+      </div>
+      <a class="btn btn-primary btn-sm" href="/#download">{{call .T "nav.download"}}</a>
+      <button class="nav-toggle" type="button" aria-label="menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+{{template "content" .}}
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© {{.Year}} AI Reply. {{call .T "footer.rights"}}.</span>
+    <nav>
+      <a href="/terms?lang={{.Locale}}">{{call .T "footer.terms"}}</a>
+      <a href="/privacy?lang={{.Locale}}">{{call .T "footer.privacy"}}</a>
+      <a href="mailto:{{.ContactEmail}}">{{call .T "footer.contact"}}</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>{{end}}
