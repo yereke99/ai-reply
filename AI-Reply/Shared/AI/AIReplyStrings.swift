@@ -53,6 +53,11 @@ struct AIReplyStrings: Sendable {
     let rateLimited: String
     let emptyResponse: String
     let serviceUnavailable: String
+    /// Backend mode only: the session is gone, and a keyboard extension cannot
+    /// sign anybody in, so it says where to do it.
+    let signInRequired: String
+    /// Backend mode only: the plan's daily generations are spent.
+    let quotaExhausted: String
 
     // Host-field conflict
     let hostFieldNotEmpty: String
@@ -67,7 +72,12 @@ struct AIReplyStrings: Sendable {
 
     /// Maps an error onto the sentence the user actually sees. Short, plain,
     /// actionable, and free of status codes, JSON and provider names.
-    func message(for error: AIReplyError) -> String {
+    ///
+    /// The transport mode matters for exactly two cases. In direct mode a
+    /// rejected credential is the user's own API key; in backend mode it is
+    /// their session, and telling them to check a key they never entered would
+    /// send them looking for something that does not exist.
+    func message(for error: AIReplyError, mode: AITransportMode = .direct) -> String {
         switch error {
         case .noSourceMessage:      return noSourceMessage
         case .messageTooLong:       return messageTooLong
@@ -76,8 +86,8 @@ struct AIReplyStrings: Sendable {
         case .offline:              return offline
         case .timedOut:             return timedOut
         case .cancelled:            return ""
-        case .authenticationFailed: return authenticationFailed
-        case .rateLimited:          return rateLimited
+        case .authenticationFailed: return mode == .backend ? signInRequired : authenticationFailed
+        case .rateLimited:          return mode == .backend ? quotaExhausted : rateLimited
         case .emptyResponse:        return emptyResponse
         case .serviceUnavailable:   return serviceUnavailable
         }
@@ -108,6 +118,8 @@ struct AIReplyStrings: Sendable {
         rateLimited: "Too many requests. Wait a moment and try again.",
         emptyResponse: "No reply came back. Try again.",
         serviceUnavailable: "The service is unavailable right now. Try again.",
+        signInRequired: "Open the AI Reply app and sign in to keep replying.",
+        quotaExhausted: "You have used today's replies. They come back tomorrow, or change your plan in the app.",
         hostFieldNotEmpty: "There is already text in this field."
     )
 
@@ -135,6 +147,8 @@ struct AIReplyStrings: Sendable {
         rateLimited: "Слишком много запросов. Подождите немного.",
         emptyResponse: "Ответ не получен. Попробуйте ещё раз.",
         serviceUnavailable: "Сервис сейчас недоступен. Попробуйте позже.",
+        signInRequired: "Откройте приложение AI Reply и войдите, чтобы продолжить.",
+        quotaExhausted: "Ответы на сегодня закончились. Они обновятся завтра — или смените тариф в приложении.",
         hostFieldNotEmpty: "В этом поле уже есть текст."
     )
 
@@ -162,6 +176,8 @@ struct AIReplyStrings: Sendable {
         rateLimited: "Сұраныс тым көп. Сәл күте тұрыңыз.",
         emptyResponse: "Жауап келмеді. Қайталап көріңіз.",
         serviceUnavailable: "Қызмет қазір қолжетімсіз. Кейінірек көріңіз.",
+        signInRequired: "Жалғастыру үшін AI Reply қолданбасын ашып, кіріңіз.",
+        quotaExhausted: "Бүгінгі жауаптар бітті. Ертең жаңарады немесе қолданбадан тарифті ауыстырыңыз.",
         hostFieldNotEmpty: "Бұл өрісте мәтін бар."
     )
 }

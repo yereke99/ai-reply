@@ -656,3 +656,63 @@ Two physical iPhones were visible to Xcode on this Mac, but both were listed as
 offline during this coding pass. The simulator and generic iPhoneOS builds pass;
 WhatsApp/Telegram/Instagram keyboard behavior and on-device Speech support still
 need a connected iPhone run.
+
+---
+
+## Аккаунты и тарифы (сервисный режим)
+
+Приложение умеет работать в двух режимах, переключатель — **Настройки ▸ Где создаются ответы**:
+
+| Режим | Кто держит ключ | Аккаунт | Лимит |
+|---|---|---|---|
+| `direct` — «Свой ключ» | пользователь, в Keychain | нет | нет |
+| `backend` — «Сервис AI Reply» | сервер (`ai-reply-back-end`) | телефон/почта + код | тариф, дневная квота |
+
+В сервисном режиме нужен адрес бэкенда (там же в настройках):
+`http://localhost:8080` для симулятора, `https://…` для устройства.
+Плоский `http://` разрешён только для локальных адресов.
+
+### Что добавилось
+
+```
+Shared/Account/                     общий слой, доступен и клавиатуре
+  APIClient.swift                   HTTP + разбор конверта ошибок в APIError
+  AccountModels.swift               DTO: сессия, профиль, тариф, квота, страны
+  AccountCredentials.swift          токены в Keychain (access group = App Group)
+  AccountSession.swift              актор: выдача access-токена, ротация refresh
+  AccountService.swift              все вызовы API в одном месте
+  AccountReplyTransport.swift       ReplyTransport поверх /api/v1/ai/reply
+  AccountUsageCache.swift           последняя известная квота для клавиатуры
+AIReply/Features/Account/           экраны приложения
+  AccountGateView.swift             гейт: сервисный режим → вход, иначе как раньше
+  SignInView.swift                  номер (12 стран) или почта
+  VerifyCodeView.swift              код, авто-подтверждение, повтор через 30 с
+  RegistrationStepView.swift        три вопроса при первом входе
+  SubscriptionView.swift            текущий тариф, остаток, список тарифов
+  AccountSettingsSection.swift      блок «Аккаунт» в настройках
+  AccountModel.swift                состояние для UI
+AIReply/Features/Settings/ServiceModeEditor.swift   переключатель режима и адрес
+Tests/AccountAPITests.swift         маппинг ошибок, декодирование, локализация
+```
+
+### Как это ведёт себя
+
+- Гейт входа появляется **только** в сервисном режиме с указанным адресом. Существующая
+  установка со своим ключом продолжает работать как раньше — никакого экрана входа.
+- Access-токен живёт 15 минут. Обновление идёт через актор `AccountSession`, поэтому
+  приложение и клавиатура не могут запустить две ротации одновременно (сервер считает
+  повторное использование refresh-токена кражей и закрывает сессию).
+- Токены лежат в Keychain с access group = App Group, поэтому клавиатура использует
+  ту же сессию и не просит войти второй раз.
+- Пока пользователь не вошёл, сервисный режим использует старый install-token путь —
+  уже установленные сборки не ломаются.
+- Ответ `/api/v1/ai/reply` приносит свежую квоту, она кэшируется в App Group и
+  показывается на главном экране и в настройках. Источник истины — всегда сервер.
+- В клавиатуре текст ошибки зависит от режима: «проверьте ключ» только в `direct`,
+  «войдите в приложении» и «ответы на сегодня закончились» — в сервисном.
+
+### Сборка
+
+Новые файлы уже добавлены в `AIReply.xcodeproj`. Если проект пересобирается
+из `project.yml`, достаточно `xcodegen generate` — списки исходников там заданы
+каталогами.

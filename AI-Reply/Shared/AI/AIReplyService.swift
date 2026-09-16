@@ -21,6 +21,9 @@ struct AIReplyService: Sendable {
         /// prompt the way the user saw it on the chip. It is NOT the reply
         /// language: that follows the incoming message, always.
         var uiLanguage: AppLanguage
+        /// What the user asked for in THIS reply, if anything ("reply briefly",
+        /// "say I am busy"). Empty for the plain one-tap flow.
+        var instruction: String = ""
         /// Injectable so working-hours behaviour is testable without waiting
         /// for 18:30.
         var now: Date = Date()
@@ -130,6 +133,32 @@ struct AIReplyService: Sendable {
             }
             let template = request.template
             let profile = request.configuration.profile
+
+            // Signed in: the account endpoint, which also returns the quota so
+            // the app can show what is left without a second call. Not signed
+            // in: the legacy install-token path, so an existing install keeps
+            // working until the user gets to the sign-in screen.
+            if AccountSession.shared.isSignedIn {
+                return AccountReplyTransport(
+                    context: AccountReplyTransport.RequestContext(
+                        message: message,
+                        instruction: request.instruction,
+                        templateID: template.id,
+                        templateName: templateName,
+                        templateRelationship: template.relationship.rawValue,
+                        templateTone: template.tone,
+                        templateInstructions: template.instructions,
+                        templateReplyLength: template.replyLength,
+                        templateEmojiPolicy: template.emojiPolicy,
+                        templateWorkingHoursBehaviour: template.workingHoursBehaviour,
+                        templateBusiness: template.effectiveBusiness,
+                        appLanguage: request.uiLanguage.rawValue,
+                        business: business
+                    ),
+                    onUsage: { usage in AccountUsageCache.store(usage) }
+                )
+            }
+
             return BackendTransport(
                 baseURL: baseURL,
                 context: BackendTransport.RequestContext(

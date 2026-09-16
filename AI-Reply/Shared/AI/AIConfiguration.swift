@@ -95,6 +95,12 @@ struct AIConfiguration: Sendable {
         return nil
     }
 
+    /// The address exactly as the user typed it, valid or not, so Settings can
+    /// show it back to them instead of silently blanking a typo.
+    var backendBaseURLString: String {
+        defaults.string(forKey: Key.backendURL) ?? ""
+    }
+
     func setBackendBaseURL(_ raw: String) {
         let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
         if trimmed.isEmpty {
@@ -115,6 +121,14 @@ struct AIConfiguration: Sendable {
         defaults.set(created, forKey: Key.installID)
         return created
     }
+
+    /// Whether this configuration expects a signed-in account.
+    ///
+    /// Only true when the app is actually pointed at our service. A build in
+    /// `.direct` mode, or one with no base URL set, keeps working without any
+    /// account at all - the sign-in screen is not something an existing user
+    /// should meet because the product gained a server.
+    var requiresAccount: Bool { mode == .backend && backendBaseURL != nil }
 
     /// Whether a generation attempt can even be made right now.
     var isReady: Bool {

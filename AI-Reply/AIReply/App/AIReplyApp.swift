@@ -5,6 +5,7 @@ struct AIReplyApp: App {
 
     @State private var settings = AppSettings()
     @State private var configuration = ReplyConfigurationModel()
+    @State private var account = AccountModel()
 
     var body: some Scene {
         WindowGroup {
@@ -18,24 +19,33 @@ struct AIReplyApp: App {
                 // DEBUG only, so none of it can exist in a shipping build.
                 if let screen = DebugScreen.requested {
                     DebugScreenHost(screen: screen)
-                } else if configuration.hasCompletedOnboarding {
-                    NavigationStack { HomeView() }
                 } else {
-                    OnboardingView()
+                    // The account gate is transparent unless this build is
+                    // pointed at our service; see AccountGateView.
+                    AccountGateView {
+                        if configuration.hasCompletedOnboarding {
+                            NavigationStack { HomeView() }
+                        } else {
+                            OnboardingView()
+                        }
+                    }
                 }
                 #else
                 // Onboarding runs once. `hasCompletedOnboarding` is stored with
                 // the profile, so it survives relaunches, and Settings can put
                 // the user back through it without losing their answers.
-                if configuration.hasCompletedOnboarding {
-                    NavigationStack { HomeView() }
-                } else {
-                    OnboardingView()
+                AccountGateView {
+                    if configuration.hasCompletedOnboarding {
+                        NavigationStack { HomeView() }
+                    } else {
+                        OnboardingView()
+                    }
                 }
                 #endif
             }
             .environment(settings)
             .environment(configuration)
+            .environment(account)
             // Drives both the interface language and every localized string in
             // the subtree, so switching language takes effect without a restart.
             .environment(\.locale, settings.locale)

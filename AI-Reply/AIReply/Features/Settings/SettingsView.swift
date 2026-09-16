@@ -6,9 +6,16 @@ struct SettingsView: View {
     @Environment(ReplyConfigurationModel.self) private var model
 
     @State private var model_name: String = AIConfiguration.shared.model
+    @State private var transportMode: AITransportMode = AIConfiguration.shared.mode
 
     var body: some View {
         Form {
+            if transportMode == .backend && AIConfiguration.shared.backendBaseURL != nil {
+                AccountSettingsSection()
+            }
+
+            ServiceModeEditor(mode: $transportMode)
+
             Section {
                 NavigationLink { ProfileEditorView() } label: {
                     Label("home.profile.edit", systemImage: "person.text.rectangle")
@@ -33,29 +40,34 @@ struct SettingsView: View {
                 Text("settings.setup.footer")
             }
 
-            Section {
-                APIKeyEditor()
-            } header: {
-                Text("settings.ai")
-            } footer: {
-                Text("settings.ai.key.footer")
-            }
-
-            Section {
-                TextField("settings.ai.model", text: $model_name)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    .onSubmit { AIConfiguration.shared.setModel(model_name) }
-                if model_name != AIConfiguration.defaultModel {
-                    Button("settings.ai.reset") {
-                        model_name = AIConfiguration.defaultModel
-                        AIConfiguration.shared.setModel(model_name)
-                    }
+            // Only direct mode has a key or a model to configure: in service
+            // mode both live on the server, and showing them here would invite
+            // a user to change something that has no effect.
+            if transportMode == .direct {
+                Section {
+                    APIKeyEditor()
+                } header: {
+                    Text("settings.ai")
+                } footer: {
+                    Text("settings.ai.key.footer")
                 }
-            } header: {
-                Text("settings.ai.model")
-            } footer: {
-                Text("settings.ai.model.footer")
+
+                Section {
+                    TextField("settings.ai.model", text: $model_name)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        .onSubmit { AIConfiguration.shared.setModel(model_name) }
+                    if model_name != AIConfiguration.defaultModel {
+                        Button("settings.ai.reset") {
+                            model_name = AIConfiguration.defaultModel
+                            AIConfiguration.shared.setModel(model_name)
+                        }
+                    }
+                } header: {
+                    Text("settings.ai.model")
+                } footer: {
+                    Text("settings.ai.model.footer")
+                }
             }
 
             Section("settings.appearance") {

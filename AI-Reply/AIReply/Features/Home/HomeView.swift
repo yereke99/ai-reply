@@ -5,6 +5,7 @@ struct HomeView: View {
 
     @Environment(AppSettings.self) private var settings
     @Environment(ReplyConfigurationModel.self) private var model
+    @Environment(AccountModel.self) private var account
 
     /// Read once per appearance rather than polled: the keyboard writes this
     /// flag when it runs, and it cannot change while this screen is in front.
@@ -15,7 +16,11 @@ struct HomeView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: DS.Spacing.xl) {
                 header
-                if !hasAPIKey { missingKeyCard }
+                if AIConfiguration.shared.requiresAccount {
+                    if account.isSignedIn { usageCard }
+                } else if !hasAPIKey {
+                    missingKeyCard
+                }
                 tryItCard
                 setupCard
                 keyboardCard
@@ -42,6 +47,10 @@ struct HomeView: View {
             keyboardStatus = .current()
             hasAPIKey = SecureCredentialStore.hasAPIKey
         }
+        .task {
+            guard AIConfiguration.shared.requiresAccount else { return }
+            await account.refresh()
+        }
     }
 
     // MARK: Sections
@@ -54,6 +63,35 @@ struct HomeView: View {
                 Text("home.subtitle").font(.subheadline).foregroundStyle(.secondary)
             }
         }
+    }
+
+    /// What is left today, and a way to the plans. Shown only for accounts,
+    /// because only the server knows the number.
+    private var usageCard: some View {
+        NavigationLink { SubscriptionView() } label: {
+            HStack(alignment: .center, spacing: DS.Spacing.m) {
+                VStack(alignment: .leading, spacing: DS.Spacing.xxs) {
+                    Text("home.usage.title").font(.subheadline.weight(.semibold))
+                    Text(verbatim: planName)
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                VStack(alignment: .trailing, spacing: 0) {
+                    Text(verbatim: "\(account.usage.remainingToday)")
+                        .font(.system(size: 28, weight: .semibold, design: .rounded))
+                        .foregroundStyle(account.usage.remainingToday > 0 ? Color.accentColor : Color.red)
+                    Text("home.usage.left").font(.caption2).foregroundStyle(.secondary)
+                }
+                Image(systemName: "chevron.right").font(.footnote).foregroundStyle(.secondary)
+            }
+            .dsCard()
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var planName: String {
+        account.subscription?.plan.localizedName(settings.effectiveLanguage.rawValue) ?? ""
     }
 
     private var missingKeyCard: some View {
