@@ -1,0 +1,16 @@
+# Build products
+build/
+DerivedData/
+*.xcuserdatad
+xcuserdata/
+.DS_Store
+
+# Never commit secrets. The OpenAI key lives ONLY in backend/.env, which is
+# read from the process environment at runtime and is not part of any build.
+backend/.env
+backend/node_modules/
+backend/usage.log
+
+# Local-only migration scratch
+.migration-backup/
+.mvtest/

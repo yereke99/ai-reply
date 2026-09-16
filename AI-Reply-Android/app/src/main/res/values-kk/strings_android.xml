@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="key_language_badge">ҚАЗ</string>
+    <string name="key_space">бос орын</string>
+    <string name="key_return">енгізу</string>
+    <string name="key_send">жіберу</string>
+    <string name="key_search">іздеу</string>
+    <string name="key_go">өту</string>
+    <string name="key_done">дайын</string>
+
+    <string name="kb_generate">Жауап беру</string>
+    <string name="kb_regenerate">Қайта жасау</string>
+    <string name="kb_insert">Кірістіру</string>
+    <string name="kb_cancel">Бас тарту</string>
+    <string name="kb_add_template">Үлгі қосу</string>
+    <string name="kb_add_template_hint">AI Reply ашылуда…</string>
+    <string name="kb_replace_existing">Ауыстыру</string>
+    <string name="kb_append_existing">Қосу</string>
+    <string name="kb_keep_typing">Бас тарту</string>
+    <string name="kb_generating">Жауап дайындалуда…</string>
+    <string name="kb_draft_title">Сіздің жауабыңыз</string>
+    <string name="kb_source_title">Хабарламаға жауап</string>
+    <string name="kb_choose_template">Кімге жауап беретініңізді таңдаңыз</string>
+    <string name="kb_host_field_not_empty">Бұл өрісте мәтін бар.</string>
+    <string name="kb_close">Жабу</string>
+    <string name="kb_expand_source">Хабарламаны толық көрсету</string>
+
+    <string name="kb_err_no_source">Алдымен хабарламаны көшіріңіз</string>
+    <string name="kb_err_message_too_long">Хабарлама тым ұзын. %1$d таңбаға дейінгі мәтінді көшіріңіз.</string>
+    <string name="kb_err_clipboard_unavailable">Көшірілген хабарламаны оқу мүмкін болмады.</string>
+    <string name="kb_err_not_configured">AI Reply қолданбасын ашып, баптауды аяқтаңыз.</string>
+    <string name="kb_err_offline">Интернет байланысы жоқ.</string>
+    <string name="kb_err_timed_out">Тым ұзаққа созылды. Қайталап көріңіз.</string>
+    <string name="kb_err_auth_failed">API кілті қабылданбады. AI Reply қолданбасынан тексеріңіз.</string>
+    <string name="kb_err_rate_limited">Сұраныс тым көп. Сәл күте тұрыңыз.</string>
+    <string name="kb_err_empty_response">Жауап келмеді. Қайталап көріңіз.</string>
+    <string name="kb_err_service_unavailable">Қызмет қазір қолжетімсіз. Кейінірек көріңіз.</string>
+
+    <string name="kb_instruction_label">Нұсқау</string>
+    <string name="kb_instruction_placeholder">Қалай жауап беру керегін айтыңыз…</string>
+    <string name="kb_instruction_optional">Міндетті емес</string>
+    <string name="kb_context_label">Контекст</string>
+    <string name="kb_secure_field">Құпия сөз өрістерінде AI Reply өшірулі.</string>
+
+    <string name="voice_kb_start">Нұсқауды айтып беру</string>
+    <string name="voice_kb_stop">Тоқтату</string>
+    <string name="voice_kb_listening">Тыңдап тұрмын…</string>
+    <string name="voice_kb_processing">Танып жатырмын…</string>
+    <string name="voice_kb_permission_needed">Микрофонға рұқсат беру үшін түртіңіз</string>
+    <string name="voice_kb_permission_denied">Микрофонға рұқсат өшірулі. Параметрлер ▸ Қолданбалар ▸ AI Reply ▸ Рұқсаттар ішінен қосыңыз.</string>
+    <string name="voice_kb_no_speech">Ештеңе естілмеді. Қайталап көріңіз.</string>
+    <string name="voice_kb_failed">Тану мүмкін болмады. Қайталап көріңіз.</string>
+    <string name="voice_kb_unavailable">Бұл құрылғыда сөзді тану қолжетімсіз.</string>
+    <string name="voice_permission_title">Микрофон</string>
+
+    <string name="android_setup_title">Пернетақтаны баптау</string>
+    <string name="android_setup_subtitle">Android параметрлерінде екі қадам — содан кейін пернетақта барлық мессенджерде дайын.</string>
+    <string name="android_checklist_enabled">Пернетақта қосулы</string>
+    <string name="android_checklist_selected">Пернетақта таңдалған</string>
+    <string name="android_checklist_footer">Android екі күйді де тікелей хабарлайды, сондықтан бұл тізім әрқашан дәл.</string>
+    <string name="android_step_enable">Экрандық пернетақталар тізімінде AI Reply қосыңыз</string>
+    <string name="android_step_select">Пернетақта ауыстыру түймесімен AI Reply-ға ауысыңыз</string>
+    <string name="android_step_test">Осында оралып, теріп көріңіз</string>
+    <string name="android_open_keyboard_settings">Пернетақта параметрлерін ашу</string>
+    <string name="android_switch_keyboard">Пернетақтаны ауыстыру</string>
+    <string name="android_keyboard_ready">AI Reply пернетақтасы дайын</string>
+    <string name="android_keyboard_enabled_not_selected">AI Reply қосулы, бірақ таңдалмаған</string>
+    <string name="android_keyboard_not_enabled">AI Reply пернетақтасы әлі қосылмаған</string>
+    <string name="android_howitworks_clipboard">Android белсенді пернетақтаға көшірілген мәтінді оқуға рұқсат береді. AI Reply оны тек сіз үлгіні түрткенде оқиды — фонда ешқашан.</string>
+    <string name="android_privacy_sensitive">Басқа қолданба құпия деп белгілеген мәтін, мысалы құпия сөз менеджеріндегі жазба, ешқашан оқылмайды.</string>
+    <string name="android_open_settings">Қолданба параметрлерін ашу</string>
+
+    <string name="compose_instruction">Нұсқау</string>
+    <string name="compose_instruction_placeholder">Міндетті емес: қалай жауап беру керегін айтыңыз</string>
+    <string name="compose_dictate_instruction">Нұсқауды айтып беру</string>
+
+    <string name="cd_back">Артқа</string>
+    <string name="cd_settings">Параметрлер</string>
+    <string name="cd_delete">Жою</string>
+    <string name="cd_move_up">Жоғары</string>
+    <string name="cd_move_down">Төмен</string>
+    <string name="cd_shift">Shift</string>
+    <string name="cd_backspace">Өшіру</string>
+    <string name="cd_switch_keyboard">Пернетақтаны ауыстыру</string>
+    <string name="cd_switch_layout">Раскладканы ауыстыру</string>
+
+</resources>

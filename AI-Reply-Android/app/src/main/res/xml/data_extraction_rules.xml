@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Android 12+ backup and device-transfer rules.
+
+    The profile and templates are worth carrying to a new phone. The encrypted
+    credential is not: its ciphertext is only decryptable by an Android Keystore
+    key that is bound to the original device and never leaves it, so restoring
+    it elsewhere would produce an undecryptable blob and a confusing "your key
+    was rejected" error. Excluding it means the user re-enters the key on a new
+    device, which is the same outcome iOS gets from
+    kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" path="aireply_secure.xml" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="sharedpref" path="aireply_secure.xml" />
+    </device-transfer>
+</data-extraction-rules>

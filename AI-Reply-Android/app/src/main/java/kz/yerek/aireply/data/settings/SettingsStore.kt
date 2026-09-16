@@ -1,0 +1,174 @@
+package kz.yerek.aireply.data.settings
+
+import android.content.Context
+import android.content.SharedPreferences
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.onStart
+import kotlinx.serialization.json.Json
+import kz.yerek.aireply.core.lang.AppLanguage
+import kz.yerek.aireply.core.lang.KeyboardLanguage
+import kz.yerek.aireply.domain.model.TemplateSummary
+import java.util.UUID
+
+/**
+ * The small amount of NON-SENSITIVE state the app screens and the keyboard both
+ * read.
+ *
+ * WHY SharedPreferences AND NOT DataStore. DataStore exists to keep settings
+ * reads off the main thread, and for an Activity that is exactly right. An
+ * input method has the opposite problem: `onCreateInputView` must produce a
+ * correct first frame synchronously, and the three values it needs to do that —
+ * the app language, the appearance, and the cached template row — are a few
+ * hundred bytes. With DataStore the choices are `runBlocking` on the main
+ * thread (worse than what DataStore was avoiding) or a visible one-frame swap
+ * of the whole chip row.
+ *
+ * SharedPreferences loads once and is an in-memory map afterwards, which is
+ * what iOS's `UserDefaults` is and what that project relies on for the same
+ * reason. The load is warmed in `AIReplyApplication` so even the first read in
+ * the process is already in memory. Observers get a [Flow] all the same, so the
+ * Compose screens never poll.
+ *
+ * Nothing secret belongs here — no tokens, no credentials, no message text.
+ * The credential lives in [kz.yerek.aireply.data.secure.SecureCredentialStore].
+ */
+class SettingsStore(context: Context) {
+
+    private val prefs: SharedPreferences =
+        context.applicationContext.getSharedPreferences(NAME, Context.MODE_PRIVATE)
+
+    private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true }
+
+    /** Forces the backing file to be read, so no later call can block. */
+    fun warmUp() {
+        prefs.all
+    }
+
+    /** Emits on every change, starting with one immediate tick. */
+    fun changes(): Flow<Unit> = callbackFlow {
+        val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+            trySend(Unit)
+        }
+        prefs.registerOnSharedPreferenceChangeListener(listener)
+        awaitClose { prefs.unregisterOnSharedPreferenceChangeListener(listener) }
+    }.onStart { emit(Unit) }.conflate()
+
+    // ---------------------------------------------------------------- layout
+
+    /**
+     * Raw layout code. Kept as a string so nothing has to compile the keyboard's
+     * layout tables just to read it.
+     */
+    var keyboardLanguage: KeyboardLanguage
+        get() = KeyboardLanguage.fromCode(prefs.getString(KEY_KEYBOARD_LANGUAGE, null))
+            ?: KeyboardLanguage.ENGLISH
+        set(value) = prefs.edit().putString(KEY_KEYBOARD_LANGUAGE, value.code).apply()
+
+    // ------------------------------------------------------------- interface
+
+    /** null means "follow the system language". */
+    var appLanguage: AppLanguage?
+        get() = AppLanguage.fromCode(prefs.getString(KEY_APP_LANGUAGE, null))
+        set(value) {
+            prefs.edit().apply {
+                if (value == null) remove(KEY_APP_LANGUAGE) else putString(KEY_APP_LANGUAGE, value.code)
+            }.apply()
+        }
+
+    /** The language actually in effect right now. */
+    val effectiveAppLanguage: AppLanguage
+        get() = appLanguage ?: AppLanguage.systemDefault()
+
+    var appearance: AppearancePreference
+        get() = AppearancePreference.fromRaw(prefs.getString(KEY_APPEARANCE, null))
+        set(value) = prefs.edit().putString(KEY_APPEARANCE, value.raw).apply()
+
+    // ------------------------------------------------------------ chip cache
+
+    /**
+     * The visible templates, in bar order, as the app last saved them.
+     *
+     * null when nothing has been written yet, which is the honest answer for a
+     * fresh install: the caller then falls back to the defaults rather than
+     * showing an empty row.
+     */
+    var templateSummaries: List<TemplateSummary>?
+        get() {
+            val raw = prefs.getString(KEY_TEMPLATE_SUMMARIES, null) ?: return null
+            return runCatching {
+                json.decodeFromString<List<TemplateSummary>>(raw)
+            }.getOrNull()?.takeIf { it.isNotEmpty() }
+        }
+        set(value) {
+            if (value.isNullOrEmpty()) {
+                prefs.edit().remove(KEY_TEMPLATE_SUMMARIES).apply()
+                return
+            }
+            val encoded = runCatching { json.encodeToString(value) }.getOrNull() ?: return
+            prefs.edit().putString(KEY_TEMPLATE_SUMMARIES, encoded).apply()
+        }
+
+    // ------------------------------------------------------------ AI settings
+
+    var transportMode: String?
+        get() = prefs.getString(KEY_AI_MODE, null)
+        set(value) = prefs.edit().putString(KEY_AI_MODE, value).apply()
+
+    var model: String?
+        get() = prefs.getString(KEY_AI_MODEL, null)?.trim()?.takeIf { it.isNotEmpty() }
+        set(value) {
+            val trimmed = value?.trim()
+            prefs.edit().apply {
+                if (trimmed.isNullOrEmpty()) remove(KEY_AI_MODEL) else putString(KEY_AI_MODEL, trimmed)
+            }.apply()
+        }
+
+    var backendBaseUrl: String?
+        get() = prefs.getString(KEY_AI_BACKEND, null)?.trim()?.takeIf { it.isNotEmpty() }
+        set(value) {
+            val trimmed = value?.trim()
+            prefs.edit().apply {
+                if (trimmed.isNullOrEmpty()) remove(KEY_AI_BACKEND) else putString(KEY_AI_BACKEND, trimmed)
+            }.apply()
+        }
+
+    /**
+     * Random per-install identifier for backend rate limiting.
+     *
+     * Generated locally and never derived from hardware. It is not the ANDROID_ID,
+     * not an advertising id, not the device name and not anything that identifies
+     * a person — uninstalling the app discards it.
+     */
+    val installIdentifier: String
+        get() {
+            prefs.getString(KEY_INSTALL_ID, null)?.let { return it }
+            val created = UUID.randomUUID().toString()
+            prefs.edit().putString(KEY_INSTALL_ID, created).apply()
+            return created
+        }
+
+    // ------------------------------------------------------- onboarding hints
+
+    /** Set once the setup guide has been completed, to stop re-nudging. */
+    var hasSeenKeyboardSetup: Boolean
+        get() = prefs.getBoolean(KEY_SEEN_SETUP, false)
+        set(value) = prefs.edit().putBoolean(KEY_SEEN_SETUP, value).apply()
+
+    private companion object {
+        const val NAME = "aireply_settings"
+
+        const val KEY_KEYBOARD_LANGUAGE = "shared.keyboardLanguage"
+        const val KEY_APP_LANGUAGE = "shared.appLanguage"
+        const val KEY_APPEARANCE = "shared.appearance"
+        const val KEY_TEMPLATE_SUMMARIES = "shared.templateSummaries"
+        const val KEY_SEEN_SETUP = "shared.seenKeyboardSetup"
+
+        const val KEY_AI_MODE = "ai.transportMode"
+        const val KEY_AI_MODEL = "ai.model"
+        const val KEY_AI_BACKEND = "ai.backendBaseURL"
+        const val KEY_INSTALL_ID = "ai.installIdentifier"
+    }
+}

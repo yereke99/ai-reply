@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="key_language_badge">РУ</string>
+    <string name="key_space">пробел</string>
+    <string name="key_return">ввод</string>
+    <string name="key_send">отпр.</string>
+    <string name="key_search">поиск</string>
+    <string name="key_go">перейти</string>
+    <string name="key_done">готово</string>
+
+    <string name="kb_generate">Ответить</string>
+    <string name="kb_regenerate">Сгенерировать заново</string>
+    <string name="kb_insert">Вставить</string>
+    <string name="kb_cancel">Отмена</string>
+    <string name="kb_add_template">Добавить шаблон</string>
+    <string name="kb_add_template_hint">Открываю AI Reply…</string>
+    <string name="kb_replace_existing">Заменить</string>
+    <string name="kb_append_existing">Добавить</string>
+    <string name="kb_keep_typing">Отмена</string>
+    <string name="kb_generating">Создаю ответ…</string>
+    <string name="kb_draft_title">Ваш ответ</string>
+    <string name="kb_source_title">Ответ на</string>
+    <string name="kb_choose_template">Выберите, кому вы отвечаете</string>
+    <string name="kb_host_field_not_empty">В этом поле уже есть текст.</string>
+    <string name="kb_close">Закрыть</string>
+    <string name="kb_expand_source">Показать сообщение целиком</string>
+
+    <string name="kb_err_no_source">Сначала скопируйте сообщение</string>
+    <string name="kb_err_message_too_long">Сообщение слишком длинное. Скопируйте не более %1$d символов.</string>
+    <string name="kb_err_clipboard_unavailable">Не удалось прочитать скопированное сообщение.</string>
+    <string name="kb_err_not_configured">Откройте приложение AI Reply и завершите настройку.</string>
+    <string name="kb_err_offline">Нет подключения к интернету.</string>
+    <string name="kb_err_timed_out">Слишком долго. Попробуйте ещё раз.</string>
+    <string name="kb_err_auth_failed">Ключ API отклонён. Проверьте его в приложении AI Reply.</string>
+    <string name="kb_err_rate_limited">Слишком много запросов. Подождите немного.</string>
+    <string name="kb_err_empty_response">Ответ не получен. Попробуйте ещё раз.</string>
+    <string name="kb_err_service_unavailable">Сервис сейчас недоступен. Попробуйте позже.</string>
+
+    <string name="kb_instruction_label">Инструкция</string>
+    <string name="kb_instruction_placeholder">Скажите, как ответить…</string>
+    <string name="kb_instruction_optional">Необязательно</string>
+    <string name="kb_context_label">Контекст</string>
+    <string name="kb_secure_field">В полях пароля AI Reply не работает.</string>
+
+    <string name="voice_kb_start">Продиктовать инструкцию</string>
+    <string name="voice_kb_stop">Стоп</string>
+    <string name="voice_kb_listening">Слушаю…</string>
+    <string name="voice_kb_processing">Распознаю…</string>
+    <string name="voice_kb_permission_needed">Нажмите, чтобы разрешить доступ к микрофону</string>
+    <string name="voice_kb_permission_denied">Доступ к микрофону выключен. Включите его в Настройках ▸ Приложения ▸ AI Reply ▸ Разрешения.</string>
+    <string name="voice_kb_no_speech">Ничего не услышал. Попробуйте ещё раз.</string>
+    <string name="voice_kb_failed">Не удалось распознать. Попробуйте ещё раз.</string>
+    <string name="voice_kb_unavailable">Распознавание речи на этом устройстве недоступно.</string>
+    <string name="voice_permission_title">Микрофон</string>
+
+    <string name="android_setup_title">Настройка клавиатуры</string>
+    <string name="android_setup_subtitle">Два шага в настройках Android — и клавиатура готова во всех мессенджерах.</string>
+    <string name="android_checklist_enabled">Клавиатура включена</string>
+    <string name="android_checklist_selected">Клавиатура выбрана</string>
+    <string name="android_checklist_footer">Android сообщает об обоих состояниях напрямую, поэтому список всегда актуален.</string>
+    <string name="android_step_enable">Включите AI Reply в списке экранных клавиатур</string>
+    <string name="android_step_select">Переключитесь на AI Reply кнопкой смены клавиатуры</string>
+    <string name="android_step_test">Вернитесь сюда и попробуйте напечатать</string>
+    <string name="android_open_keyboard_settings">Открыть настройки клавиатур</string>
+    <string name="android_switch_keyboard">Сменить клавиатуру</string>
+    <string name="android_keyboard_ready">Клавиатура AI Reply готова</string>
+    <string name="android_keyboard_enabled_not_selected">AI Reply включена, но не выбрана</string>
+    <string name="android_keyboard_not_enabled">Клавиатура AI Reply ещё не включена</string>
+    <string name="android_howitworks_clipboard">Android разрешает активной клавиатуре читать скопированный текст. AI Reply читает его только когда вы нажимаете шаблон — никогда в фоне.</string>
+    <string name="android_privacy_sensitive">Текст, помеченный другим приложением как конфиденциальный (например, запись из менеджера паролей), не читается никогда.</string>
+    <string name="android_open_settings">Открыть настройки приложения</string>
+
+    <string name="compose_instruction">Инструкция</string>
+    <string name="compose_instruction_placeholder">Необязательно: скажите, как ответить</string>
+    <string name="compose_dictate_instruction">Продиктовать инструкцию</string>
+
+    <string name="cd_back">Назад</string>
+    <string name="cd_settings">Настройки</string>
+    <string name="cd_delete">Удалить</string>
+    <string name="cd_move_up">Вверх</string>
+    <string name="cd_move_down">Вниз</string>
+    <string name="cd_shift">Shift</string>
+    <string name="cd_backspace">Стереть</string>
+    <string name="cd_switch_keyboard">Сменить клавиатуру</string>
+    <string name="cd_switch_layout">Сменить раскладку</string>
+
+</resources>

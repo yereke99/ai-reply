@@ -1,0 +1,190 @@
+package kz.yerek.aireply.ai
+
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ensureActive
+import kz.yerek.aireply.core.lang.AppLanguage
+import kz.yerek.aireply.core.text.clampToCodePoints
+import kz.yerek.aireply.core.text.codePointLength
+import kz.yerek.aireply.data.secure.SecureCredentialStore
+import kz.yerek.aireply.domain.model.ReplyConfiguration
+import kz.yerek.aireply.domain.model.ReplyTemplate
+import java.time.LocalDateTime
+import kotlin.coroutines.coroutineContext
+
+/**
+ * The single entry point for generating a reply.
+ *
+ * Responsibilities, and nothing else: validate the input, assemble the context,
+ * choose a transport, run the call, map every failure onto [AIReplyError]. No
+ * UI, no storage writes, no clipboard access and no knowledge of which screen
+ * asked.
+ *
+ * The keyboard and the app both go through it, so what a user sees in "Try a
+ * reply" is what the keyboard will produce. A separate code path would drift.
+ */
+class AIReplyService(
+    private val configuration: AIConfiguration,
+    private val credentials: SecureCredentialStore,
+    private val nameTemplate: (ReplyTemplate, AppLanguage) -> String,
+    private val transportOverride: ((Request, ReplyPromptBuilder.Prompt) -> ReplyTransport)? = null
+) {
+
+    /**
+     * What the caller supplies. The service never reads the clipboard itself;
+     * the message arrives already acquired by an explicit user action.
+     */
+    data class Request(
+        val message: String,
+        val template: ReplyTemplate,
+        val configuration: ReplyConfiguration,
+        /**
+         * The APP's language, used only to name the selected template in the
+         * prompt the way the user saw it on the chip. It is NOT the reply
+         * language: that follows the incoming message, always.
+         */
+        val uiLanguage: AppLanguage,
+        /** What the user typed or dictated for this reply. May be blank. */
+        val instruction: String = "",
+        /**
+         * Injectable so working-hours behaviour is testable without waiting for
+         * 18:30.
+         */
+        val now: LocalDateTime = LocalDateTime.now()
+    )
+
+    suspend fun generate(request: Request): GeneratedReply {
+        val message = when (val result = validate(request.message)) {
+            is ValidationResult.Valid -> result.message
+            is ValidationResult.Invalid -> result.error.raise()
+        }
+
+        if (!configuration.isReady) AIReplyError.NotConfigured.raise()
+
+        val profile = request.configuration.profile
+        val templateName = nameTemplate(request.template, request.uiLanguage)
+        val instruction = request.instruction
+            .trim()
+            .clampToCodePoints(AIConfiguration.MAX_INSTRUCTION_CHARACTERS)
+
+        // The template's own schedule wins when it has one; otherwise the
+        // profile's applies. Resolved HERE, deterministically, so the model is
+        // never asked to work out what "after hours" means — it is told.
+        val hours = request.template.effectiveWorkingHours(profile.workingHours)
+
+        // Only computed when the user actually enabled working hours, so a
+        // profile without them sends no time context at all.
+        val businessContext = if (hours.isEnabled) hours.context(request.now) else null
+
+        val prompt = ReplyPromptBuilder.build(
+            ReplyPromptBuilder.Input(
+                message = message,
+                template = request.template,
+                templateName = templateName,
+                profileDescription = profile.promptDescription,
+                profileRole = profile.role,
+                preferredTone = profile.preferredTone,
+                profileBusiness = profile.business,
+                templateBusiness = request.template.effectiveBusiness,
+                businessContext = businessContext,
+                userInstruction = instruction
+            )
+        )
+
+        val transport = transportOverride?.invoke(request, prompt)
+            ?: makeTransport(request, message, templateName, instruction, businessContext)
+
+        return try {
+            val reply = transport.generate(prompt)
+            coroutineContext.ensureActive()
+            reply
+        } catch (cancellation: CancellationException) {
+            throw cancellation
+        } catch (exception: AIReplyException) {
+            throw exception
+        } catch (throwable: Throwable) {
+            throw AIReplyException(ReplyNetworking.mapError(throwable))
+        }
+    }
+
+    private fun makeTransport(
+        request: Request,
+        message: String,
+        templateName: String,
+        instruction: String,
+        businessContext: kz.yerek.aireply.domain.model.WorkingHours.Context?
+    ): ReplyTransport = when (configuration.mode) {
+        AITransportMode.DIRECT ->
+            DirectOpenAITransport(configuration.model, credentials)
+
+        AITransportMode.BACKEND -> {
+            val baseUrl = configuration.backendBaseUrl
+                ?: return UnconfiguredTransport
+            val template = request.template
+            val profile = request.configuration.profile
+            BackendTransport(
+                baseUrl = baseUrl,
+                credentials = credentials,
+                installIdentifier = configuration.installIdentifier,
+                context = BackendTransport.RequestContext(
+                    message = message,
+                    templateId = template.id,
+                    appLanguage = request.uiLanguage.code,
+                    profileDescription = profile.promptDescription,
+                    profileRole = profile.role,
+                    preferredTone = profile.preferredTone,
+                    profileBusiness = profile.business,
+                    templateName = templateName,
+                    templateRelationship = template.relationship.raw,
+                    templateTone = template.tone,
+                    templateInstructions = template.instructions,
+                    templateReplyLength = template.replyLength,
+                    templateEmojiPolicy = template.emojiPolicy,
+                    templateBusiness = template.effectiveBusiness,
+                    templateWorkingHoursBehaviour = template.workingHoursBehaviour,
+                    business = businessContext,
+                    userInstruction = instruction
+                )
+            )
+        }
+    }
+
+    sealed interface ValidationResult {
+        data class Valid(val message: String) : ValidationResult
+        data class Invalid(val error: AIReplyError) : ValidationResult
+    }
+
+    companion object {
+        /**
+         * The 300-character rule.
+         *
+         * It applies to the INCOMING MESSAGE ONLY. The profile, the template
+         * instructions, the user's instruction and the developer rules are
+         * separate and are not counted against it — the limit exists to keep one
+         * pasted chat message sane, not to cap the prompt.
+         *
+         * Counted in code points, which is what the user sees as characters for
+         * these three languages and what the backend counts too.
+         */
+        fun validate(message: String): ValidationResult {
+            val trimmed = message.trim()
+            if (trimmed.isEmpty()) return ValidationResult.Invalid(AIReplyError.NoSourceMessage)
+            if (trimmed.codePointLength() > AIConfiguration.MAX_MESSAGE_CHARACTERS) {
+                return ValidationResult.Invalid(
+                    AIReplyError.MessageTooLong(AIConfiguration.MAX_MESSAGE_CHARACTERS)
+                )
+            }
+            return ValidationResult.Valid(trimmed)
+        }
+
+        fun characterCount(message: String): Int = message.trim().codePointLength()
+    }
+}
+
+/**
+ * Fails cleanly when the chosen mode has not been set up, rather than making
+ * the transport optional and pushing the branch onto every caller.
+ */
+private object UnconfiguredTransport : ReplyTransport {
+    override suspend fun generate(prompt: ReplyPromptBuilder.Prompt): GeneratedReply =
+        AIReplyError.NotConfigured.raise()
+}

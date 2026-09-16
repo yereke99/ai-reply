@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Only the few colours the PLATFORM needs before Compose is running: the
+    launch window and the system bars. Everything the app draws lives in
+    ui/design/Color.kt, as one Kotlin palette rather than two half-palettes that
+    drift apart.
+-->
+<resources>
+    <color name="window_background">#F2F2F7</color>
+    <color name="ic_launcher_background">#4A3EE8</color>
+</resources>

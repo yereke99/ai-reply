@@ -1,0 +1,70 @@
+import Foundation
+import Observation
+import SwiftUI
+
+/// App-level preferences, backed by the shared container so the keyboard
+/// extension reads the same values.
+///
+/// Setters are explicit rather than `didSet` observers: `@Observable` rewrites
+/// stored properties, and mixing that with property observers is a subtlety
+/// this app has no reason to depend on.
+@Observable
+final class AppSettings {
+
+    private(set) var appearance: AppearancePreference
+    /// `nil` means "follow the system language".
+    private(set) var language: AppLanguage?
+
+    @ObservationIgnored private let store: SharedSettings
+
+    init(store: SharedSettings = .shared) {
+        self.store = store
+        self.appearance = store.appearance
+        self.language = store.appLanguage
+    }
+
+    func setAppearance(_ value: AppearancePreference) {
+        appearance = value
+        store.setAppearance(value)
+    }
+
+    func setLanguage(_ value: AppLanguage?) {
+        language = value
+        store.setAppLanguage(value)
+    }
+
+    var effectiveLanguage: AppLanguage { language ?? .systemDefault }
+
+    var locale: Locale { Locale(identifier: effectiveLanguage.localeIdentifier) }
+
+    /// Resolves a string in the language the user actually chose.
+    ///
+    /// `Text("key")` already follows `\.locale` from the environment, but
+    /// `String(localized:)` called from code does not: it resolves against the
+    /// bundle's own preferred localization, which is the SYSTEM language. That
+    /// difference is invisible until someone with an English phone switches the
+    /// app to Kazakh and finds one counter still reading "%d of %d characters"
+    /// in English. Every format string built in code goes through here.
+    func localized(_ key: String.LocalizationValue) -> String {
+        String(localized: key, locale: locale)
+    }
+
+    /// `nil` hands the decision back to Settings ▸ Display & Brightness.
+    var colorScheme: ColorScheme? {
+        switch appearance {
+        case .system: return nil
+        case .light:  return .light
+        case .dark:   return .dark
+        }
+    }
+}
+
+extension AppearancePreference {
+    var titleKey: LocalizedStringKey {
+        switch self {
+        case .system: return "settings.appearance.system"
+        case .light:  return "settings.appearance.light"
+        case .dark:   return "settings.appearance.dark"
+        }
+    }
+}
