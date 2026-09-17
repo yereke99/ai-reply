@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1760" height="4564" viewBox="0 0 1760 4564" font-family="-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,'Helvetica Neue','Noto Sans',Arial,sans-serif">
+<title>AI Reply — жүйенің толық ағыны</title>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,'Helvetica Neue','Noto Sans',Arial,sans-serif;}text.m{font-family:'SF Mono','JetBrains Mono',Menlo,Consolas,'DejaVu Sans Mono','Liberation Mono',monospace;}</style>
+<rect width="1760" height="4564" fill="#FFFFFF"/>
+<rect x="88" y="72" width="54" height="3" rx="1.5" fill="#1E4C8A"/>
+<text x="88" y="130" font-size="40" font-weight="600" fill="#15181D">AI Reply — жүйенің толық ағыны</text>
+<text x="88" y="166" font-size="16" font-weight="400" fill="#737C89">Қолданушы қосымшаны ашқаннан бастап сервердегі логикаға дейін: экрандар, пернетақта,</text>
+<text x="88" y="190" font-size="16" font-weight="400" fill="#737C89">токендер, күндік лимит және деректі сақтау саясаты.</text>
+<rect x="1178" y="103" width="11" height="11" rx="3" fill="#1E4C8A"/>
+<text x="1200" y="113" font-size="13" font-weight="500" fill="#3B434F">Қосымша интерфейсі</text>
+<rect x="1178" y="133" width="11" height="11" rx="3" fill="#2C6B4F"/>
+<text x="1200" y="143" font-size="13" font-weight="500" fill="#3B434F">Сервер логикасы</text>
+<rect x="1178" y="163" width="11" height="11" rx="3" fill="#A9521F"/>
+<text x="1200" y="173" font-size="13" font-weight="500" fill="#3B434F">Құпиялылық шегі</text>
+<rect x="88" y="224" width="118.56" height="30" rx="15" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="147.28" y="243.38" font-size="12.5" font-weight="500" fill="#3B434F" text-anchor="middle">iOS · SwiftUI</text>
+<rect x="216.56" y="224" width="200.31" height="30" rx="15" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="316.72" y="243.38" font-size="12.5" font-weight="500" fill="#3B434F" text-anchor="middle">Android · Jetpack Compose</text>
+<rect x="426.88" y="224" width="139" height="30" rx="15" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="496.38" y="243.38" font-size="12.5" font-weight="500" fill="#3B434F" text-anchor="middle">Go 1.24 · SQLite</text>
+<rect x="575.88" y="224" width="166.25" height="30" rx="15" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="659" y="243.38" font-size="12.5" font-weight="500" fill="#3B434F" text-anchor="middle">Vue 3 · админ панель</text>
+<line x1="88" y1="300" x2="1672" y2="300" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round"/>
+<text x="88" y="342" font-size="13" font-weight="700" fill="#1E4C8A" class="m" letter-spacing="0.04em">01</text>
+<text x="132" y="342" font-size="21" font-weight="600" fill="#15181D">АЛҒАШҚЫ КІРУ</text>
+<text x="132" y="368" font-size="14.5" font-weight="400" fill="#737C89">Қолданушы нөмірін растап, профилін толтырады және тарифін таңдайды</text>
+<rect x="88" y="408" width="252" height="500" rx="32" fill="#FFFFFF" stroke="#DBE0E6" stroke-width="1.4"/>
+<text x="112" y="438" font-size="10.5" font-weight="600" fill="#15181D">9:41</text>
+<rect x="295" y="430" width="19" height="10" rx="2.6" fill="none" stroke="#B7BDC6" stroke-width="1"/>
+<rect x="296.5" y="431.5" width="12" height="7" rx="1.2" fill="#B7BDC6"/>
+<rect x="314.5" y="433" width="1.6" height="4" rx="0.8" fill="#B7BDC6"/>
+<rect x="272" y="436" width="3" height="3.5" rx="1" fill="#B7BDC6"/>
+<rect x="277" y="434" width="3" height="5.5" rx="1" fill="#B7BDC6"/>
+<rect x="282" y="432" width="3" height="7.5" rx="1" fill="#B7BDC6"/>
+<rect x="287" y="430" width="3" height="9.5" rx="1" fill="#B7BDC6"/>
+<rect x="159" y="892" width="110" height="4.5" rx="2.25" fill="#D3D8DE"/>
+<text x="110" y="496" font-size="17" font-weight="600" fill="#15181D">Нөміріңізді енгізіңіз</text>
+<text x="110" y="520" font-size="12" font-weight="400" fill="#737C89">Растау кодын жібереміз</text>
+<rect x="110" y="554" width="208" height="48" rx="12" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="126" y="584" font-size="14.5" font-weight="600" fill="#15181D" class="m">+7</text>
+<line x1="158" y1="566" x2="158" y2="590" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round"/>
+<text x="172" y="584" font-size="14.5" font-weight="500" fill="#15181D" class="m">707 123 45 67</text>
+<rect x="110" y="620" width="46.61" height="26" rx="13" fill="#EDF2F9" stroke="#1E4C8A" stroke-width="1"/>
+<text x="133.31" y="636.67" font-size="10.5" font-weight="600" fill="#1E4C8A" text-anchor="middle">KZ +7</text>
+<rect x="162.61" y="620" width="46.61" height="26" rx="13" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="185.92" y="636.67" font-size="10.5" font-weight="600" fill="#737C89" text-anchor="middle">RU +7</text>
+<rect x="215.23" y="620" width="58.06" height="26" rx="13" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="244.25" y="636.67" font-size="10.5" font-weight="600" fill="#737C89" text-anchor="middle">UZ +998</text>
+<rect x="279.28" y="620" width="52.34" height="26" rx="13" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="305.45" y="636.67" font-size="10.5" font-weight="600" fill="#737C89" text-anchor="middle">тағы 9</text>
+<rect x="110" y="666" width="208" height="46" rx="12" fill="#1E4C8A"/>
+<text x="214" y="694" font-size="14.5" font-weight="600" fill="#FFFFFF" text-anchor="middle">Кодты жіберу</text>
+<text x="214" y="740" font-size="10.5" font-weight="400" fill="#9BA4AF" text-anchor="middle">Жалғастыру арқылы қызмет</text>
+<text x="214" y="755" font-size="10.5" font-weight="400" fill="#9BA4AF" text-anchor="middle">шарттарын қабылдайсыз</text>
+<text x="214" y="850" font-size="11.5" font-weight="500" fill="#1E4C8A" text-anchor="middle">Кіруде қиындық бар ма?</text>
+<text x="88" y="944" font-size="15.5" font-weight="600" fill="#15181D">1. Кіру</text>
+<text x="88" y="968" font-size="12.5" font-weight="400" fill="#737C89">Нөмір E.164 стандартымен тексеріледі:</text>
+<text x="88" y="986" font-size="12.5" font-weight="400" fill="#737C89">KZ, RU, UZ, KG, AZ, TJ, TM, GE, AM,</text>
+<text x="88" y="1004" font-size="12.5" font-weight="400" fill="#737C89">BY, UA, MD — барлығы 12 ел.</text>
+<rect x="421" y="408" width="252" height="500" rx="32" fill="#FFFFFF" stroke="#DBE0E6" stroke-width="1.4"/>
+<text x="445" y="438" font-size="10.5" font-weight="600" fill="#15181D">9:41</text>
+<rect x="628" y="430" width="19" height="10" rx="2.6" fill="none" stroke="#B7BDC6" stroke-width="1"/>
+<rect x="629.5" y="431.5" width="12" height="7" rx="1.2" fill="#B7BDC6"/>
+<rect x="647.5" y="433" width="1.6" height="4" rx="0.8" fill="#B7BDC6"/>
+<rect x="605" y="436" width="3" height="3.5" rx="1" fill="#B7BDC6"/>
+<rect x="610" y="434" width="3" height="5.5" rx="1" fill="#B7BDC6"/>
+<rect x="615" y="432" width="3" height="7.5" rx="1" fill="#B7BDC6"/>
+<rect x="620" y="430" width="3" height="9.5" rx="1" fill="#B7BDC6"/>
+<rect x="492" y="892" width="110" height="4.5" rx="2.25" fill="#D3D8DE"/>
+<path d="M451 468 L445 474 L451 480" fill="none" stroke="#15181D" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="443" y="512" font-size="17" font-weight="600" fill="#15181D">Код жіберілді</text>
+<text x="443" y="536" font-size="12" font-weight="400" fill="#737C89">+7 707 123 45 67 нөміріне</text>
+<rect x="442.5" y="564" width="44" height="54" rx="12" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="464.5" y="600" font-size="20" font-weight="600" fill="#15181D" text-anchor="middle">1</text>
+<rect x="497.5" y="564" width="44" height="54" rx="12" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="519.5" y="600" font-size="20" font-weight="600" fill="#15181D" text-anchor="middle">1</text>
+<rect x="552.5" y="564" width="44" height="54" rx="12" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="574.5" y="600" font-size="20" font-weight="600" fill="#15181D" text-anchor="middle">1</text>
+<rect x="607.5" y="564" width="44" height="54" rx="12" fill="#F7F9FA" stroke="#1E4C8A" stroke-width="1.5"/>
+<text x="629.5" y="600" font-size="20" font-weight="600" fill="#15181D" text-anchor="middle">1</text>
+<rect x="443" y="640" width="208" height="34" rx="10" fill="#ECF4EF"/>
+<text x="547" y="661" font-size="11.5" font-weight="600" fill="#2C6B4F" text-anchor="middle">Демо режим: 1111 коды өтеді</text>
+<text x="547" y="708" font-size="12" font-weight="500" fill="#737C89" text-anchor="middle">Кодты қайта жіберу — 00:42</text>
+<text x="547" y="738" font-size="10.5" font-weight="400" fill="#9BA4AF" text-anchor="middle">Код бір рет қана жарайды. 3 қате</text>
+<text x="547" y="753" font-size="10.5" font-weight="400" fill="#9BA4AF" text-anchor="middle">әрекеттен кейін ол күшін жояды.</text>
+<text x="547" y="836" font-size="11" font-weight="400" fill="#9BA4AF" text-anchor="middle">Кейін WhatsApp / SMS арнасы</text>
+<text x="547" y="851" font-size="11" font-weight="400" fill="#9BA4AF" text-anchor="middle">қосылады</text>
+<text x="421" y="944" font-size="15.5" font-weight="600" fill="#15181D">2. Растау коды</text>
+<text x="421" y="968" font-size="12.5" font-weight="400" fill="#737C89">Қазір уақытша заглушка: 1111 коды</text>
+<text x="421" y="986" font-size="12.5" font-weight="400" fill="#737C89">өтеді. Нақты арна (WhatsApp не SMS)</text>
+<text x="421" y="1004" font-size="12.5" font-weight="400" fill="#737C89">бір интерфейс арқылы қосылады, қалған</text>
+<text x="421" y="1022" font-size="12.5" font-weight="400" fill="#737C89">код өзгермейді.</text>
+<rect x="754" y="408" width="252" height="500" rx="32" fill="#FFFFFF" stroke="#DBE0E6" stroke-width="1.4"/>
+<text x="778" y="438" font-size="10.5" font-weight="600" fill="#15181D">9:41</text>
+<rect x="961" y="430" width="19" height="10" rx="2.6" fill="none" stroke="#B7BDC6" stroke-width="1"/>
+<rect x="962.5" y="431.5" width="12" height="7" rx="1.2" fill="#B7BDC6"/>
+<rect x="980.5" y="433" width="1.6" height="4" rx="0.8" fill="#B7BDC6"/>
+<rect x="938" y="436" width="3" height="3.5" rx="1" fill="#B7BDC6"/>
+<rect x="943" y="434" width="3" height="5.5" rx="1" fill="#B7BDC6"/>
+<rect x="948" y="432" width="3" height="7.5" rx="1" fill="#B7BDC6"/>
+<rect x="953" y="430" width="3" height="9.5" rx="1" fill="#B7BDC6"/>
+<rect x="825" y="892" width="110" height="4.5" rx="2.25" fill="#D3D8DE"/>
+<path d="M784 468 L778 474 L784 480" fill="none" stroke="#15181D" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="776" y="512" font-size="17" font-weight="600" fill="#15181D">Өзіңіз туралы</text>
+<text x="776" y="536" font-size="12" font-weight="400" fill="#737C89">Бір рет қана толтырасыз</text>
+<text x="776" y="568" font-size="9.5" font-weight="600" fill="#9BA4AF" letter-spacing="0.1em">АТЫҢЫЗ</text>
+<rect x="776" y="578" width="208" height="44" rx="11" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="792" y="606" font-size="13" font-weight="500" fill="#15181D">Ерек</text>
+<text x="776" y="638" font-size="9.5" font-weight="600" fill="#9BA4AF" letter-spacing="0.1em">ТІЛ</text>
+<rect x="776" y="648" width="208" height="44" rx="11" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="792" y="676" font-size="13" font-weight="500" fill="#15181D">Қазақша</text>
+<path d="M964 666 L968 670 L964 674" fill="none" stroke="#9BA4AF" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="776" y="708" font-size="9.5" font-weight="600" fill="#9BA4AF" letter-spacing="0.1em">УАҚЫТ БЕЛДЕУІ</text>
+<rect x="776" y="718" width="208" height="44" rx="11" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="792" y="746" font-size="13" font-weight="500" fill="#15181D">Asia/Almaty · UTC+5</text>
+<path d="M964 736 L968 740 L964 744" fill="none" stroke="#9BA4AF" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="776" y="776" width="208" height="46" rx="12" fill="#1E4C8A"/>
+<text x="880" y="804" font-size="14.5" font-weight="600" fill="#FFFFFF" text-anchor="middle">Сақтап, жалғастыру</text>
+<text x="880" y="848" font-size="10.5" font-weight="400" fill="#9BA4AF" text-anchor="middle">Белдеу лимиттің жаңару сағатына</text>
+<text x="880" y="863" font-size="10.5" font-weight="400" fill="#9BA4AF" text-anchor="middle">әсер етеді</text>
+<text x="754" y="944" font-size="15.5" font-weight="600" fill="#15181D">3. Профиль</text>
+<text x="754" y="968" font-size="12.5" font-weight="400" fill="#737C89">Аты, тілі және уақыт белдеуі. Белдеу</text>
+<text x="754" y="986" font-size="12.5" font-weight="400" fill="#737C89">маңызды: күндік лимит қолданушының түн</text>
+<text x="754" y="1004" font-size="12.5" font-weight="400" fill="#737C89">ортасында жаңарады, сервердікінде</text>
+<text x="754" y="1022" font-size="12.5" font-weight="400" fill="#737C89">емес.</text>
+<rect x="1087" y="408" width="252" height="500" rx="32" fill="#FFFFFF" stroke="#DBE0E6" stroke-width="1.4"/>
+<text x="1111" y="438" font-size="10.5" font-weight="600" fill="#15181D">9:41</text>
+<rect x="1294" y="430" width="19" height="10" rx="2.6" fill="none" stroke="#B7BDC6" stroke-width="1"/>
+<rect x="1295.5" y="431.5" width="12" height="7" rx="1.2" fill="#B7BDC6"/>
+<rect x="1313.5" y="433" width="1.6" height="4" rx="0.8" fill="#B7BDC6"/>
+<rect x="1271" y="436" width="3" height="3.5" rx="1" fill="#B7BDC6"/>
+<rect x="1276" y="434" width="3" height="5.5" rx="1" fill="#B7BDC6"/>
+<rect x="1281" y="432" width="3" height="7.5" rx="1" fill="#B7BDC6"/>
+<rect x="1286" y="430" width="3" height="9.5" rx="1" fill="#B7BDC6"/>
+<rect x="1158" y="892" width="110" height="4.5" rx="2.25" fill="#D3D8DE"/>
+<text x="1109" y="478" font-size="16" font-weight="600" fill="#15181D">AI Reply</text>
+<circle cx="1309" cy="473" r="2.1" fill="#9BA4AF"/>
+<circle cx="1300" cy="473" r="2.1" fill="#9BA4AF"/>
+<circle cx="1291" cy="473" r="2.1" fill="#9BA4AF"/>
+<rect x="1109" y="500" width="208" height="120" rx="16" fill="#FFFFFF" stroke="#E2E6EB" stroke-width="1.2"/>
+<text x="1125" y="526" font-size="11.5" font-weight="500" fill="#737C89">Бүгінгі лимит</text>
+<text x="1125" y="560" font-size="27" font-weight="600" fill="#15181D">5</text>
+<text x="1145" y="560" font-size="15" font-weight="500" fill="#737C89">/ 7</text>
+<text x="1301" y="560" font-size="11" font-weight="400" fill="#9BA4AF" text-anchor="end">сұраныс</text>
+<rect x="1125" y="578" width="176" height="6" rx="3" fill="#EDF0F3"/>
+<rect x="1125" y="578" width="125.71" height="6" rx="3" fill="#2C6B4F"/>
+<text x="1125" y="604" font-size="10.5" font-weight="400" fill="#9BA4AF">Тегін тариф · түнде жаңарады</text>
+<rect x="1109" y="638" width="208" height="86" rx="14" fill="#F7F9FA"/>
+<text x="1125" y="664" font-size="13" font-weight="600" fill="#15181D">Пернетақтаны қосу</text>
+<text x="1125" y="684" font-size="11" font-weight="400" fill="#737C89">Баптаулар → Пернетақта →</text>
+<text x="1125" y="700" font-size="11" font-weight="400" fill="#737C89">AI Reply → Толық қосымша</text>
+<path d="M1299 675.5 L1303.5 680 L1299 684.5" fill="none" stroke="#9BA4AF" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="1109" y1="744" x2="1317" y2="744" stroke="#EDF0F3" stroke-width="1" stroke-linecap="round"/>
+<text x="1109" y="772" font-size="12.5" font-weight="500" fill="#15181D">Тариф</text>
+<text x="1301" y="772" font-size="12.5" font-weight="400" fill="#737C89" text-anchor="end">Тегін</text>
+<path d="M1309 764 L1313 768 L1309 772" fill="none" stroke="#9BA4AF" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="1109" y1="788" x2="1317" y2="788" stroke="#EDF0F3" stroke-width="1" stroke-linecap="round"/>
+<text x="1109" y="816" font-size="12.5" font-weight="500" fill="#15181D">Тіл</text>
+<text x="1301" y="816" font-size="12.5" font-weight="400" fill="#737C89" text-anchor="end">Қазақша</text>
+<path d="M1309 808 L1313 812 L1309 816" fill="none" stroke="#9BA4AF" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="1109" y1="832" x2="1317" y2="832" stroke="#EDF0F3" stroke-width="1" stroke-linecap="round"/>
+<text x="1109" y="860" font-size="12.5" font-weight="500" fill="#15181D">Сервис режимі</text>
+<text x="1301" y="860" font-size="12.5" font-weight="400" fill="#737C89" text-anchor="end">Сервер</text>
+<path d="M1309 852 L1313 856 L1309 860" fill="none" stroke="#9BA4AF" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="1109" y1="876" x2="1317" y2="876" stroke="#EDF0F3" stroke-width="1" stroke-linecap="round"/>
+<text x="1087" y="944" font-size="15.5" font-weight="600" fill="#15181D">4. Басты бет</text>
+<text x="1087" y="968" font-size="12.5" font-weight="400" fill="#737C89">Қалған лимит, тариф және пернетақтаны</text>
+<text x="1087" y="986" font-size="12.5" font-weight="400" fill="#737C89">қосу нұсқауы. Лимит әр сұраныстан</text>
+<text x="1087" y="1004" font-size="12.5" font-weight="400" fill="#737C89">кейін серверден жаңарып отырады.</text>
+<rect x="1420" y="408" width="252" height="500" rx="32" fill="#FFFFFF" stroke="#DBE0E6" stroke-width="1.4"/>
+<text x="1444" y="438" font-size="10.5" font-weight="600" fill="#15181D">9:41</text>
+<rect x="1627" y="430" width="19" height="10" rx="2.6" fill="none" stroke="#B7BDC6" stroke-width="1"/>
+<rect x="1628.5" y="431.5" width="12" height="7" rx="1.2" fill="#B7BDC6"/>
+<rect x="1646.5" y="433" width="1.6" height="4" rx="0.8" fill="#B7BDC6"/>
+<rect x="1604" y="436" width="3" height="3.5" rx="1" fill="#B7BDC6"/>
+<rect x="1609" y="434" width="3" height="5.5" rx="1" fill="#B7BDC6"/>
+<rect x="1614" y="432" width="3" height="7.5" rx="1" fill="#B7BDC6"/>
+<rect x="1619" y="430" width="3" height="9.5" rx="1" fill="#B7BDC6"/>
+<rect x="1491" y="892" width="110" height="4.5" rx="2.25" fill="#D3D8DE"/>
+<path d="M1450 468 L1444 474 L1450 480" fill="none" stroke="#15181D" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="1442" y="512" font-size="17" font-weight="600" fill="#15181D">Тарифті таңдаңыз</text>
+<text x="1442" y="536" font-size="12" font-weight="400" fill="#737C89">Кез келген уақытта ауыстырасыз</text>
+<rect x="1442" y="564" width="208" height="74" rx="14" fill="#FFFFFF" stroke="#E2E6EB" stroke-width="1"/>
+<circle cx="1466" cy="601" r="8.5" fill="#FFFFFF" stroke="#C6CCD4" stroke-width="1.6"/>
+<text x="1486" y="596" font-size="14" font-weight="600" fill="#15181D">Тегін</text>
+<text x="1486" y="614" font-size="11" font-weight="400" fill="#737C89">7 сұраныс / күн</text>
+<text x="1634" y="596" font-size="14.5" font-weight="600" fill="#15181D" text-anchor="end">0 ₸</text>
+<text x="1634" y="614" font-size="10" font-weight="400" fill="#9BA4AF" text-anchor="end">айына</text>
+<rect x="1442" y="648" width="208" height="74" rx="14" fill="#EDF2F9" stroke="#1E4C8A" stroke-width="1.5"/>
+<circle cx="1466" cy="685" r="8.5" fill="#FFFFFF" stroke="#1E4C8A" stroke-width="1.6"/>
+<circle cx="1466" cy="685" r="4" fill="#1E4C8A"/>
+<text x="1486" y="680" font-size="14" font-weight="600" fill="#15181D">Стандарт</text>
+<text x="1486" y="698" font-size="11" font-weight="400" fill="#737C89">30 сұраныс / күн</text>
+<text x="1634" y="680" font-size="14.5" font-weight="600" fill="#15181D" text-anchor="end">1 990 ₸</text>
+<text x="1634" y="698" font-size="10" font-weight="400" fill="#9BA4AF" text-anchor="end">айына</text>
+<rect x="1442" y="732" width="208" height="74" rx="14" fill="#FFFFFF" stroke="#E2E6EB" stroke-width="1"/>
+<circle cx="1466" cy="769" r="8.5" fill="#FFFFFF" stroke="#C6CCD4" stroke-width="1.6"/>
+<text x="1486" y="764" font-size="14" font-weight="600" fill="#15181D">Pro</text>
+<text x="1486" y="782" font-size="11" font-weight="400" fill="#737C89">50 сұраныс / күн</text>
+<text x="1634" y="764" font-size="14.5" font-weight="600" fill="#15181D" text-anchor="end">3 490 ₸</text>
+<text x="1634" y="782" font-size="10" font-weight="400" fill="#9BA4AF" text-anchor="end">айына</text>
+<rect x="1442" y="822" width="208" height="44" rx="12" fill="#1E4C8A"/>
+<text x="1546" y="849" font-size="14" font-weight="600" fill="#FFFFFF" text-anchor="middle">Демо төлемге өту</text>
+<text x="1420" y="944" font-size="15.5" font-weight="600" fill="#15181D">5. Тариф</text>
+<text x="1420" y="968" font-size="12.5" font-weight="400" fill="#737C89">Тегін 7, Стандарт 30, Pro 50 сұраныс /</text>
+<text x="1420" y="986" font-size="12.5" font-weight="400" fill="#737C89">күн. Қазір демо төлем — эквайринг</text>
+<text x="1420" y="1004" font-size="12.5" font-weight="400" fill="#737C89">қосылғанда бұл экран өзгермейді.</text>
+<line x1="88" y1="1086" x2="1672" y2="1086" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round"/>
+<text x="88" y="1128" font-size="13" font-weight="700" fill="#1E4C8A" class="m" letter-spacing="0.04em">02</text>
+<text x="132" y="1128" font-size="21" font-weight="600" fill="#15181D">КҮНДЕЛІКТІ ҚОЛДАНЫС</text>
+<text x="132" y="1154" font-size="14.5" font-weight="400" fill="#737C89">Пернетақта кеңейтімі арқылы жауап жасау — төрт қадам</text>
+<rect x="88" y="1194" width="288" height="600" rx="32" fill="#FFFFFF" stroke="#DBE0E6" stroke-width="1.4"/>
+<text x="112" y="1224" font-size="10.5" font-weight="600" fill="#15181D">9:41</text>
+<rect x="331" y="1216" width="19" height="10" rx="2.6" fill="none" stroke="#B7BDC6" stroke-width="1"/>
+<rect x="332.5" y="1217.5" width="12" height="7" rx="1.2" fill="#B7BDC6"/>
+<rect x="350.5" y="1219" width="1.6" height="4" rx="0.8" fill="#B7BDC6"/>
+<rect x="308" y="1222" width="3" height="3.5" rx="1" fill="#B7BDC6"/>
+<rect x="313" y="1220" width="3" height="5.5" rx="1" fill="#B7BDC6"/>
+<rect x="318" y="1218" width="3" height="7.5" rx="1" fill="#B7BDC6"/>
+<rect x="323" y="1216" width="3" height="9.5" rx="1" fill="#B7BDC6"/>
+<rect x="177" y="1778" width="110" height="4.5" rx="2.25" fill="#D3D8DE"/>
+<circle cx="122" cy="1272" r="14" fill="#E8ECF0"/>
+<text x="122" y="1276" font-size="12" font-weight="600" fill="#737C89" text-anchor="middle">А</text>
+<text x="144" y="1268" font-size="12.5" font-weight="600" fill="#15181D">Айгүл</text>
+<text x="144" y="1284" font-size="10" font-weight="400" fill="#9BA4AF">онлайн</text>
+<line x1="89" y1="1298" x2="375" y2="1298" stroke="#EDF0F3" stroke-width="1" stroke-linecap="round"/>
+<rect x="144" y="1310" width="96" height="28" rx="8" fill="#22262C"/>
+<text x="192" y="1329" font-size="11" font-weight="600" fill="#FFFFFF" text-anchor="middle">Көшіру</text>
+<path d="M186 1338 L198 1338 L192 1345 Z" fill="#22262C"/>
+<rect x="108" y="1350" width="200" height="62" rx="15" fill="#F1F3F6"/>
+<text x="122" y="1374" font-size="10.8" font-weight="400" fill="#3B434F">Сәлем! Ертеңгі кездесуді</text>
+<text x="122" y="1389" font-size="10.8" font-weight="400" fill="#3B434F">15:00-ге ауыстыра аламыз ба?</text>
+<text x="108" y="1426" font-size="9" font-weight="400" fill="#9BA4AF">14:32</text>
+<rect x="108" y="1448" width="212" height="34" rx="17" fill="#FFFFFF" stroke="#E2E6EB" stroke-width="1"/>
+<text x="124" y="1469" font-size="10.5" font-weight="400" fill="#9BA4AF">Хабарлама</text>
+<circle cx="342" cy="1465" r="15" fill="#1E4C8A"/>
+<path d="M336 1465 L348 1465 M343 1460 L348 1465 M343 1470 L348 1465" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="89" y="1502" width="286" height="291" fill="#D4D8DE"/>
+<rect x="89" y="1502" width="286" height="44" fill="#FFFFFF"/>
+<line x1="89" y1="1546" x2="375" y2="1546" stroke="#C6CBD2" stroke-width="1" stroke-linecap="round"/>
+<rect x="98" y="1510" width="54.34" height="28" rx="14" fill="#1E4C8A" stroke="#1E4C8A" stroke-width="1"/>
+<text x="125.17" y="1527.67" font-size="10.5" font-weight="600" fill="#FFFFFF" text-anchor="middle">Сыпайы</text>
+<rect x="159.34" y="1510" width="48.61" height="28" rx="14" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="183.64" y="1527.67" font-size="10.5" font-weight="600" fill="#3B434F" text-anchor="middle">Қысқа</text>
+<rect x="214.95" y="1510" width="65.78" height="28" rx="14" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="247.84" y="1527.67" font-size="10.5" font-weight="600" fill="#3B434F" text-anchor="middle">Күлдіргі</text>
+<rect x="287.73" y="1510" width="65.78" height="28" rx="14" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="320.62" y="1527.67" font-size="10.5" font-weight="600" fill="#3B434F" text-anchor="middle">Іскерлік</text>
+<rect x="98" y="1556" width="268" height="66" rx="10" fill="#FFFFFF" stroke="#E2E6EB" stroke-width="1"/>
+<text x="110" y="1576" font-size="10.3" font-weight="400" fill="#15181D">Әрине, 15:00 маған қолайлы.</text>
+<text x="110" y="1590" font-size="10.3" font-weight="400" fill="#15181D">Кездесуді сол уақытқа ауыстырайық.</text>
+<rect x="314" y="1596" width="50" height="20" rx="6" fill="#1E4C8A"/>
+<text x="339" y="1610" font-size="10" font-weight="600" fill="#FFFFFF" text-anchor="middle">Қою</text>
+<rect x="121" y="1630" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="132" y="1647.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Ә</text>
+<rect x="146" y="1630" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="157" y="1647.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">І</text>
+<rect x="171" y="1630" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="182" y="1647.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Ң</text>
+<rect x="196" y="1630" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="207" y="1647.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Ғ</text>
+<rect x="221" y="1630" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="232" y="1647.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Ү</text>
+<rect x="246" y="1630" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="257" y="1647.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Ұ</text>
+<rect x="271" y="1630" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="282" y="1647.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Қ</text>
+<rect x="296" y="1630" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="307" y="1647.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Ө</text>
+<rect x="321" y="1630" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="332" y="1647.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Һ</text>
+<rect x="96" y="1662" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="107" y="1679.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Й</text>
+<rect x="121" y="1662" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="132" y="1679.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Ц</text>
+<rect x="146" y="1662" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="157" y="1679.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">У</text>
+<rect x="171" y="1662" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="182" y="1679.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">К</text>
+<rect x="196" y="1662" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="207" y="1679.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Е</text>
+<rect x="221" y="1662" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="232" y="1679.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Н</text>
+<rect x="246" y="1662" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="257" y="1679.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Г</text>
+<rect x="271" y="1662" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="282" y="1679.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Ш</text>
+<rect x="296" y="1662" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="307" y="1679.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Щ</text>
+<rect x="321" y="1662" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="332" y="1679.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">З</text>
+<rect x="346" y="1662" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="357" y="1679.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Х</text>
+<rect x="96" y="1694" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="107" y="1711.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Ф</text>
+<rect x="121" y="1694" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="132" y="1711.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Ы</text>
+<rect x="146" y="1694" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="157" y="1711.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">В</text>
+<rect x="171" y="1694" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="182" y="1711.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">А</text>
+<rect x="196" y="1694" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="207" y="1711.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">П</text>
+<rect x="221" y="1694" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="232" y="1711.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Р</text>
+<rect x="246" y="1694" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="257" y="1711.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">О</text>
+<rect x="271" y="1694" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="282" y="1711.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Л</text>
+<rect x="296" y="1694" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="307" y="1711.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Д</text>
+<rect x="321" y="1694" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="332" y="1711.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Ж</text>
+<rect x="346" y="1694" width="22" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="357" y="1711.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Э</text>
+<rect x="96" y="1726" width="24" height="27" rx="4.5" fill="#B9BFC7"/>
+<path d="M103 1742 L108 1736 L113 1742" fill="none" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="124" y="1726" width="21" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="134.5" y="1743.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Я</text>
+<rect x="148" y="1726" width="21" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="158.5" y="1743.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Ч</text>
+<rect x="172" y="1726" width="21" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="182.5" y="1743.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">С</text>
+<rect x="196" y="1726" width="21" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="206.5" y="1743.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">М</text>
+<rect x="220" y="1726" width="21" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="230.5" y="1743.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">И</text>
+<rect x="244" y="1726" width="21" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="254.5" y="1743.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Т</text>
+<rect x="268" y="1726" width="21" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="278.5" y="1743.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Ь</text>
+<rect x="292" y="1726" width="21" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="302.5" y="1743.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Б</text>
+<rect x="316" y="1726" width="21" height="27" rx="4.5" fill="#FFFFFF"/>
+<text x="326.5" y="1743.7" font-size="11.5" font-weight="400" fill="#15181D" text-anchor="middle">Ю</text>
+<rect x="344" y="1726" width="24" height="27" rx="4.5" fill="#B9BFC7"/>
+<path d="M351 1736 L361 1743 M351 1743 L361 1736" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="96" y="1758" width="32" height="27" rx="4.5" fill="#B9BFC7"/>
+<text x="112" y="1775.5" font-size="10" font-weight="500" fill="#FFFFFF" text-anchor="middle">123</text>
+<rect x="132" y="1758" width="26" height="27" rx="4.5" fill="#B9BFC7"/>
+<circle cx="145" cy="1771.5" r="7" fill="none" stroke="#FFFFFF" stroke-width="1.2"/>
+<line x1="138" y1="1771.5" x2="152" y2="1771.5" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round"/>
+<path d="M145 1764.5 Q139.96 1771.5 145 1778.5 Q150.04 1771.5 145 1764.5" fill="none" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="162" y="1758" width="156" height="27" rx="4.5" fill="#FFFFFF"/>
+<rect x="322" y="1758" width="46" height="27" rx="4.5" fill="#B9BFC7"/>
+<text x="345" y="1775.5" font-size="9.5" font-weight="500" fill="#FFFFFF" text-anchor="middle">Enter</text>
+<text x="88" y="1828" font-size="15.5" font-weight="600" fill="#15181D">Пернетақта кеңейтімі</text>
+<text x="88" y="1852" font-size="12.5" font-weight="400" fill="#737C89">Мәнер жолағы, дайын жауап және қалыпты</text>
+<text x="88" y="1870" font-size="12.5" font-weight="400" fill="#737C89">пернетақта — бәрі бір экранда.</text>
+<text x="452" y="1222" font-size="12.5" font-weight="700" fill="#1E4C8A" class="m" letter-spacing="0.04em">01</text>
+<text x="488" y="1222" font-size="17" font-weight="600" fill="#15181D">Хабарламаны көшіресіз</text>
+<text x="488" y="1248" font-size="13.5" font-weight="400" fill="#737C89">Кез келген қосымшада мәтінді басып тұрып «Көшіру» дейсіз. WhatsApp,</text>
+<text x="488" y="1269" font-size="13.5" font-weight="400" fill="#737C89">Telegram, Instagram — бәрібір.</text>
+<text x="1094" y="1222" font-size="12.5" font-weight="700" fill="#1E4C8A" class="m" letter-spacing="0.04em">02</text>
+<text x="1130" y="1222" font-size="17" font-weight="600" fill="#15181D">Пернетақтаны ауыстырасыз</text>
+<text x="1130" y="1248" font-size="13.5" font-weight="400" fill="#737C89">Глобус белгісін басасыз. AI Reply қосымшасын ашудың қажеті жоқ, бәрі</text>
+<text x="1130" y="1269" font-size="13.5" font-weight="400" fill="#737C89">пернетақтаның ішінде.</text>
+<text x="452" y="1356" font-size="12.5" font-weight="700" fill="#1E4C8A" class="m" letter-spacing="0.04em">03</text>
+<text x="488" y="1356" font-size="17" font-weight="600" fill="#15181D">Мәнерді таңдайсыз</text>
+<text x="488" y="1382" font-size="13.5" font-weight="400" fill="#737C89">Сыпайы, қысқа, күлдіргі немесе іскерлік. Хабарламаның тілі автоматты</text>
+<text x="488" y="1403" font-size="13.5" font-weight="400" fill="#737C89">анықталады.</text>
+<text x="1094" y="1356" font-size="12.5" font-weight="700" fill="#1E4C8A" class="m" letter-spacing="0.04em">04</text>
+<text x="1130" y="1356" font-size="17" font-weight="600" fill="#15181D">Жауапты қоясыз</text>
+<text x="1130" y="1382" font-size="13.5" font-weight="400" fill="#737C89">Дайын мәтін 2–3 секундта шығады. «Қою» дегенде ол тікелей жазу өрісіне</text>
+<text x="1130" y="1403" font-size="13.5" font-weight="400" fill="#737C89">түседі.</text>
+<rect x="452" y="1490" width="1220" height="96" rx="12" fill="#FBF2EA"/>
+<rect x="452" y="1490" width="3.5" height="96" rx="1.75" fill="#A9521F"/>
+<text x="478" y="1522" font-size="15" font-weight="600" fill="#A9521F">Мәтін ешқайда жазылмайды</text>
+<text x="478" y="1546" font-size="13.2" font-weight="400" fill="#3B434F">Көшірілген хабарлама да, дайын жауап та дерекқорға түспейді және логқа жазылмайды. Сервер тек «қанша символ келді, қанша токен кетті» дегенді ғана есептеп қалдырады.</text>
+<rect x="452" y="1618" width="578" height="118" rx="12" fill="#EDF2F9"/>
+<text x="474" y="1650" font-size="14" font-weight="600" fill="#1E4C8A">Сервер режимі — әдепкі</text>
+<text x="474" y="1674" font-size="12.8" font-weight="400" fill="#3B434F">OpenAI кілті тек серверде. Лимит тарифке байланысты. Қосымшаның ішінде</text>
+<text x="474" y="1692" font-size="12.8" font-weight="400" fill="#3B434F">ешқандай кілт жоқ.</text>
+<rect x="1094" y="1618" width="578" height="118" rx="12" fill="#F7F9FA"/>
+<text x="1116" y="1650" font-size="14" font-weight="600" fill="#3B434F">Жеке кілт режимі</text>
+<text x="1116" y="1674" font-size="12.8" font-weight="400" fill="#737C89">Қолданушы өз OpenAI кілтін енгізеді. Лимит қойылмайды, кілт құрылғыдан</text>
+<text x="1116" y="1692" font-size="12.8" font-weight="400" fill="#737C89">шықпайды.</text>
+<line x1="88" y1="1952" x2="1672" y2="1952" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round"/>
+<text x="88" y="1994" font-size="13" font-weight="700" fill="#1E4C8A" class="m" letter-spacing="0.04em">03</text>
+<text x="132" y="1994" font-size="21" font-weight="600" fill="#15181D">СҰРАНЫС СЕРВЕРДЕ ҚАЛАЙ ӨТЕДІ</text>
+<text x="132" y="2020" font-size="14.5" font-weight="400" fill="#737C89">Батырманы басқаннан жауап келгенге дейінгі тоғыз қадам</text>
+<rect x="88" y="2060" width="258" height="58" rx="12" fill="#EDF2F9"/>
+<text x="217" y="2086" font-size="14.5" font-weight="600" fill="#1E4C8A" text-anchor="middle">Қосымша</text>
+<text x="217" y="2104" font-size="10.5" font-weight="400" fill="#737C89" text-anchor="middle" class="m">iOS · Android</text>
+<rect x="530" y="2060" width="258" height="58" rx="12" fill="#ECF4EF"/>
+<text x="659" y="2086" font-size="14.5" font-weight="600" fill="#2C6B4F" text-anchor="middle">Go бэкенд</text>
+<text x="659" y="2104" font-size="10.5" font-weight="400" fill="#737C89" text-anchor="middle" class="m">internal/ai · gateway</text>
+<rect x="972" y="2060" width="258" height="58" rx="12" fill="#F7F9FA"/>
+<text x="1101" y="2086" font-size="14.5" font-weight="600" fill="#15181D" text-anchor="middle">SQLite</text>
+<text x="1101" y="2104" font-size="10.5" font-weight="400" fill="#9BA4AF" text-anchor="middle" class="m">usage · subscriptions</text>
+<rect x="1414" y="2060" width="258" height="58" rx="12" fill="#F7F9FA"/>
+<text x="1543" y="2086" font-size="14.5" font-weight="600" fill="#15181D" text-anchor="middle">OpenAI</text>
+<text x="1543" y="2104" font-size="10.5" font-weight="400" fill="#9BA4AF" text-anchor="middle" class="m">Responses API</text>
+<line x1="217" y1="2118" x2="217" y2="2736" stroke="#CDD3DA" stroke-width="1" stroke-linecap="round" stroke-dasharray="2 6"/>
+<rect x="214" y="2736" width="6" height="6" rx="3" fill="#CDD3DA"/>
+<line x1="659" y1="2118" x2="659" y2="2736" stroke="#CDD3DA" stroke-width="1" stroke-linecap="round" stroke-dasharray="2 6"/>
+<rect x="656" y="2736" width="6" height="6" rx="3" fill="#CDD3DA"/>
+<line x1="1101" y1="2118" x2="1101" y2="2736" stroke="#CDD3DA" stroke-width="1" stroke-linecap="round" stroke-dasharray="2 6"/>
+<rect x="1098" y="2736" width="6" height="6" rx="3" fill="#CDD3DA"/>
+<line x1="1543" y1="2118" x2="1543" y2="2736" stroke="#CDD3DA" stroke-width="1" stroke-linecap="round" stroke-dasharray="2 6"/>
+<rect x="1540" y="2736" width="6" height="6" rx="3" fill="#CDD3DA"/>
+<line x1="217" y1="2168" x2="651.88" y2="2168" stroke="#3B434F" stroke-width="1.3" stroke-linecap="round"/>
+<path d="M659 2168 L651.5 2171.3 L651.5 2164.7 Z" fill="#3B434F"/>
+<text x="438" y="2157" font-size="13" font-weight="500" fill="#15181D" text-anchor="middle">Жауап сұралады</text>
+<text x="438" y="2186" font-size="10.8" font-weight="400" fill="#737C89" text-anchor="middle" class="m">POST /api/v1/ai/reply  ·  Authorization: Bearer &lt;access&gt;</text>
+<text x="74" y="2172" font-size="11.5" font-weight="700" fill="#1E4C8A" text-anchor="end" class="m">01</text>
+<rect x="675" y="2208" width="470" height="54" rx="10" fill="#FFFFFF" stroke="#E2E6EB" stroke-width="1"/>
+<line x1="659" y1="2208" x2="675" y2="2208" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round"/>
+<text x="691" y="2226" font-size="12.2" font-weight="400" fill="#3B434F">Access токеннің қолтаңбасы мен мерзімі тексеріледі · өтіп кетсе 401</text>
+<text x="691" y="2243" font-size="12.2" font-weight="400" fill="#3B434F">→ қосымша refresh арқылы жаңартып, бір рет қайталайды</text>
+<text x="74" y="2238" font-size="11.5" font-weight="700" fill="#1E4C8A" text-anchor="end" class="m">02</text>
+<line x1="659" y1="2312" x2="1093.88" y2="2312" stroke="#3B434F" stroke-width="1.3" stroke-linecap="round"/>
+<path d="M1101 2312 L1093.5 2315.3 L1093.5 2308.7 Z" fill="#3B434F"/>
+<text x="880" y="2301" font-size="13" font-weight="500" fill="#15181D" text-anchor="middle">Жазылым, тариф және бүгінгі есеп оқылады</text>
+<text x="74" y="2316" font-size="11.5" font-weight="700" fill="#1E4C8A" text-anchor="end" class="m">03</text>
+<line x1="659" y1="2372" x2="1093.88" y2="2372" stroke="#3B434F" stroke-width="1.3" stroke-linecap="round"/>
+<path d="M1101 2372 L1093.5 2375.3 L1093.5 2368.7 Z" fill="#3B434F"/>
+<text x="880" y="2361" font-size="13" font-weight="500" fill="#15181D" text-anchor="middle">Лимит брондалады</text>
+<text x="880" y="2390" font-size="10.8" font-weight="400" fill="#737C89" text-anchor="middle" class="m">BEGIN IMMEDIATE · UPDATE ... WHERE used &lt; limit</text>
+<text x="74" y="2376" font-size="11.5" font-weight="700" fill="#1E4C8A" text-anchor="end" class="m">04</text>
+<line x1="1101" y1="2438" x2="666.12" y2="2438" stroke="#737C89" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="5 4"/>
+<path d="M659 2438 L666.5 2434.7 L666.5 2441.3 Z" fill="#737C89"/>
+<text x="880" y="2427" font-size="13" font-weight="400" fill="#3B434F" text-anchor="middle">Брондалды: 5 → 6 / 7</text>
+<text x="74" y="2442" font-size="11.5" font-weight="700" fill="#1E4C8A" text-anchor="end" class="m">05</text>
+<line x1="659" y1="2498" x2="1535.88" y2="2498" stroke="#3B434F" stroke-width="1.3" stroke-linecap="round"/>
+<path d="M1543 2498 L1535.5 2501.3 L1535.5 2494.7 Z" fill="#3B434F"/>
+<text x="1101" y="2487" font-size="13" font-weight="500" fill="#15181D" text-anchor="middle">Нұсқаулық + хабарлама мәтіні жіберіледі</text>
+<text x="1101" y="2516" font-size="10.8" font-weight="400" fill="#737C89" text-anchor="middle" class="m">store: false  ·  кілт тек .env ішінде</text>
+<text x="74" y="2502" font-size="11.5" font-weight="700" fill="#1E4C8A" text-anchor="end" class="m">06</text>
+<line x1="1543" y1="2564" x2="666.12" y2="2564" stroke="#737C89" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="5 4"/>
+<path d="M659 2564 L666.5 2560.7 L666.5 2567.3 Z" fill="#737C89"/>
+<text x="1101" y="2553" font-size="13" font-weight="400" fill="#3B434F" text-anchor="middle">Дайын жауап қайтады</text>
+<text x="74" y="2568" font-size="11.5" font-weight="700" fill="#1E4C8A" text-anchor="end" class="m">07</text>
+<line x1="659" y1="2624" x2="1093.88" y2="2624" stroke="#3B434F" stroke-width="1.3" stroke-linecap="round"/>
+<path d="M1101 2624 L1093.5 2627.3 L1093.5 2620.7 Z" fill="#3B434F"/>
+<text x="880" y="2613" font-size="13" font-weight="500" fill="#15181D" text-anchor="middle">Тек метадерек жазылады</text>
+<text x="880" y="2642" font-size="10.8" font-weight="400" fill="#737C89" text-anchor="middle" class="m">модель, токен саны, құны, ұзақтығы</text>
+<text x="74" y="2628" font-size="11.5" font-weight="700" fill="#1E4C8A" text-anchor="end" class="m">08</text>
+<line x1="659" y1="2690" x2="224.12" y2="2690" stroke="#737C89" stroke-width="1.3" stroke-linecap="round" stroke-dasharray="5 4"/>
+<path d="M217 2690 L224.5 2686.7 L224.5 2693.3 Z" fill="#737C89"/>
+<text x="438" y="2679" font-size="13" font-weight="400" fill="#3B434F" text-anchor="middle">Жауап пен жаңартылған лимит</text>
+<text x="438" y="2708" font-size="10.8" font-weight="400" fill="#737C89" text-anchor="middle" class="m">200 OK  ·  { reply, usage: { used: 6, limit: 7 } }</text>
+<text x="74" y="2694" font-size="11.5" font-weight="700" fill="#1E4C8A" text-anchor="end" class="m">09</text>
+<rect x="88" y="2784" width="504" height="132" rx="12" fill="#FBF2EA"/>
+<text x="110" y="2818" font-size="14.5" font-weight="600" fill="#A9521F">Лимит бітсе</text>
+<text x="110" y="2842" font-size="12.8" font-weight="400" fill="#3B434F">4-қадамда орын болмаса, сұраныс сол жерде тоқтайды: 429</text>
+<text x="110" y="2860" font-size="12.8" font-weight="400" fill="#3B434F">quota_exceeded қайтады да, OpenAI-ге мүлде бармайды. Ақша да, токен</text>
+<text x="110" y="2878" font-size="12.8" font-weight="400" fill="#3B434F">де жұмсалмайды.</text>
+<rect x="628" y="2784" width="504" height="132" rx="12" fill="#FBF2EA"/>
+<text x="650" y="2818" font-size="14.5" font-weight="600" fill="#A9521F">OpenAI қате берсе</text>
+<text x="650" y="2842" font-size="12.8" font-weight="400" fill="#3B434F">6-қадамда қате шықса, брондалған лимит сол транзакцияда кері</text>
+<text x="650" y="2860" font-size="12.8" font-weight="400" fill="#3B434F">қайтарылады. Қолданушының күні қатеге жанып кетпейді.</text>
+<rect x="1168" y="2784" width="504" height="132" rx="12" fill="#ECF4EF"/>
+<text x="1190" y="2818" font-size="14.5" font-weight="600" fill="#2C6B4F">Кілт қайда жатыр</text>
+<text x="1190" y="2842" font-size="12.8" font-weight="400" fill="#3B434F">OpenAI кілті IPA, APK, plist, BuildConfig, Keychain,</text>
+<text x="1190" y="2860" font-size="12.8" font-weight="400" fill="#3B434F">SharedPreferences — ешқайсысында жоқ. Ол тек сервердің .env</text>
+<text x="1190" y="2878" font-size="12.8" font-weight="400" fill="#3B434F">файлында.</text>
+<line x1="88" y1="2972" x2="1672" y2="2972" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round"/>
+<text x="88" y="3014" font-size="13" font-weight="700" fill="#1E4C8A" class="m" letter-spacing="0.04em">04</text>
+<text x="132" y="3014" font-size="21" font-weight="600" fill="#15181D">КІРУ ЖӘНЕ ТОКЕН ЛОГИКАСЫ</text>
+<text x="132" y="3040" font-size="14.5" font-weight="400" fill="#737C89">Код қалай тексеріледі, токен қанша тұрады және ұрлықтан қалай қорғалады</text>
+<rect x="88" y="3080" width="352.5" height="158" rx="14" fill="#EDF2F9"/>
+<circle cx="112" cy="3110" r="11" fill="#FFFFFF"/>
+<text x="112" y="3114" font-size="12" font-weight="700" fill="#1E4C8A" text-anchor="middle" class="m">1</text>
+<text x="134" y="3114" font-size="14.5" font-weight="600" fill="#1E4C8A">Нөмір мен код</text>
+<text x="112" y="3148" font-size="12.8" font-weight="400" fill="#3B434F">Нөмір E.164 бойынша тексеріледі, содан соң</text>
+<text x="112" y="3166" font-size="12.8" font-weight="400" fill="#3B434F">код жіберіледі. Код бір рет қана жарайды, 3</text>
+<text x="112" y="3184" font-size="12.8" font-weight="400" fill="#3B434F">қате әрекеттен кейін өшеді. Сағатына</text>
+<text x="112" y="3202" font-size="12.8" font-weight="400" fill="#3B434F">сұралатын код саны да шектеулі.</text>
+<line x1="456.5" y1="3159" x2="475.38" y2="3159" stroke="#B9C0C9" stroke-width="1.4" stroke-linecap="round"/>
+<path d="M482.5 3159 L475 3162.3 L475 3155.7 Z" fill="#B9C0C9"/>
+<rect x="498.5" y="3080" width="352.5" height="158" rx="14" fill="#ECF4EF"/>
+<circle cx="522.5" cy="3110" r="11" fill="#FFFFFF"/>
+<text x="522.5" y="3114" font-size="12" font-weight="700" fill="#2C6B4F" text-anchor="middle" class="m">2</text>
+<text x="544.5" y="3114" font-size="14.5" font-weight="600" fill="#2C6B4F">Access токен</text>
+<text x="522.5" y="3148" font-size="12.8" font-weight="400" fill="#3B434F">15 минут жарамды. Тек жадта тұрады, дискіге</text>
+<text x="522.5" y="3166" font-size="12.8" font-weight="400" fill="#3B434F">жазылмайды. Әр сұраныста тақырыпта</text>
+<text x="522.5" y="3184" font-size="12.8" font-weight="400" fill="#3B434F">жіберіледі.</text>
+<line x1="867" y1="3159" x2="885.88" y2="3159" stroke="#B9C0C9" stroke-width="1.4" stroke-linecap="round"/>
+<path d="M893 3159 L885.5 3162.3 L885.5 3155.7 Z" fill="#B9C0C9"/>
+<rect x="909" y="3080" width="352.5" height="158" rx="14" fill="#ECF4EF"/>
+<circle cx="933" cy="3110" r="11" fill="#FFFFFF"/>
+<text x="933" y="3114" font-size="12" font-weight="700" fill="#2C6B4F" text-anchor="middle" class="m">3</text>
+<text x="955" y="3114" font-size="14.5" font-weight="600" fill="#2C6B4F">Refresh токен</text>
+<text x="933" y="3148" font-size="12.8" font-weight="400" fill="#3B434F">30 күн. iOS — Keychain, Android — Keystore.</text>
+<text x="933" y="3166" font-size="12.8" font-weight="400" fill="#3B434F">Серверде токеннің өзі емес, тек хэші жатыр.</text>
+<line x1="1277.5" y1="3159" x2="1296.38" y2="3159" stroke="#B9C0C9" stroke-width="1.4" stroke-linecap="round"/>
+<path d="M1303.5 3159 L1296 3162.3 L1296 3155.7 Z" fill="#B9C0C9"/>
+<rect x="1319.5" y="3080" width="352.5" height="158" rx="14" fill="#FBF2EA"/>
+<circle cx="1343.5" cy="3110" r="11" fill="#FFFFFF"/>
+<text x="1343.5" y="3114" font-size="12" font-weight="700" fill="#A9521F" text-anchor="middle" class="m">4</text>
+<text x="1365.5" y="3114" font-size="14.5" font-weight="600" fill="#A9521F">Ротация мен қорғаныс</text>
+<text x="1343.5" y="3148" font-size="12.8" font-weight="400" fill="#3B434F">Әр жаңартуда ескі refresh күшін жояды.</text>
+<text x="1343.5" y="3166" font-size="12.8" font-weight="400" fill="#3B434F">Ескісі екінші рет келсе — сол құрылғының</text>
+<text x="1343.5" y="3184" font-size="12.8" font-weight="400" fill="#3B434F">бүкіл тізбегі жабылады.</text>
+<line x1="88" y1="3294" x2="1672" y2="3294" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round"/>
+<text x="88" y="3336" font-size="13" font-weight="700" fill="#1E4C8A" class="m" letter-spacing="0.04em">05</text>
+<text x="132" y="3336" font-size="21" font-weight="600" fill="#15181D">ДЕРЕКТЕР: НЕ САҚТАЛАДЫ, НЕ САҚТАЛМАЙДЫ</text>
+<text x="132" y="3362" font-size="14.5" font-weight="400" fill="#737C89">Құпиялылық интерфейспен емес, архитектурамен қамтамасыз етілген</text>
+<rect x="88" y="3402" width="772" height="312" rx="14" fill="#FBF2EA"/>
+<text x="116" y="3442" font-size="16" font-weight="600" fill="#A9521F">Ешқашан сақталмайды</text>
+<line x1="118" y1="3478.4" x2="127.2" y2="3487.6" stroke="#A9521F" stroke-width="1.9" stroke-linecap="round"/>
+<line x1="118" y1="3487.6" x2="127.2" y2="3478.4" stroke="#A9521F" stroke-width="1.9" stroke-linecap="round"/>
+<text x="144" y="3488" font-size="13.5" font-weight="400" fill="#3B434F">Көшірілген хабарлама мәтіні</text>
+<line x1="116" y1="3500" x2="832" y2="3500" stroke="#A9521F" opacity="0.13" stroke-width="1" stroke-linecap="round"/>
+<line x1="118" y1="3516.4" x2="127.2" y2="3525.6" stroke="#A9521F" stroke-width="1.9" stroke-linecap="round"/>
+<line x1="118" y1="3525.6" x2="127.2" y2="3516.4" stroke="#A9521F" stroke-width="1.9" stroke-linecap="round"/>
+<text x="144" y="3526" font-size="13.5" font-weight="400" fill="#3B434F">AI жасаған жауап</text>
+<line x1="116" y1="3538" x2="832" y2="3538" stroke="#A9521F" opacity="0.13" stroke-width="1" stroke-linecap="round"/>
+<line x1="118" y1="3554.4" x2="127.2" y2="3563.6" stroke="#A9521F" stroke-width="1.9" stroke-linecap="round"/>
+<line x1="118" y1="3563.6" x2="127.2" y2="3554.4" stroke="#A9521F" stroke-width="1.9" stroke-linecap="round"/>
+<text x="144" y="3564" font-size="13.5" font-weight="400" fill="#3B434F">Пернетақтада терілген мәтін</text>
+<line x1="116" y1="3576" x2="832" y2="3576" stroke="#A9521F" opacity="0.13" stroke-width="1" stroke-linecap="round"/>
+<line x1="118" y1="3592.4" x2="127.2" y2="3601.6" stroke="#A9521F" stroke-width="1.9" stroke-linecap="round"/>
+<line x1="118" y1="3601.6" x2="127.2" y2="3592.4" stroke="#A9521F" stroke-width="1.9" stroke-linecap="round"/>
+<text x="144" y="3602" font-size="13.5" font-weight="400" fill="#3B434F">Дауыстан түрлендірілген мәтін</text>
+<line x1="116" y1="3614" x2="832" y2="3614" stroke="#A9521F" opacity="0.13" stroke-width="1" stroke-linecap="round"/>
+<line x1="118" y1="3630.4" x2="127.2" y2="3639.6" stroke="#A9521F" stroke-width="1.9" stroke-linecap="round"/>
+<line x1="118" y1="3639.6" x2="127.2" y2="3630.4" stroke="#A9521F" stroke-width="1.9" stroke-linecap="round"/>
+<text x="144" y="3640" font-size="13.5" font-weight="400" fill="#3B434F">Сұраныс денесі — қате логында да жоқ</text>
+<line x1="116" y1="3652" x2="832" y2="3652" stroke="#A9521F" opacity="0.13" stroke-width="1" stroke-linecap="round"/>
+<line x1="118" y1="3668.4" x2="127.2" y2="3677.6" stroke="#A9521F" stroke-width="1.9" stroke-linecap="round"/>
+<line x1="118" y1="3677.6" x2="127.2" y2="3668.4" stroke="#A9521F" stroke-width="1.9" stroke-linecap="round"/>
+<text x="144" y="3678" font-size="13.5" font-weight="400" fill="#3B434F">OTP коды, құпиясөз, токен, OpenAI кілті</text>
+<rect x="900" y="3402" width="772" height="312" rx="14" fill="#ECF4EF"/>
+<text x="928" y="3442" font-size="16" font-weight="600" fill="#2C6B4F">Сақталады</text>
+<path d="M929 3483 L932.6 3486.6 L938.5 3478.25" fill="none" stroke="#2C6B4F" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="956" y="3488" font-size="13.5" font-weight="400" fill="#3B434F">Телефон нөмірі, аты, тілі, уақыт белдеуі</text>
+<line x1="928" y1="3500" x2="1644" y2="3500" stroke="#2C6B4F" opacity="0.13" stroke-width="1" stroke-linecap="round"/>
+<path d="M929 3521 L932.6 3524.6 L938.5 3516.25" fill="none" stroke="#2C6B4F" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="956" y="3526" font-size="13.5" font-weight="400" fill="#3B434F">Тариф және жазылым мерзімі</text>
+<line x1="928" y1="3538" x2="1644" y2="3538" stroke="#2C6B4F" opacity="0.13" stroke-width="1" stroke-linecap="round"/>
+<path d="M929 3559 L932.6 3562.6 L938.5 3554.25" fill="none" stroke="#2C6B4F" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="956" y="3564" font-size="13.5" font-weight="400" fill="#3B434F">Күндік және айлық сұраныс саны</text>
+<line x1="928" y1="3576" x2="1644" y2="3576" stroke="#2C6B4F" opacity="0.13" stroke-width="1" stroke-linecap="round"/>
+<path d="M929 3597 L932.6 3600.6 L938.5 3592.25" fill="none" stroke="#2C6B4F" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="956" y="3602" font-size="13.5" font-weight="400" fill="#3B434F">Модель, токен саны, құны, ұзақтығы</text>
+<line x1="928" y1="3614" x2="1644" y2="3614" stroke="#2C6B4F" opacity="0.13" stroke-width="1" stroke-linecap="round"/>
+<path d="M929 3635 L932.6 3638.6 L938.5 3630.25" fill="none" stroke="#2C6B4F" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="956" y="3640" font-size="13.5" font-weight="400" fill="#3B434F">Құрылғы моделі мен қосымша нұсқасы</text>
+<line x1="928" y1="3652" x2="1644" y2="3652" stroke="#2C6B4F" opacity="0.13" stroke-width="1" stroke-linecap="round"/>
+<path d="M929 3673 L932.6 3676.6 L938.5 3668.25" fill="none" stroke="#2C6B4F" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="956" y="3678" font-size="13.5" font-weight="400" fill="#3B434F">Кіру оқиғалары және админ әрекеттері</text>
+<rect x="88" y="3738" width="1584" height="74" rx="12" fill="#F7F9FA"/>
+<text x="116" y="3770" font-size="14.5" font-weight="600" fill="#15181D">Админ панельде «Хабарламаларды қарау» деген бөлім жоқ — ол әдейі жобаланбаған.</text>
+<text x="116" y="3792" font-size="13" font-weight="400" fill="#737C89">Дерекқорда ондай бағанның өзі жоқ, сондықтан оны интерфейске кейін де қоса алмайсың. Тестте дерекқор мен лог файлы мәтінге тікелей тексеріледі.</text>
+<line x1="88" y1="3868" x2="1672" y2="3868" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round"/>
+<text x="88" y="3910" font-size="13" font-weight="700" fill="#1E4C8A" class="m" letter-spacing="0.04em">06</text>
+<text x="132" y="3910" font-size="21" font-weight="600" fill="#15181D">АДМИН ПАНЕЛЬ ЖӘНЕ ЛЕНДИНГ</text>
+<text x="132" y="3936" font-size="14.5" font-weight="400" fill="#737C89">Веб бөлігі: басқару панелі мен таныстыру беті</text>
+<rect x="88" y="3976" width="770" height="372" rx="14" fill="#FFFFFF" stroke="#DBE0E6" stroke-width="1.3"/>
+<rect x="88" y="3976" width="770" height="40" rx="14" fill="#F4F6F8"/>
+<rect x="88" y="4002" width="770" height="14" fill="#F4F6F8"/>
+<line x1="88" y1="4016" x2="858" y2="4016" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round"/>
+<circle cx="110" cy="3996" r="4" fill="#C8CDD4"/>
+<circle cx="124" cy="3996" r="4" fill="#C8CDD4"/>
+<circle cx="138" cy="3996" r="4" fill="#C8CDD4"/>
+<rect x="164" y="3986" width="250" height="20" rx="10" fill="#FFFFFF" stroke="#E2E6EB" stroke-width="1"/>
+<text x="289" y="4000" font-size="10.5" font-weight="400" fill="#737C89" text-anchor="middle" class="m">aireply.kz/admin</text>
+<rect x="89" y="4016" width="168" height="331" fill="#FAFBFC"/>
+<line x1="256" y1="4016" x2="256" y2="4347" stroke="#E8ECF0" stroke-width="1" stroke-linecap="round"/>
+<text x="112" y="4046" font-size="12.5" font-weight="600" fill="#15181D">AI Reply</text>
+<text x="112" y="4062" font-size="9.5" font-weight="400" fill="#9BA4AF">басқару панелі</text>
+<rect x="102" y="4087" width="140" height="26" rx="7" fill="#EDF2F9"/>
+<text x="116" y="4104" font-size="11.5" font-weight="600" fill="#1E4C8A">Статистика</text>
+<text x="116" y="4134" font-size="11.5" font-weight="400" fill="#737C89">Қолданушылар</text>
+<text x="116" y="4164" font-size="11.5" font-weight="400" fill="#737C89">Тарифтер</text>
+<text x="116" y="4194" font-size="11.5" font-weight="400" fill="#737C89">Аудит журналы</text>
+<text x="116" y="4224" font-size="11.5" font-weight="400" fill="#737C89">Хабарландыру</text>
+<text x="116" y="4254" font-size="11.5" font-weight="400" fill="#737C89">Баптаулар</text>
+<text x="278" y="4050" font-size="15" font-weight="600" fill="#15181D">Статистика</text>
+<rect x="722" y="4034" width="89.4" height="24" rx="12" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="766.7" y="4049.5" font-size="10" font-weight="500" fill="#737C89" text-anchor="middle">Соңғы 30 күн</text>
+<rect x="278" y="4068" width="130.5" height="64" rx="10" fill="#FFFFFF" stroke="#E2E6EB" stroke-width="1"/>
+<text x="292" y="4090" font-size="9.5" font-weight="500" fill="#737C89">Қолданушы</text>
+<text x="292" y="4116" font-size="18" font-weight="600" fill="#15181D">1 248</text>
+<rect x="420.5" y="4068" width="130.5" height="64" rx="10" fill="#FFFFFF" stroke="#E2E6EB" stroke-width="1"/>
+<text x="434.5" y="4090" font-size="9.5" font-weight="500" fill="#737C89">Бүгінгі сұраныс</text>
+<text x="434.5" y="4116" font-size="18" font-weight="600" fill="#15181D">3 106</text>
+<rect x="563" y="4068" width="130.5" height="64" rx="10" fill="#FFFFFF" stroke="#E2E6EB" stroke-width="1"/>
+<text x="577" y="4090" font-size="9.5" font-weight="500" fill="#737C89">Белсенді жазылым</text>
+<text x="577" y="4116" font-size="18" font-weight="600" fill="#15181D">214</text>
+<rect x="705.5" y="4068" width="130.5" height="64" rx="10" fill="#FFFFFF" stroke="#E2E6EB" stroke-width="1"/>
+<text x="719.5" y="4090" font-size="9.5" font-weight="500" fill="#737C89">Айлық шығын</text>
+<text x="719.5" y="4116" font-size="18" font-weight="600" fill="#15181D">$41.80</text>
+<rect x="278" y="4144" width="351.54" height="168" rx="10" fill="#FFFFFF" stroke="#E2E6EB" stroke-width="1"/>
+<text x="294" y="4168" font-size="11.5" font-weight="600" fill="#15181D">Күндік сұраныс</text>
+<line x1="294" y1="4182" x2="613.54" y2="4182" stroke="#EDF0F3" stroke-width="1" stroke-linecap="round"/>
+<line x1="294" y1="4214" x2="613.54" y2="4214" stroke="#EDF0F3" stroke-width="1" stroke-linecap="round"/>
+<line x1="294" y1="4246" x2="613.54" y2="4246" stroke="#EDF0F3" stroke-width="1" stroke-linecap="round"/>
+<line x1="294" y1="4278" x2="613.54" y2="4278" stroke="#EDF0F3" stroke-width="1" stroke-linecap="round"/>
+<path d="M294 4249.2 L323.05 4237.68 L352.1 4243.44 L381.15 4225.2 L410.2 4231.92 L439.25 4216.56 L468.29 4222.32 L497.34 4208.88 L526.39 4214.64 L555.44 4200.24 L584.49 4206.96 L613.54 4189.68 L613.54 4278 L294 4278 Z" fill="#EDF2F9"/>
+<path d="M294 4249.2 L323.05 4237.68 L352.1 4243.44 L381.15 4225.2 L410.2 4231.92 L439.25 4216.56 L468.29 4222.32 L497.34 4208.88 L526.39 4214.64 L555.44 4200.24 L584.49 4206.96 L613.54 4189.68" fill="none" stroke="#1E4C8A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="294" cy="4249.2" r="2.4" fill="#1E4C8A"/>
+<circle cx="381.15" cy="4225.2" r="2.4" fill="#1E4C8A"/>
+<circle cx="468.29" cy="4222.32" r="2.4" fill="#1E4C8A"/>
+<circle cx="555.44" cy="4200.24" r="2.4" fill="#1E4C8A"/>
+<text x="294" y="4296" font-size="9" font-weight="400" fill="#9BA4AF">1 қыр</text>
+<text x="400.51" y="4296" font-size="9" font-weight="400" fill="#9BA4AF" text-anchor="middle">10 қыр</text>
+<text x="507.03" y="4296" font-size="9" font-weight="400" fill="#9BA4AF" text-anchor="middle">20 қыр</text>
+<text x="613.54" y="4296" font-size="9" font-weight="400" fill="#9BA4AF" text-anchor="end">30 қыр</text>
+<rect x="643.54" y="4144" width="192.46" height="168" rx="10" fill="#FFFFFF" stroke="#E2E6EB" stroke-width="1"/>
+<text x="659.54" y="4168" font-size="11.5" font-weight="600" fill="#15181D">Тариф бойынша</text>
+<text x="659.54" y="4202" font-size="10" font-weight="500" fill="#737C89">Тегін</text>
+<rect x="659.54" y="4210" width="160.46" height="8" rx="4" fill="#EDF0F3"/>
+<rect x="659.54" y="4210" width="125.16" height="8" rx="4" fill="#9AA9BE"/>
+<text x="659.54" y="4240" font-size="10" font-weight="500" fill="#737C89">Стандарт</text>
+<rect x="659.54" y="4248" width="160.46" height="8" rx="4" fill="#EDF0F3"/>
+<rect x="659.54" y="4248" width="83.44" height="8" rx="4" fill="#1E4C8A"/>
+<text x="659.54" y="4278" font-size="10" font-weight="500" fill="#737C89">Pro</text>
+<rect x="659.54" y="4286" width="160.46" height="8" rx="4" fill="#EDF0F3"/>
+<rect x="659.54" y="4286" width="38.51" height="8" rx="4" fill="#2C6B4F"/>
+<rect x="902" y="3976" width="770" height="372" rx="14" fill="#FFFFFF" stroke="#DBE0E6" stroke-width="1.3"/>
+<rect x="902" y="3976" width="770" height="40" rx="14" fill="#F4F6F8"/>
+<rect x="902" y="4002" width="770" height="14" fill="#F4F6F8"/>
+<line x1="902" y1="4016" x2="1672" y2="4016" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round"/>
+<circle cx="924" cy="3996" r="4" fill="#C8CDD4"/>
+<circle cx="938" cy="3996" r="4" fill="#C8CDD4"/>
+<circle cx="952" cy="3996" r="4" fill="#C8CDD4"/>
+<rect x="978" y="3986" width="250" height="20" rx="10" fill="#FFFFFF" stroke="#E2E6EB" stroke-width="1"/>
+<text x="1103" y="4000" font-size="10.5" font-weight="400" fill="#737C89" text-anchor="middle" class="m">aireply.kz</text>
+<text x="930" y="4052" font-size="14" font-weight="600" fill="#15181D">AI Reply</text>
+<text x="1022" y="4052" font-size="10.5" font-weight="400" fill="#737C89">Мүмкіндіктер</text>
+<text x="1115.03" y="4052" font-size="10.5" font-weight="400" fill="#737C89">Тарифтер</text>
+<text x="1185.72" y="4052" font-size="10.5" font-weight="400" fill="#737C89">Қауіпсіздік</text>
+<rect x="1440" y="4038" width="30" height="22" rx="6" fill="#1E4C8A"/>
+<text x="1455" y="4053" font-size="10" font-weight="600" fill="#FFFFFF" text-anchor="middle">KK</text>
+<rect x="1474" y="4038" width="30" height="22" rx="6" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="1489" y="4053" font-size="10" font-weight="600" fill="#737C89" text-anchor="middle">RU</text>
+<rect x="1508" y="4038" width="30" height="22" rx="6" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="1523" y="4053" font-size="10" font-weight="600" fill="#737C89" text-anchor="middle">EN</text>
+<rect x="1542" y="4038" width="30" height="22" rx="6" fill="#F7F9FA" stroke="#E2E6EB" stroke-width="1"/>
+<text x="1557" y="4053" font-size="10" font-weight="600" fill="#737C89" text-anchor="middle">UZ</text>
+<rect x="1582" y="4036" width="62" height="26" rx="7" fill="#FFFFFF" stroke="#15181D" stroke-width="1.2"/>
+<text x="1613" y="4053" font-size="10.5" font-weight="600" fill="#15181D" text-anchor="middle">Кіру</text>
+<line x1="903" y1="4076" x2="1671" y2="4076" stroke="#EDF0F3" stroke-width="1" stroke-linecap="round"/>
+<text x="930" y="4124" font-size="24" font-weight="600" fill="#15181D">Кез келген хабарламаға</text>
+<text x="930" y="4156" font-size="24" font-weight="600" fill="#1E4C8A">бірнеше секундта жауап</text>
+<text x="930" y="4186" font-size="12.5" font-weight="400" fill="#737C89">Пернетақтаңыздың ішінде жұмыс істейді. Мәтініңіз</text>
+<text x="930" y="4205" font-size="12.5" font-weight="400" fill="#737C89">ешқайда сақталмайды, ешкім оқымайды.</text>
+<rect x="930" y="4230" width="132" height="36" rx="9" fill="#1E4C8A"/>
+<text x="996" y="4253" font-size="12" font-weight="600" fill="#FFFFFF" text-anchor="middle">Тегін бастау</text>
+<text x="1082" y="4253" font-size="12" font-weight="500" fill="#1E4C8A">Қалай жұмыс істейді →</text>
+<rect x="1492" y="4100" width="146" height="146" rx="16" fill="#FFFFFF" stroke="#E2E6EB" stroke-width="1.2"/>
+<rect x="1506" y="4118" width="86" height="24" rx="8" fill="#F1F3F6"/>
+<rect x="1538" y="4150" width="86" height="22" rx="8" fill="#EDF2F9"/>
+<rect x="1506" y="4180" width="62" height="18" rx="7" fill="#F1F3F6"/>
+<rect x="1502" y="4206" width="126" height="32" rx="7" fill="#EEF1F4"/>
+<rect x="1507" y="4212" width="13" height="8" rx="2" fill="#FFFFFF"/>
+<rect x="1524" y="4212" width="13" height="8" rx="2" fill="#FFFFFF"/>
+<rect x="1541" y="4212" width="13" height="8" rx="2" fill="#FFFFFF"/>
+<rect x="1558" y="4212" width="13" height="8" rx="2" fill="#FFFFFF"/>
+<rect x="1575" y="4212" width="13" height="8" rx="2" fill="#FFFFFF"/>
+<rect x="1592" y="4212" width="13" height="8" rx="2" fill="#FFFFFF"/>
+<rect x="1609" y="4212" width="13" height="8" rx="2" fill="#FFFFFF"/>
+<rect x="1507" y="4224" width="13" height="8" rx="2" fill="#FFFFFF"/>
+<rect x="1524" y="4224" width="13" height="8" rx="2" fill="#FFFFFF"/>
+<rect x="1541" y="4224" width="13" height="8" rx="2" fill="#FFFFFF"/>
+<rect x="1558" y="4224" width="13" height="8" rx="2" fill="#FFFFFF"/>
+<rect x="1575" y="4224" width="13" height="8" rx="2" fill="#FFFFFF"/>
+<rect x="1592" y="4224" width="13" height="8" rx="2" fill="#FFFFFF"/>
+<rect x="1609" y="4224" width="13" height="8" rx="2" fill="#FFFFFF"/>
+<line x1="903" y1="4252" x2="1671" y2="4252" stroke="#EDF0F3" stroke-width="1" stroke-linecap="round"/>
+<rect x="930" y="4276" width="20" height="20" rx="6" fill="#EDF2F9"/>
+<rect x="936" y="4282" width="8" height="8" rx="2" fill="#1E4C8A"/>
+<text x="960" y="4285" font-size="11.5" font-weight="600" fill="#15181D">Пернетақтада</text>
+<text x="960" y="4301" font-size="10.5" font-weight="400" fill="#737C89">Қосымшаны ашпайсыз</text>
+<rect x="1168" y="4276" width="20" height="20" rx="6" fill="#EDF2F9"/>
+<rect x="1174" y="4282" width="8" height="8" rx="2" fill="#1E4C8A"/>
+<text x="1198" y="4285" font-size="11.5" font-weight="600" fill="#15181D">Төрт тіл</text>
+<text x="1198" y="4301" font-size="10.5" font-weight="400" fill="#737C89">KK · RU · EN · UZ</text>
+<rect x="1406" y="4276" width="20" height="20" rx="6" fill="#EDF2F9"/>
+<rect x="1412" y="4282" width="8" height="8" rx="2" fill="#1E4C8A"/>
+<text x="1436" y="4285" font-size="11.5" font-weight="600" fill="#15181D">Мәтін сақталмайды</text>
+<text x="1436" y="4301" font-size="10.5" font-weight="400" fill="#737C89">Логта да жоқ</text>
+<text x="88" y="4384" font-size="15.5" font-weight="600" fill="#15181D">Админ панель · Vue 3</text>
+<text x="88" y="4408" font-size="12.8" font-weight="400" fill="#737C89">Статистика, қолданушылар, тарифтер, аудит журналы, хабарландыру және баптаулар. Кіру бөлек құпиясөзбен, әр әрекет</text>
+<text x="88" y="4426" font-size="12.8" font-weight="400" fill="#737C89">журналға жазылады.</text>
+<text x="902" y="4384" font-size="15.5" font-weight="600" fill="#15181D">Лендинг · төрт тіл</text>
+<text x="902" y="4408" font-size="12.8" font-weight="400" fill="#737C89">Қазақша, орысша, ағылшынша, өзбекше. Өнімнің не істейтінін және деректің қайда кетпейтінін түсіндіреді.</text>
+<line x1="88" y1="4488" x2="1672" y2="4488" stroke="#E2E6EB" stroke-width="1" stroke-linecap="round"/>
+<text x="88" y="4522" font-size="12.5" font-weight="600" fill="#3B434F">AI Reply — жүйенің толық ағыны</text>
+<text x="1672" y="4522" font-size="12.5" font-weight="400" fill="#9BA4AF" text-anchor="end">Go · SQLite · SwiftUI · Jetpack Compose · Vue 3</text>
+</svg>
