@@ -35,6 +35,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kz.yerek.aireply.R
 import kz.yerek.aireply.ai.AIConfiguration
+import kz.yerek.aireply.ai.AITransportMode
+import kz.yerek.aireply.ui.feature.account.AccountSection
+import kz.yerek.aireply.ui.feature.account.ServiceModeEditor
 import kz.yerek.aireply.core.lang.AppLanguage
 import kz.yerek.aireply.data.settings.AppearancePreference
 import kz.yerek.aireply.ui.LocalServices
@@ -57,6 +60,7 @@ fun SettingsScreen(onBack: () -> Unit, onOpen: (String) -> Unit) {
     var appearance by remember { mutableStateOf(services.settings.appearance) }
     var language by remember { mutableStateOf(services.settings.appLanguage) }
     var model by remember { mutableStateOf(services.aiConfiguration.model) }
+    var transportMode by remember { mutableStateOf(services.aiConfiguration.mode) }
 
     // Committed on the way out as well as on submit, so a model name typed
     // without pressing done is not silently discarded.
@@ -96,12 +100,25 @@ fun SettingsScreen(onBack: () -> Unit, onOpen: (String) -> Unit) {
                 Footnote(stringResource(R.string.settings_setup_footer))
             }
 
-            AppSection(stringResource(R.string.settings_ai)) {
-                AppCard { ApiKeyEditor() }
-                Footnote(stringResource(R.string.settings_ai_key_footer))
+            if (transportMode == AITransportMode.BACKEND &&
+                services.aiConfiguration.backendBaseUrl != null
+            ) {
+                AccountSection(onOpenSubscription = { onOpen(Routes.Subscription) })
             }
 
-            AppSection(stringResource(R.string.settings_ai_model)) {
+            ServiceModeEditor(mode = transportMode, onModeChange = { transportMode = it })
+
+            // Only direct mode has a key or a model to configure: in service
+            // mode both live on the server, and showing them here would invite
+            // a user to change something that has no effect.
+            if (transportMode == AITransportMode.DIRECT) {
+                AppSection(stringResource(R.string.settings_ai)) {
+                    AppCard { ApiKeyEditor() }
+                    Footnote(stringResource(R.string.settings_ai_key_footer))
+                }
+            }
+
+            if (transportMode == AITransportMode.DIRECT) AppSection(stringResource(R.string.settings_ai_model)) {
                 AppCard {
                     OutlinedTextField(
                         value = model,

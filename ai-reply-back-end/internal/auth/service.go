@@ -81,7 +81,7 @@ func (s *Service) RequestOTP(ctx context.Context, rawIdentifier, locale string) 
 	if err != nil {
 		return Challenge{}, err
 	}
-	if count >= s.cfg.OTPMaxAttempts {
+	if count >= s.cfg.OTPRequestsPerHour {
 		return Challenge{}, domain.ErrRateLimited
 	}
 

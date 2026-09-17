@@ -99,9 +99,22 @@ func SecurityHeaders(production bool) func(http.Handler) http.Handler {
 			h.Set("Referrer-Policy", "strict-origin-when-cross-origin")
 			h.Set("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
 			// Барлық стиль мен скрипт өз доменімізден: сыртқы CDN жоқ.
+			//
+			// The admin panel gets one extra source, and only it: Vue's runtime
+			// template compiler builds render functions with `new Function`,
+			// which 'unsafe-eval' is what permits. The trade is deliberate and
+			// contained — the landing page, the mobile API and everything a
+			// signed-out visitor can reach keep the strict policy, and the
+			// admin panel is same-origin, behind a session, and renders every
+			// value through Vue's escaped interpolation rather than raw HTML.
+			// Precompiling the templates at build time removes this line.
+			script := "script-src 'self'"
+			if strings.HasPrefix(r.URL.Path, "/admin") {
+				script = "script-src 'self' 'unsafe-eval'"
+			}
 			h.Set("Content-Security-Policy",
 				"default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; "+
-					"script-src 'self'; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'")
+					script+"; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'")
 			if production {
 				h.Set("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
 			}

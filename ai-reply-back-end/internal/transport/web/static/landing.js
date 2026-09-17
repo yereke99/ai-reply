@@ -1,127 +1,193 @@
 /*
- * Лендингтің интерактив бөлігі (Vue 3). Негізгі мазмұн серверде рендерленеді —
- * бұл скрипт тек демо анимациясы мен санауыштарды қосады.
+ * Лендингтің интерактив бөлігі. Фреймворксіз: мазмұн серверде рендерленген,
+ * бұл скрипт оны тек жандандырады.
+ *
+ * WHY NO FRAMEWORK HERE. The page is server-rendered for search engines and for
+ * the first paint, and everything below is three small enhancements. Shipping a
+ * runtime to a marketing page would cost every visitor a download, and its
+ * template compiler would need 'unsafe-eval' in the Content-Security-Policy —
+ * a real weakening of a public page in exchange for nothing. The admin panel,
+ * which is behind a session and genuinely interactive, keeps Vue.
  */
 (function () {
   "use strict";
 
-  var Vue = window.Vue;
-  var node = document.getElementById("landing-data");
-  if (!Vue || !node) return;
-  var data = JSON.parse(node.textContent);
+  var data = readJSON("landing-data");
 
-  /* Пернетақта демосы: хабарлама → нұсқау → жауап, әріптеп теріледі. */
-  var Demo = {
-    data: function () {
-      return { scenes: data.scenes, index: 0, incoming: "", instruction: "", reply: "", stage: 0, timer: null };
-    },
-    mounted: function () { this.play(); },
-    unmounted: function () { clearTimeout(this.timer); },
-    methods: {
-      wait: function (ms) {
-        var self = this;
-        return new Promise(function (resolve) { self.timer = setTimeout(resolve, ms); });
-      },
-      type: async function (field, text, speed) {
-        this[field] = "";
-        for (var i = 0; i < text.length; i++) {
-          this[field] += text[i];
-          if (i % 2 === 0) await this.wait(speed);
-        }
-      },
-      play: async function () {
-        var scene = this.scenes[this.index];
-        this.stage = 0; this.incoming = ""; this.instruction = ""; this.reply = "";
-        await this.wait(400);
-        this.stage = 1;
-        await this.type("incoming", scene.incoming, 14);
-        await this.wait(650);
-        this.stage = 2;
-        await this.type("instruction", scene.instruction, 16);
-        await this.wait(500);
-        this.stage = 3;   // «ойлану» күйі
-        await this.wait(900);
-        this.stage = 4;
-        await this.type("reply", scene.reply, 12);
-        await this.wait(2600);
-        this.index = (this.index + 1) % this.scenes.length;
-        this.play();
-      },
-      pick: function (i) { clearTimeout(this.timer); this.index = i; this.play(); }
-    },
-    template: `
-      <div class="phone">
-        <div class="phone-screen">
-          <div class="chat-row" :class="{ 'is-on': stage >= 1 }">
-            <div class="chat-label">{{ scenes[index].labelIncoming }}</div>
-            <div class="bubble bubble-in">{{ incoming }}<span class="caret" v-if="stage === 1"></span></div>
-          </div>
-          <div class="chat-row" :class="{ 'is-on': stage >= 2 }">
-            <div class="chat-label">{{ scenes[index].labelInstruction }}</div>
-            <div class="bubble bubble-instruction">{{ instruction }}<span class="caret" v-if="stage === 2"></span></div>
-          </div>
-          <div class="chat-row" :class="{ 'is-on': stage >= 3 }">
-            <div class="chat-label">{{ scenes[index].labelReply }}</div>
-            <div class="bubble bubble-out" v-if="stage === 3"><span class="typing"><i></i><i></i><i></i></span></div>
-            <div class="bubble bubble-out" v-else-if="stage >= 4">{{ reply }}</div>
-          </div>
-          <div class="kbd-hint">
-            <span>AI Reply</span>
-            <span class="kbd-keys"><i v-for="n in 5" :key="n"></i></span>
-          </div>
-        </div>
-        <div class="phone-dots">
-          <button v-for="(s, i) in scenes" :key="i" :class="{ 'is-active': i === index }"
-                  @click="pick(i)" :aria-label="'demo ' + (i + 1)"></button>
-        </div>
-      </div>`
-  };
+  function readJSON(id) {
+    var node = document.getElementById(id);
+    if (!node) return null;
+    try { return JSON.parse(node.textContent); } catch (error) { return null; }
+  }
 
-  /* Санауыштар: көрінген сәтте нөлден нақты мәнге дейін өседі. */
-  var Counter = {
-    props: { value: { type: Number, default: 0 }, suffix: { type: String, default: "" } },
-    data: function () { return { shown: 0 }; },
-    mounted: function () {
-      var self = this;
-      var observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (!entry.isIntersecting) return;
-          observer.disconnect();
-          var start = performance.now(), duration = 1100;
-          function step(now) {
-            var progress = Math.min((now - start) / duration, 1);
-            self.shown = Math.round(self.value * (1 - Math.pow(1 - progress, 3)));
-            if (progress < 1) requestAnimationFrame(step);
-          }
-          requestAnimationFrame(step);
-        });
-      }, { threshold: 0.4 });
-      observer.observe(this.$el);
-    },
-    template: `<span class="counter">{{ shown }}{{ suffix }}</span>`
-  };
+  /* ------------------------------------------------- keyboard demo */
+  var phone = document.getElementById("hero-demo");
+  if (phone && data && data.scenes && data.scenes.length) {
+    startDemo(phone, data.scenes);
+  }
 
-  Vue.createApp({ components: { Demo: Demo } }).mount("#hero-demo");
-  Vue.createApp({ components: { Counter: Counter } }).mount("#stats-strip");
+  function startDemo(root, scenes) {
+    var fields = {
+      incoming: root.querySelector('[data-field="incoming"]'),
+      instruction: root.querySelector('[data-field="instruction"]'),
+      reply: root.querySelector('[data-field="reply"]')
+    };
+    var rows = {
+      incoming: root.querySelector('[data-stage="1"]'),
+      instruction: root.querySelector('[data-stage="2"]'),
+      reply: root.querySelector('[data-stage="3"]')
+    };
+    var dotsHost = root.querySelector("[data-dots]");
+    var index = 0, timer = null, runId = 0;
 
-  /* Скролл кезінде секцияларды жұмсақ көрсету. */
-  var reveal = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) { entry.target.classList.add("is-visible"); reveal.unobserve(entry.target); }
+    // Motion is an enhancement, never a requirement: a visitor who asked the
+    // system not to animate still sees the whole conversation, just at rest.
+    var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    var dots = scenes.map(function (_, i) {
+      var button = document.createElement("button");
+      button.type = "button";
+      button.setAttribute("aria-label", "demo " + (i + 1));
+      button.addEventListener("click", function () { play(i, true); });
+      dotsHost.appendChild(button);
+      return button;
     });
-  }, { threshold: 0.12 });
-  document.querySelectorAll(".reveal").forEach(function (node) { reveal.observe(node); });
 
-  /* Мобильді мәзір. */
+    function wait(ms) {
+      return new Promise(function (resolve) { timer = setTimeout(resolve, ms); });
+    }
+
+    function type(node, text, speed, run) {
+      node.textContent = "";
+      node.classList.add("is-typing");
+      return new Promise(function (resolve) {
+        var i = 0;
+        (function step() {
+          if (run !== runId) return resolve();
+          node.textContent = text.slice(0, i);
+          i += 2;
+          if (i <= text.length + 2) {
+            timer = setTimeout(step, speed);
+          } else {
+            node.textContent = text;
+            node.classList.remove("is-typing");
+            resolve();
+          }
+        })();
+      });
+    }
+
+    function markDots() {
+      dots.forEach(function (dot, i) { dot.classList.toggle("is-active", i === index); });
+    }
+
+    function reset() {
+      Object.keys(rows).forEach(function (key) { rows[key].classList.remove("is-on"); });
+      fields.reply.classList.remove("is-thinking");
+      fields.reply.textContent = "";
+    }
+
+    // Every run carries an id. A dot tapped mid-animation bumps it, and the
+    // steps of the previous run return instead of writing into the DOM the new
+    // one is already using — no overlapping typing, no stray timers.
+    async function play(next, manual) {
+      clearTimeout(timer);
+      runId += 1;
+      var run = runId;
+
+      index = typeof next === "number" ? next : index;
+      var scene = scenes[index];
+      markDots();
+
+      if (reduced) {
+        // Still show the finished conversation, just without the typing.
+        Object.keys(rows).forEach(function (key) { rows[key].classList.add("is-on"); });
+        fields.incoming.textContent = scene.incoming;
+        fields.instruction.textContent = scene.instruction;
+        fields.reply.textContent = scene.reply;
+        return;
+      }
+
+      reset();
+      await wait(manual ? 150 : 400);
+      if (run !== runId) return;
+
+      rows.incoming.classList.add("is-on");
+      await type(fields.incoming, scene.incoming, 16, run);
+      if (run !== runId) return;
+      await wait(600);
+
+      rows.instruction.classList.add("is-on");
+      await type(fields.instruction, scene.instruction, 18, run);
+      if (run !== runId) return;
+      await wait(450);
+
+      rows.reply.classList.add("is-on");
+      fields.reply.classList.add("is-thinking");
+      fields.reply.innerHTML = '<span class="typing"><i></i><i></i><i></i></span>';
+      await wait(900);
+      if (run !== runId) return;
+      fields.reply.classList.remove("is-thinking");
+      await type(fields.reply, scene.reply, 14, run);
+      if (run !== runId) return;
+
+      await wait(2800);
+      if (run !== runId) return;
+      index = (index + 1) % scenes.length;
+      play(index, false);
+    }
+
+    play(0, false);
+  }
+
+  /* ------------------------------------------------- counters */
+  var counters = document.querySelectorAll("[data-count]");
+  if (counters.length && "IntersectionObserver" in window) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        observer.unobserve(entry.target);
+        countUp(entry.target);
+      });
+    }, { threshold: 0.4 });
+    counters.forEach(function (node) { observer.observe(node); });
+  }
+
+  function countUp(node) {
+    var target = parseInt(node.getAttribute("data-count"), 10) || 0;
+    var suffix = node.getAttribute("data-suffix") || "";
+    if (target === 0) { node.textContent = "0" + suffix; return; }
+
+    var started = performance.now(), duration = 1100;
+    (function step(now) {
+      var progress = Math.min((now - started) / duration, 1);
+      node.textContent = Math.round(target * (1 - Math.pow(1 - progress, 3))) + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    })(started);
+  }
+
+  /* ------------------------------------------------- reveal on scroll */
+  var sections = document.querySelectorAll(".reveal");
+  if (sections.length && "IntersectionObserver" in window) {
+    var reveal = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        reveal.unobserve(entry.target);
+      });
+    }, { threshold: 0.12 });
+    sections.forEach(function (node) { reveal.observe(node); });
+  } else {
+    sections.forEach(function (node) { node.classList.add("is-visible"); });
+  }
+
+  /* ------------------------------------------------- mobile menu */
   var toggle = document.querySelector(".nav-toggle");
   if (toggle) {
-    toggle.addEventListener("click", function () {
-      document.querySelector(".site-header").classList.toggle("is-open");
-    });
+    var header = document.querySelector(".site-header");
+    toggle.addEventListener("click", function () { header.classList.toggle("is-open"); });
     document.querySelectorAll(".nav a").forEach(function (link) {
-      link.addEventListener("click", function () {
-        document.querySelector(".site-header").classList.remove("is-open");
-      });
+      link.addEventListener("click", function () { header.classList.remove("is-open"); });
     });
   }
 })();

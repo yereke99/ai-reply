@@ -35,7 +35,9 @@ fun NavigationRow(
     icon: ImageVector,
     title: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    /** Optional trailing detail, shown quietly before the chevron. */
+    value: String? = null
 ) {
     Row(
         modifier = modifier
@@ -54,6 +56,13 @@ fun NavigationRow(
         )
         Text(title, style = MaterialTheme.typography.bodyLarge)
         Spacer(Modifier.weight(1f))
+        if (!value.isNullOrEmpty()) {
+            Text(
+                value,
+                style = MaterialTheme.typography.bodyMedium,
+                color = LocalExtraColors.current.textSecondary
+            )
+        }
         Icon(
             Icons.AutoMirrored.Filled.KeyboardArrowRight,
             contentDescription = null,

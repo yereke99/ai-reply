@@ -6,16 +6,24 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.Dispatchers
 import kz.yerek.aireply.ai.AIConfiguration
 import kz.yerek.aireply.ai.AIReplyService
+import kz.yerek.aireply.ai.AccountReplyTransport
 import kz.yerek.aireply.ai.AppStrings
 import kz.yerek.aireply.ai.ReplyDraftNormalizer
 import kz.yerek.aireply.core.lang.AppLanguage
 import kz.yerek.aireply.core.lang.KeyboardLanguage
 import kz.yerek.aireply.core.lang.LocalizedContext
 import kz.yerek.aireply.core.lang.TemplateNaming
+import kz.yerek.aireply.data.account.AccountCredentials
+import kz.yerek.aireply.data.account.AccountService
+import kz.yerek.aireply.data.account.AccountSession
+import kz.yerek.aireply.data.account.AccountUsageCache
+import kz.yerek.aireply.data.account.DeviceDescriptor
 import kz.yerek.aireply.data.profile.ConfigurationRepository
 import kz.yerek.aireply.data.profile.ProfileStore
 import kz.yerek.aireply.data.secure.SecureCredentialStore
 import kz.yerek.aireply.data.settings.SettingsStore
+import kz.yerek.aireply.ui.feature.account.AccountController
+import java.util.TimeZone
 
 /**
  * The object graph, by hand.
@@ -52,6 +60,49 @@ class ServiceLocator(context: Context) {
 
     val aiConfiguration: AIConfiguration by lazy { AIConfiguration(settings, credentials) }
 
+    // ------------------------------------------------------------- account
+
+    val accountCredentials: AccountCredentials by lazy {
+        AccountCredentials(credentials, settings)
+    }
+
+    val usageCache: AccountUsageCache by lazy { AccountUsageCache(settings) }
+
+    /**
+     * One session object for the whole process: the app screens and the input
+     * method share it, so a token is never refreshed twice at once.
+     */
+    val accountSession: AccountSession by lazy {
+        AccountSession(
+            credentials = accountCredentials,
+            baseUrlProvider = { aiConfiguration.backendBaseUrl },
+            deviceDescriptor = ::deviceDescriptor
+        )
+    }
+
+    /** UI-facing account state; one instance for the app and the keyboard. */
+    val account: AccountController by lazy {
+        AccountController(accountService, accountCredentials, usageCache)
+    }
+
+    val accountService: AccountService by lazy {
+        AccountService(
+            session = accountSession,
+            baseUrlProvider = { aiConfiguration.backendBaseUrl },
+            deviceDescriptor = ::deviceDescriptor
+        )
+    }
+
+    /** Platform, version, locale and time zone — nothing that identifies a person. */
+    fun deviceDescriptor(): DeviceDescriptor = DeviceDescriptor(
+        deviceId = accountCredentials.deviceId,
+        platform = "android",
+        appVersion = BuildConfig.VERSION_NAME,
+        osVersion = android.os.Build.VERSION.RELEASE.orEmpty(),
+        locale = settings.effectiveAppLanguage.code,
+        timezone = TimeZone.getDefault().id
+    )
+
     val draftNormalizer: ReplyDraftNormalizer by lazy { ReplyDraftNormalizer() }
 
     val replyService: AIReplyService by lazy {
@@ -60,6 +111,18 @@ class ServiceLocator(context: Context) {
             credentials = credentials,
             nameTemplate = { template, language ->
                 TemplateNaming.displayName(localized(language), template)
+            },
+            // Signed in: the account endpoint, which also returns the quota.
+            // Not signed in: null, and the service falls back to the legacy
+            // install-token path so an existing install keeps working.
+            accountTransport = { baseUrl, context ->
+                if (!accountSession.isSignedIn) null
+                else AccountReplyTransport(
+                    baseUrl = baseUrl,
+                    session = accountSession,
+                    usageCache = usageCache,
+                    context = context
+                )
             }
         )
     }

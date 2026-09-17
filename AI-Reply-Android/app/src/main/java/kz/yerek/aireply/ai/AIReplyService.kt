@@ -2,6 +2,7 @@ package kz.yerek.aireply.ai
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ensureActive
+import kz.yerek.aireply.BuildConfig
 import kz.yerek.aireply.core.lang.AppLanguage
 import kz.yerek.aireply.core.text.clampToCodePoints
 import kz.yerek.aireply.core.text.codePointLength
@@ -26,6 +27,12 @@ class AIReplyService(
     private val configuration: AIConfiguration,
     private val credentials: SecureCredentialStore,
     private val nameTemplate: (ReplyTemplate, AppLanguage) -> String,
+    /**
+     * Builds the account transport when a session exists, or returns null so
+     * the legacy install-token path is used. Injected rather than constructed
+     * here, because this class must stay free of storage and DI concerns.
+     */
+    private val accountTransport: ((String, AccountReplyTransport.RequestContext) -> ReplyTransport?)? = null,
     private val transportOverride: ((Request, ReplyPromptBuilder.Prompt) -> ReplyTransport)? = null
 ) {
 
@@ -121,6 +128,29 @@ class AIReplyService(
                 ?: return UnconfiguredTransport
             val template = request.template
             val profile = request.configuration.profile
+
+            // A signed-in account gets the endpoint that knows who it is and
+            // answers with the quota; everyone else keeps the old path.
+            accountTransport?.invoke(
+                baseUrl,
+                AccountReplyTransport.RequestContext(
+                    message = message,
+                    userInstruction = instruction,
+                    templateId = template.id,
+                    templateName = templateName,
+                    templateRelationship = template.relationship.raw,
+                    templateTone = template.tone,
+                    templateInstructions = template.instructions,
+                    templateReplyLength = template.replyLength,
+                    templateEmojiPolicy = template.emojiPolicy,
+                    templateWorkingHoursBehaviour = template.workingHoursBehaviour,
+                    templateBusiness = template.effectiveBusiness,
+                    appLanguage = request.uiLanguage.code,
+                    business = businessContext,
+                    appVersion = BuildConfig.VERSION_NAME
+                )
+            )?.let { return it }
+
             BackendTransport(
                 baseUrl = baseUrl,
                 credentials = credentials,

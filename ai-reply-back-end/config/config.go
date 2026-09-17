@@ -71,9 +71,11 @@ type Auth struct {
 	DemoOTP        string
 	OTPTTL         time.Duration
 	OTPMaxAttempts int
-	OTPChannel     string // stub | sms | whatsapp | email
-	LegacySecret   string // ескі мобильді build-тердің install-token қолтаңбасы
-	LegacyEnabled  bool
+	// Бір идентификаторға сағатына сұрауға болатын код саны.
+	OTPRequestsPerHour int
+	OTPChannel         string // stub | sms | whatsapp | email
+	LegacySecret       string // ескі мобильді build-тердің install-token қолтаңбасы
+	LegacyEnabled      bool
 }
 
 type OpenAI struct {
@@ -139,18 +141,19 @@ func Load(envFile string) (Config, error) {
 			MigrateOnStart: boolean("DB_MIGRATE_ON_START", true),
 		},
 		Auth: Auth{
-			AccessSecret:   str("JWT_ACCESS_SECRET", ""),
-			RefreshSecret:  str("JWT_REFRESH_SECRET", ""),
-			AccessTTL:      dur("ACCESS_TOKEN_TTL", 15*time.Minute),
-			RefreshTTL:     dur("REFRESH_TOKEN_TTL", 30*24*time.Hour),
-			Issuer:         str("JWT_ISSUER", "ai-reply"),
-			DemoMode:       boolean("AUTH_DEMO_MODE", true),
-			DemoOTP:        str("AUTH_DEMO_OTP", "1111"),
-			OTPTTL:         dur("OTP_TTL", 5*time.Minute),
-			OTPMaxAttempts: num("OTP_MAX_ATTEMPTS", 5),
-			OTPChannel:     str("OTP_CHANNEL", "stub"),
-			LegacySecret:   str("AUTH_SIGNING_SECRET", ""),
-			LegacyEnabled:  boolean("LEGACY_API_ENABLED", true),
+			AccessSecret:       str("JWT_ACCESS_SECRET", ""),
+			RefreshSecret:      str("JWT_REFRESH_SECRET", ""),
+			AccessTTL:          dur("ACCESS_TOKEN_TTL", 15*time.Minute),
+			RefreshTTL:         dur("REFRESH_TOKEN_TTL", 30*24*time.Hour),
+			Issuer:             str("JWT_ISSUER", "ai-reply"),
+			DemoMode:           boolean("AUTH_DEMO_MODE", true),
+			DemoOTP:            str("AUTH_DEMO_OTP", "1111"),
+			OTPTTL:             dur("OTP_TTL", 5*time.Minute),
+			OTPMaxAttempts:     num("OTP_MAX_ATTEMPTS", 5),
+			OTPRequestsPerHour: num("RATE_OTP_REQUEST_PER_HOUR", 5),
+			OTPChannel:         str("OTP_CHANNEL", "stub"),
+			LegacySecret:       str("AUTH_SIGNING_SECRET", ""),
+			LegacyEnabled:      boolean("LEGACY_API_ENABLED", true),
 		},
 		OpenAI: OpenAI{
 			APIKey:          str("OPENAI_API_KEY", ""),

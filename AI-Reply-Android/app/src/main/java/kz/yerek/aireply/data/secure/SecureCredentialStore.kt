@@ -66,6 +66,39 @@ class SecureCredentialStore(context: Context) {
         return write(KEY_BACKEND_TOKEN, trimmed)
     }
 
+    // -------------------------------------------------------- account tokens
+
+    /**
+     * The signed-in session's token pair.
+     *
+     * Тіркелгі токендері де осы шифрланған қоймада — қарапайым prefs-те емес.
+     *
+     * Same protection as the provider key above, and for the same reason: the
+     * input method has to read these while the device is locked but in use, and
+     * nothing here may survive a backup restored onto another phone.
+     */
+    fun accessToken(): String? = read(KEY_ACCESS_TOKEN)
+
+    fun setAccessToken(value: String?): Boolean {
+        val trimmed = value?.trim()
+        if (trimmed.isNullOrEmpty()) return delete(KEY_ACCESS_TOKEN)
+        return write(KEY_ACCESS_TOKEN, trimmed)
+    }
+
+    fun refreshToken(): String? = read(KEY_REFRESH_TOKEN)
+
+    fun setRefreshToken(value: String?): Boolean {
+        val trimmed = value?.trim()
+        if (trimmed.isNullOrEmpty()) return delete(KEY_REFRESH_TOKEN)
+        return write(KEY_REFRESH_TOKEN, trimmed)
+    }
+
+    /** Drops the whole session. Used by sign-out and by an unrecoverable 401. */
+    fun clearAccountTokens() {
+        delete(KEY_ACCESS_TOKEN)
+        delete(KEY_REFRESH_TOKEN)
+    }
+
     // ---------------------------------------------------------------- crypto
 
     private fun read(name: String): String? = runCatching {
@@ -134,5 +167,7 @@ class SecureCredentialStore(context: Context) {
 
         const val KEY_API = "openai.api.key"
         const val KEY_BACKEND_TOKEN = "backend.client.token"
+        const val KEY_ACCESS_TOKEN = "account.access.token"
+        const val KEY_REFRESH_TOKEN = "account.refresh.token"
     }
 }

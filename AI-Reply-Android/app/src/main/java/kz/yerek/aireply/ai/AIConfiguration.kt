@@ -78,6 +78,17 @@ class AIConfiguration(
 
     val installIdentifier: String get() = settings.installIdentifier
 
+    /**
+     * Whether this configuration expects a signed-in account.
+     *
+     * Only true when the app is actually pointed at our service. A build in
+     * DIRECT mode, or one with no base URL, keeps working without any account
+     * at all — an existing user should not meet a sign-in screen because the
+     * product gained a server.
+     */
+    val requiresAccount: Boolean
+        get() = mode == AITransportMode.BACKEND && backendBaseUrl != null
+
     /** Whether a generation attempt can even be made right now. */
     val isReady: Boolean
         get() = when (mode) {

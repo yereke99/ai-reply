@@ -94,6 +94,9 @@ func (s *Server) Register(mux *http.ServeMux) {
 	// --- профиль және қолданыс
 	mux.Handle("GET /api/v1/me", s.requireUser(http.HandlerFunc(s.handleMe)))
 	mux.Handle("PATCH /api/v1/me", s.requireUser(http.HandlerFunc(s.handleUpdateMe)))
+	// Android alias: HttpURLConnection refuses PATCH outright, and a reflection
+	// hack on a platform class is a worse thing to ship than one extra route.
+	mux.Handle("POST /api/v1/me", s.requireUser(http.HandlerFunc(s.handleUpdateMe)))
 	mux.Handle("GET /api/v1/me/usage", s.requireUser(http.HandlerFunc(s.handleUsage)))
 	mux.Handle("GET /api/v1/me/subscription", s.requireUser(http.HandlerFunc(s.handleSubscription)))
 	mux.Handle("GET /api/v1/me/devices", s.requireUser(http.HandlerFunc(s.handleListDevices)))

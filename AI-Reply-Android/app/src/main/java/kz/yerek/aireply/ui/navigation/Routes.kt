@@ -16,6 +16,7 @@ object Routes {
     const val WorkingHours = "hours"
     const val Settings = "settings"
     const val KeyboardSetup = "setup"
+    const val Subscription = "subscription"
 
     fun templateEditor(id: String) = "$TemplateEditor/$id"
     const val TemplateEditorPattern = "$TemplateEditor/{id}"

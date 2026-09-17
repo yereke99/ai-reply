@@ -150,6 +150,75 @@ class SettingsStore(context: Context) {
             return created
         }
 
+    // ---------------------------------------------------------- account state
+
+    /**
+     * NON-SECRET account state only. The tokens live in the Keystore-backed
+     * store; what is here is what a screen needs to draw itself before any
+     * network call returns.
+     */
+    var accessTokenExpiry: Long
+        get() = prefs.getLong(KEY_ACCESS_EXPIRY, 0L)
+        set(value) = prefs.edit().putLong(KEY_ACCESS_EXPIRY, value).apply()
+
+    /** Masked by the server before it ever reached us. */
+    var accountIdentifier: String?
+        get() = prefs.getString(KEY_ACCOUNT_IDENTIFIER, null)
+        set(value) {
+            prefs.edit().apply {
+                if (value.isNullOrEmpty()) remove(KEY_ACCOUNT_IDENTIFIER)
+                else putString(KEY_ACCOUNT_IDENTIFIER, value)
+            }.apply()
+        }
+
+    /** Server-issued device id, so a re-install does not orphan a device row. */
+    var accountDeviceId: String?
+        get() = prefs.getString(KEY_ACCOUNT_DEVICE, null)
+        set(value) {
+            prefs.edit().apply {
+                if (value.isNullOrEmpty()) remove(KEY_ACCOUNT_DEVICE)
+                else putString(KEY_ACCOUNT_DEVICE, value)
+            }.apply()
+        }
+
+    /**
+     * Last known quota, for display only.
+     *
+     * The server enforces the limit; if this and the server disagree, the
+     * server is right. It exists so the keyboard can show "2 left today" the
+     * instant it opens instead of blanking a label until a call returns.
+     */
+    var cachedDailyLimit: Int
+        get() = prefs.getInt(KEY_USAGE_LIMIT, 0)
+        set(value) = prefs.edit().putInt(KEY_USAGE_LIMIT, value).apply()
+
+    var cachedUsedToday: Int
+        get() = prefs.getInt(KEY_USAGE_USED, 0)
+        set(value) = prefs.edit().putInt(KEY_USAGE_USED, value).apply()
+
+    var cachedRemainingToday: Int
+        get() = prefs.getInt(KEY_USAGE_REMAINING, 0)
+        set(value) = prefs.edit().putInt(KEY_USAGE_REMAINING, value).apply()
+
+    var cachedPlanCode: String?
+        get() = prefs.getString(KEY_USAGE_PLAN, null)
+        set(value) {
+            prefs.edit().apply {
+                if (value.isNullOrEmpty()) remove(KEY_USAGE_PLAN) else putString(KEY_USAGE_PLAN, value)
+            }.apply()
+        }
+
+    fun clearAccountState() {
+        prefs.edit()
+            .remove(KEY_ACCESS_EXPIRY)
+            .remove(KEY_ACCOUNT_IDENTIFIER)
+            .remove(KEY_USAGE_LIMIT)
+            .remove(KEY_USAGE_USED)
+            .remove(KEY_USAGE_REMAINING)
+            .remove(KEY_USAGE_PLAN)
+            .apply()
+    }
+
     // ------------------------------------------------------- onboarding hints
 
     /** Set once the setup guide has been completed, to stop re-nudging. */
@@ -170,5 +239,13 @@ class SettingsStore(context: Context) {
         const val KEY_AI_MODEL = "ai.model"
         const val KEY_AI_BACKEND = "ai.backendBaseURL"
         const val KEY_INSTALL_ID = "ai.installIdentifier"
+
+        const val KEY_ACCESS_EXPIRY = "account.accessTokenExpiry"
+        const val KEY_ACCOUNT_IDENTIFIER = "account.identifier"
+        const val KEY_ACCOUNT_DEVICE = "account.deviceId"
+        const val KEY_USAGE_LIMIT = "account.usage.dailyLimit"
+        const val KEY_USAGE_USED = "account.usage.usedToday"
+        const val KEY_USAGE_REMAINING = "account.usage.remainingToday"
+        const val KEY_USAGE_PLAN = "account.usage.planCode"
     }
 }

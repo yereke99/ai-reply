@@ -48,6 +48,8 @@ import kz.yerek.aireply.ui.design.SecondaryButton
 import kz.yerek.aireply.ui.design.Spacing
 import kz.yerek.aireply.ui.design.StepRow
 import kz.yerek.aireply.ui.navigation.Routes
+import androidx.compose.runtime.LaunchedEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 /**
  * The root screen.
@@ -140,6 +142,10 @@ fun HomeScreen(onOpen: (String) -> Unit) {
                 }
             }
 
+            if (services.aiConfiguration.requiresAccount) {
+                UsageCard(onOpen = onOpen)
+            }
+
             AppSection(stringResource(R.string.home_profile_title)) {
                 RowGroup {
                     NavigationRow(
@@ -221,6 +227,71 @@ fun HomeScreen(onOpen: (String) -> Unit) {
 
             AppSection(stringResource(R.string.home_privacy_title)) {
                 AppCard { Footnote(stringResource(R.string.settings_privacy_body)) }
+            }
+        }
+    }
+}
+
+/**
+ * What is left today, and a way to the plans.
+ *
+ * Бүгін неше жауап қалғаны — серверден, кештен емес.
+ *
+ * Shown only for accounts, because only the server knows the number. The cached
+ * value renders instantly and the fresh one replaces it a moment later.
+ */
+@Composable
+private fun UsageCard(onOpen: (String) -> Unit) {
+    val services = LocalServices.current
+    val state by services.account.state.collectAsStateWithLifecycle()
+    val language = services.settings.effectiveAppLanguage.code
+
+    LaunchedEffect(Unit) { services.account.refresh() }
+
+    if (!state.isSignedIn) return
+
+    val cached = services.usageCache.current()
+    val remaining = if (state.usage.dailyLimit > 0) state.usage.remainingToday else cached.remainingToday
+    val limit = if (state.usage.dailyLimit > 0) state.usage.dailyLimit else cached.dailyLimit
+
+    AppCard(modifier = Modifier.clickable { onOpen(Routes.Subscription) }) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(Spacing.xxs)) {
+                Text(
+                    stringResource(R.string.home_usage_title),
+                    style = MaterialTheme.typography.titleSmall
+                )
+                Text(
+                    state.subscription?.plan?.localizedName(language).orEmpty(),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = LocalExtraColors.current.textSecondary
+                )
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(
+                        remaining.toString(),
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = if (remaining > 0) MaterialTheme.colorScheme.primary
+                        else MaterialTheme.colorScheme.error
+                    )
+                    Text(
+                        stringResource(R.string.home_usage_left, limit),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = LocalExtraColors.current.textSecondary
+                    )
+                }
+                Spacer(Modifier.size(Spacing.xs))
+                Icon(
+                    Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null,
+                    tint = LocalExtraColors.current.textTertiary,
+                    modifier = Modifier.size(20.dp)
+                )
             }
         }
     }

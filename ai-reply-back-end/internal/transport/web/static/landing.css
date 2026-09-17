@@ -256,10 +256,13 @@ details.qa p { color: var(--muted); margin: 12px 0 0; font-size: 16px; }
 .phone-dots button.is-active { background: var(--brand); width: 20px; border-radius: 999px; }
 
 .chat-row { opacity: 0; transform: translateY(6px); transition: opacity .28s ease, transform .28s ease; min-height: 0; }
+/* Без JS (или до его загрузки) диалог виден целиком. */
+.no-js .chat-row, html:not(.js) .chat-row { opacity: 1; transform: none; }
 .chat-row.is-on { opacity: 1; transform: none; }
 .bubble { min-height: 20px; }
-.caret { display: inline-block; width: 2px; height: 15px; background: var(--brand); margin-left: 2px;
-  vertical-align: -2px; animation: blink .9s step-end infinite; }
+.bubble.is-typing::after { content: ""; display: inline-block; width: 2px; height: 15px;
+  background: currentColor; margin-left: 3px; vertical-align: -2px; animation: blink .9s step-end infinite; }
+.bubble-out.is-typing::after { background: #fff; }
 @keyframes blink { 50% { opacity: 0; } }
 .typing { display: inline-flex; gap: 4px; padding: 2px 0; }
 .typing i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.85);

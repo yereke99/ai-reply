@@ -185,3 +185,29 @@ func TestConcurrentSignInCreatesOneAccount(t *testing.T) {
 		t.Fatalf("otp consumed more than once: %d successes", success)
 	}
 }
+
+// Профиль PATCH арқылы да, POST арқылы да жаңарады (Android клиенті үшін).
+func TestProfileUpdateAcceptsPostAlias(t *testing.T) {
+	h := newHarness(t)
+	session := h.signIn("+7 707 555 44 33")
+
+	patched := h.do(http.MethodPatch, "/api/v1/me",
+		map[string]any{"role": "сатушы", "preferred_tone": "professional"}, h.auth(session.access))
+	if patched.status != http.StatusOK {
+		t.Fatalf("PATCH /me: %d %s", patched.status, patched.raw)
+	}
+
+	posted := h.do(http.MethodPost, "/api/v1/me",
+		map[string]any{"description": "Парфюм сатамын", "onboarding_completed": true}, h.auth(session.access))
+	if posted.status != http.StatusOK {
+		t.Fatalf("POST /me: %d %s", posted.status, posted.raw)
+	}
+
+	me := h.do(http.MethodGet, "/api/v1/me", nil, h.auth(session.access))
+	if role := me.str("profile", "role"); role != "сатушы" {
+		t.Fatalf("role = %q after update", role)
+	}
+	if done := me.body["profile"].(map[string]any)["onboarding_completed"]; done != true {
+		t.Fatalf("onboarding flag not stored: %v", done)
+	}
+}

@@ -14,20 +14,40 @@
       <p class="hero-note">{{call .T "hero.note"}}</p>
     </div>
 
-    <div id="hero-demo" class="hero-demo">
-      <demo></demo>
+    <div class="hero-demo">
+      <div class="phone" id="hero-demo" aria-hidden="true">
+        <div class="phone-screen">
+          <div class="chat-row is-on" data-stage="1">
+            <div class="chat-label">{{call .T "hero.demo_label_incoming"}}</div>
+            <div class="bubble bubble-in" data-field="incoming">{{call .T "hero.demo_incoming"}}</div>
+          </div>
+          <div class="chat-row is-on" data-stage="2">
+            <div class="chat-label">{{call .T "hero.demo_label_instruction"}}</div>
+            <div class="bubble bubble-instruction" data-field="instruction">{{call .T "hero.demo_instruction"}}</div>
+          </div>
+          <div class="chat-row is-on" data-stage="3">
+            <div class="chat-label">{{call .T "hero.demo_label_reply"}}</div>
+            <div class="bubble bubble-out" data-field="reply">{{call .T "hero.demo_reply"}}</div>
+          </div>
+          <div class="kbd-hint">
+            <span>AI Reply</span>
+            <span class="kbd-keys"><i></i><i></i><i></i><i></i><i></i></span>
+          </div>
+        </div>
+        <div class="phone-dots" data-dots></div>
+      </div>
     </div>
   </div>
 </section>
 
 <section class="stats-section">
   <div class="wrap">
-    <div id="stats-strip" class="stats-strip">
-      <div class="stat"><b><counter :value="8" suffix="s"></counter></b><span>{{call .T "stats.seconds"}}</span></div>
-      <div class="stat"><b><counter :value="4"></counter></b><span>{{call .T "stats.languages"}}</span></div>
-      <div class="stat"><b><counter :value="12"></counter></b><span>{{call .T "stats.countries"}}</span></div>
-      <div class="stat"><b><counter :value="7"></counter></b><span>{{call .T "stats.free"}}</span></div>
-      <div class="stat"><b><counter :value="0"></counter></b><span>{{call .T "stats.stored"}}</span></div>
+    <div class="stats-strip">
+      <div class="stat"><b data-count="8" data-suffix="s">8s</b><span>{{call .T "stats.seconds"}}</span></div>
+      <div class="stat"><b data-count="4">4</b><span>{{call .T "stats.languages"}}</span></div>
+      <div class="stat"><b data-count="12">12</b><span>{{call .T "stats.countries"}}</span></div>
+      <div class="stat"><b data-count="7">7</b><span>{{call .T "stats.free"}}</span></div>
+      <div class="stat"><b data-count="0">0</b><span>{{call .T "stats.stored"}}</span></div>
     </div>
   </div>
 </section>

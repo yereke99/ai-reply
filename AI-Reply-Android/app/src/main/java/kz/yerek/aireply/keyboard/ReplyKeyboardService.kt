@@ -137,7 +137,9 @@ class ReplyKeyboardService : InputMethodService() {
         chips = cachedChips()
 
         replyFlow.uiLanguage = uiLanguage
-        replyFlow.describeError = { error -> services.strings(uiLanguage).message(error) }
+        replyFlow.describeError = { error ->
+            services.strings(uiLanguage).message(error, services.aiConfiguration.mode)
+        }
         replyFlow.configuration = ReplyConfiguration.INITIAL
     }
 
@@ -619,7 +621,7 @@ class ReplyKeyboardService : InputMethodService() {
     }
 
     private fun showToast(error: AIReplyError) {
-        val message = services.strings(uiLanguage).message(error)
+        val message = services.strings(uiLanguage).message(error, services.aiConfiguration.mode)
         if (message.isEmpty()) return
         replyFlow.showToast(message)
         toastJob?.cancel()
@@ -776,7 +778,9 @@ class ReplyKeyboardService : InputMethodService() {
         if (language != uiLanguage) {
             uiLanguage = language
             replyFlow.uiLanguage = language
-            replyFlow.describeError = { error -> services.strings(language).message(error) }
+            replyFlow.describeError = { error ->
+                services.strings(language).message(error, services.aiConfiguration.mode)
+            }
             chips = cachedChips()
         }
         appearance = services.settings.appearance
