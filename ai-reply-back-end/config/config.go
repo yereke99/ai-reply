@@ -126,9 +126,9 @@ func Load(envFile string) (Config, error) {
 	cfg := Config{
 		App: App{
 			Env:           str("APP_ENV", "development"),
-			Port:          num("APP_PORT", 8080),
+			Port:          num("APP_PORT", 8084),
 			Host:          str("APP_HOST", "0.0.0.0"),
-			PublicBaseURL: strings.TrimRight(str("PUBLIC_BASE_URL", "http://localhost:8080"), "/"),
+			PublicBaseURL: strings.TrimRight(str("PUBLIC_BASE_URL", "https://api.meily.kz"), "/"),
 			Timezone:      str("DEFAULT_TIMEZONE", "Asia/Almaty"),
 			CORSOrigins:   list("CORS_ORIGINS", ""),
 			TrustProxy:    boolean("TRUST_PROXY", false),

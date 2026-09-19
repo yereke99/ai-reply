@@ -23,6 +23,10 @@ struct AIConfiguration: Sendable {
     /// in direct mode this is the default the user can override in Settings.
     static let defaultModel = "gpt-4o-mini"
 
+    /// Production AI Reply API endpoint. Mobile clients talk only to this
+    /// service in the default build; provider credentials stay on the server.
+    static let defaultBackendBaseURLString = "https://api.meily.kz"
+
     /// Output budget, matching the backend's `OPENAI_MAX_OUTPUT_TOKENS`.
     /// Sized for 1-4 short sentences plus headroom, because Cyrillic and
     /// Kazakh tokenize less efficiently than English and a budget tuned on
@@ -58,7 +62,7 @@ struct AIConfiguration: Sendable {
 
     var mode: AITransportMode {
         guard let raw = defaults.string(forKey: Key.mode),
-              let value = AITransportMode(rawValue: raw) else { return .direct }
+              let value = AITransportMode(rawValue: raw) else { return .backend }
         return value
     }
 
@@ -82,8 +86,8 @@ struct AIConfiguration: Sendable {
 
     /// Base URL of our own service, used only in `.backend` mode.
     var backendBaseURL: URL? {
-        guard let raw = defaults.string(forKey: Key.backendURL),
-              let url = URL(string: raw),
+        let raw = defaults.string(forKey: Key.backendURL) ?? Self.defaultBackendBaseURLString
+        guard let url = URL(string: raw),
               let scheme = url.scheme?.lowercased() else { return nil }
         // HTTPS only in production. http is tolerated for a local address so a
         // developer can point at a laptop, and nowhere else.
@@ -98,7 +102,7 @@ struct AIConfiguration: Sendable {
     /// The address exactly as the user typed it, valid or not, so Settings can
     /// show it back to them instead of silently blanking a typo.
     var backendBaseURLString: String {
-        defaults.string(forKey: Key.backendURL) ?? ""
+        defaults.string(forKey: Key.backendURL) ?? Self.defaultBackendBaseURLString
     }
 
     func setBackendBaseURL(_ raw: String) {
@@ -124,10 +128,8 @@ struct AIConfiguration: Sendable {
 
     /// Whether this configuration expects a signed-in account.
     ///
-    /// Only true when the app is actually pointed at our service. A build in
-    /// `.direct` mode, or one with no base URL set, keeps working without any
-    /// account at all - the sign-in screen is not something an existing user
-    /// should meet because the product gained a server.
+    /// Only true when the app is actually pointed at our service. The default
+    /// build is backend-first, so a clean install signs in before generation.
     var requiresAccount: Bool { mode == .backend && backendBaseURL != nil }
 
     /// Whether a generation attempt can even be made right now.

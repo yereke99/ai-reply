@@ -56,7 +56,7 @@ struct APIClient: Sendable {
 
     /// Decoded response plus the bearer token that was used, so a caller that
     /// refreshed mid-flight does not have to ask again.
-    struct Empty: Decodable, Sendable {}
+    struct Empty: Codable, Sendable {}
 
     // MARK: Requests
 

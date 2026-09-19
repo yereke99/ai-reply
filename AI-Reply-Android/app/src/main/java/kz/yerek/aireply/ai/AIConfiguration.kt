@@ -21,7 +21,7 @@ enum class AITransportMode(val raw: String) {
 
     companion object {
         fun fromRaw(raw: String?): AITransportMode =
-            entries.firstOrNull { it.raw == raw } ?: DIRECT
+            entries.firstOrNull { it.raw == raw } ?: BACKEND
     }
 }
 
@@ -57,7 +57,7 @@ class AIConfiguration(
      */
     val backendBaseUrl: String?
         get() {
-            val raw = settings.backendBaseUrl ?: return null
+            val raw = settings.backendBaseUrl ?: DEFAULT_BACKEND_BASE_URL
             val lower = raw.lowercase()
             if (lower.startsWith("https://")) return raw
             if (lower.startsWith("http://")) {
@@ -72,6 +72,8 @@ class AIConfiguration(
             return null
         }
 
+    val backendBaseUrlString: String get() = settings.backendBaseUrl ?: DEFAULT_BACKEND_BASE_URL
+
     fun setBackendBaseUrl(value: String) {
         settings.backendBaseUrl = value
     }
@@ -81,10 +83,8 @@ class AIConfiguration(
     /**
      * Whether this configuration expects a signed-in account.
      *
-     * Only true when the app is actually pointed at our service. A build in
-     * DIRECT mode, or one with no base URL, keeps working without any account
-     * at all — an existing user should not meet a sign-in screen because the
-     * product gained a server.
+     * Only true when the app is actually pointed at our service. The default
+     * build is backend-first, so a clean install signs in before generation.
      */
     val requiresAccount: Boolean
         get() = mode == AITransportMode.BACKEND && backendBaseUrl != null
@@ -103,6 +103,12 @@ class AIConfiguration(
          * in direct mode it is the default the user can override in Settings.
          */
         const val DEFAULT_MODEL = "gpt-4o-mini"
+
+        /**
+         * Production AI Reply API endpoint. Mobile clients talk only to this
+         * service in the default build; provider credentials stay on the server.
+         */
+        const val DEFAULT_BACKEND_BASE_URL = "https://api.meily.kz"
 
         /**
          * Output budget. Sized for 1-4 short sentences plus headroom, because

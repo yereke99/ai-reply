@@ -20,8 +20,7 @@
 байт в байт. Достаточно:
 
 1. `AIConfiguration.setMode(.backend)` / `AITransportMode.BACKEND`;
-2. base URL → адрес сервера (`http://localhost:8080` на симуляторе,
-   `http://10.0.2.2:8080` на эмуляторе Android, `https://…` в проде).
+2. base URL → адрес сервера (`https://api.meily.kz` для iOS и Android).
 
 После этого приложения перестают ходить в OpenAI напрямую, а запросы начинают
 учитываться в квоте и статистике. Проверено тестами `TestLegacyEndpointsStayCompatible`,

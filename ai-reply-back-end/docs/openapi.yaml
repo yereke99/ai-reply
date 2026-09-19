@@ -6,8 +6,8 @@ info:
     Мобильный API AI Reply. Тексты сообщений не сохраняются: сервер обрабатывает
     их только в памяти во время запроса.
 servers:
-  - url: http://localhost:8080
-    description: local
+  - url: https://api.meily.kz
+    description: production
 paths:
   /healthz:
     get:

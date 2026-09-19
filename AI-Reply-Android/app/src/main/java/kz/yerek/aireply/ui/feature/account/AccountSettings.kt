@@ -54,7 +54,7 @@ import kz.yerek.aireply.ui.design.Spacing
 @Composable
 fun ServiceModeEditor(mode: AITransportMode, onModeChange: (AITransportMode) -> Unit) {
     val services = LocalServices.current
-    var url by remember { mutableStateOf(services.settings.backendBaseUrl.orEmpty()) }
+    var url by remember { mutableStateOf(services.aiConfiguration.backendBaseUrlString) }
     var invalid by remember { mutableStateOf(false) }
 
     fun save() {

@@ -20,7 +20,7 @@ Mobile (iOS / Android / клавиатура)
 ```bash
 cp .env.example .env
 # заполнить OPENAI_API_KEY и три секрета: make secrets
-make run           # http://localhost:8080
+make run           # http://localhost:8084
 ```
 
 Или в Docker:
@@ -37,10 +37,10 @@ docker compose up --build
 Проверка:
 
 ```bash
-curl localhost:8080/healthz
-curl localhost:8080/api/v1/plans
-open http://localhost:8080/          # лендинг
-open http://localhost:8080/admin     # админка
+curl localhost:8084/healthz
+curl localhost:8084/api/v1/plans
+open http://localhost:8084/          # лендинг
+open http://localhost:8084/admin     # админка
 ```
 
 Демо-вход в приложении: любой номер поддерживаемой страны + код **1111**
