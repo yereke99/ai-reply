@@ -27,10 +27,8 @@ data class GeneratedReply(
 /**
  * What a reply source has to be able to do.
  *
- * Two implementations ship: [DirectOpenAITransport], which calls the provider
- * from the device, and [BackendTransport], which calls our own service. The
- * keyboard and the app know only this interface, so moving between them is a
- * configuration change rather than a rewrite.
+ * The keyboard and app depend on this interface while production requests are
+ * handled by the authenticated account transport.
  */
 interface ReplyTransport {
     suspend fun generate(prompt: ReplyPromptBuilder.Prompt): GeneratedReply

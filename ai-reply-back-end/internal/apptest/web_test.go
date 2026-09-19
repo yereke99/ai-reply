@@ -51,9 +51,25 @@ func TestLandingRendersInAllLocales(t *testing.T) {
 // Заң беттері ашылады.
 func TestLegalPages(t *testing.T) {
 	h := newHarness(t)
-	for _, path := range []string{"/terms?lang=kk", "/privacy?lang=ru", "/terms?lang=uz", "/privacy?lang=en"} {
+	for _, path := range []string{"/offer?lang=kk", "/terms?lang=en", "/privacy?lang=ru", "/offer?lang=uz", "/privacy?lang=en"} {
 		if status, _ := fetch(t, h, path); status != http.StatusOK {
 			t.Fatalf("%s: status %d", path, status)
+		}
+	}
+
+	res, err := h.server.Client().Get(h.server.URL + "/offer?lang=ru")
+	if err != nil {
+		t.Fatalf("get public offer: %v", err)
+	}
+	defer res.Body.Close()
+	body, _ := io.ReadAll(res.Body)
+	page := string(body)
+	if contentType := res.Header.Get("Content-Type"); !strings.HasPrefix(contentType, "text/html") {
+		t.Fatalf("offer content type = %q", contentType)
+	}
+	for _, needle := range []string{"<!doctype html>", "Публичная оферта", "1. Общие положения", "9. Контакты"} {
+		if !strings.Contains(page, needle) {
+			t.Fatalf("public offer is missing %q", needle)
 		}
 	}
 }

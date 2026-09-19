@@ -15,7 +15,7 @@ final class AccountModel {
     /// Where the user is in the sign-in flow.
     enum Phase: Equatable {
         case signedOut
-        case awaitingCode(identifier: String, masked: String, demoMode: Bool)
+        case awaitingCode(identifier: String, masked: String)
         case signedIn
     }
 
@@ -25,6 +25,9 @@ final class AccountModel {
     private(set) var usage: AccountAPI.Usage = .unknown
     private(set) var plans: [AccountAPI.Plan] = []
     private(set) var countries: [AccountAPI.Country] = []
+    private(set) var legalConfig: AccountAPI.LegalConfig = .production
+    private(set) var hasAcceptedLegal: Bool
+    private(set) var isBootstrapComplete = false
     private(set) var isBusy = false
     /// A key the view localizes. Never a raw server string.
     private(set) var errorKey: String?
@@ -34,6 +37,7 @@ final class AccountModel {
     init(service: AccountService = AccountService()) {
         self.service = service
         self.phase = AccountCredentials.isSignedIn ? .signedIn : .signedOut
+        self.hasAcceptedLegal = LegalConsentStore.hasAccepted(.production)
     }
 
     var isSignedIn: Bool { phase == .signedIn }
@@ -47,12 +51,24 @@ final class AccountModel {
 
     // MARK: Loading
 
-    /// Countries and limits, needed before the first screen is drawn.
+    /// Countries and current legal versions, needed before the first screen.
     func loadServerConfig() async {
-        guard countries.isEmpty else { return }
         if let config = try? await service.serverConfig() {
             countries = config.countries
+            legalConfig = config.legal ?? .production
         }
+        hasAcceptedLegal = LegalConsentStore.hasAccepted(legalConfig)
+    }
+
+    func bootstrap() async {
+        guard !isBootstrapComplete else { return }
+        await loadServerConfig()
+        if AccountCredentials.isSignedIn {
+            await refresh()
+            await syncPendingLegalConsent()
+        }
+        hasAcceptedLegal = LegalConsentStore.hasAccepted(legalConfig)
+        isBootstrapComplete = true
     }
 
     func loadPlans() async {
@@ -70,6 +86,7 @@ final class AccountModel {
         do {
             let account = try await service.account()
             apply(user: account.user, subscription: account.subscription, usage: account.usage)
+            applyLegalConsent(account.legalConsent)
             phase = .signedIn
         } catch APIError.unauthorized {
             await signOutLocally()
@@ -100,8 +117,7 @@ final class AccountModel {
         do {
             let challenge = try await service.requestCode(identifier: identifier, locale: locale)
             phase = .awaitingCode(identifier: identifier,
-                                  masked: challenge.maskedIdentifier,
-                                  demoMode: challenge.demoMode)
+                                  masked: challenge.maskedIdentifier)
         } catch {
             errorKey = Self.message(for: error)
         }
@@ -111,7 +127,7 @@ final class AccountModel {
     /// short profile step instead of dropping the user straight onto Home.
     @discardableResult
     func verify(code: String) async -> Bool {
-        guard case let .awaitingCode(identifier, _, _) = phase else { return false }
+        guard case let .awaitingCode(identifier, _) = phase else { return false }
         isBusy = true
         errorKey = nil
         defer { isBusy = false }
@@ -119,9 +135,11 @@ final class AccountModel {
         do {
             let session = try await service.verifyCode(identifier: identifier, code: code)
             apply(user: session.user, subscription: session.subscription, usage: session.usage)
+            applyLegalConsent(session.legalConsent)
             phase = .signedIn
             // Best effort: a failed device registration must not block sign-in.
             try? await service.registerDevice()
+            await syncPendingLegalConsent()
             return session.isNewUser
         } catch {
             errorKey = Self.message(for: error)
@@ -130,13 +148,19 @@ final class AccountModel {
     }
 
     func resendCode(locale: String) async {
-        guard case let .awaitingCode(identifier, _, _) = phase else { return }
+        guard case let .awaitingCode(identifier, _) = phase else { return }
         await requestCode(identifier: identifier, locale: locale)
     }
 
     func cancelCodeEntry() {
         phase = AccountCredentials.isSignedIn ? .signedIn : .signedOut
         errorKey = nil
+    }
+
+    func acceptLegal(locale: String) async {
+        LegalConsentStore.accept(legalConfig, locale: locale)
+        hasAcceptedLegal = true
+        await syncPendingLegalConsent()
     }
 
     func signOut() async {
@@ -219,6 +243,29 @@ final class AccountModel {
         AccountUsageCache.store(usage)
         AccountUsageCache.storePlanCode(subscription.plan.code)
         AccountCredentials.setDisplayIdentifier(user.identifier)
+    }
+
+    private func applyLegalConsent(_ consent: AccountAPI.LegalConsent?) {
+        guard let consent,
+              consent.termsVersion == legalConfig.termsVersion,
+              consent.privacyVersion == legalConfig.privacyVersion else { return }
+        LegalConsentStore.restore(consent)
+        hasAcceptedLegal = true
+    }
+
+    private func syncPendingLegalConsent() async {
+        guard AccountCredentials.isSignedIn,
+              let record = LegalConsentStore.load(),
+              record.isPendingSync,
+              record.termsVersion == legalConfig.termsVersion,
+              record.privacyVersion == legalConfig.privacyVersion else { return }
+        do {
+            let saved = try await service.recordLegalConsent(record)
+            LegalConsentStore.restore(saved)
+            hasAcceptedLegal = true
+        } catch {
+            // The local acceptance remains pending and is retried on refresh.
+        }
     }
 
     /// Maps a failure onto a localization key. The server's English message is

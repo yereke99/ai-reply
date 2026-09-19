@@ -23,7 +23,7 @@ sealed interface AIReplyError {
      */
     data object ClipboardUnavailable : AIReplyError
 
-    /** No API key entered (direct mode) or no service URL set (backend mode). */
+    /** The account is not ready to make a request. */
     data object NotConfigured : AIReplyError
 
     /** Device is offline. */
@@ -35,10 +35,10 @@ sealed interface AIReplyError {
     /** The user or the keyboard cancelled before a reply arrived. */
     data object Cancelled : AIReplyError
 
-    /** Credential rejected: the key is wrong, revoked or out of quota. */
+    /** The account session is missing, expired or rejected. */
     data object AuthenticationFailed : AIReplyError
 
-    /** Too many requests, ours or the provider's. */
+    /** The account limit or request rate limit has been reached. */
     data object RateLimited : AIReplyError
 
     /** The service answered, but not with a usable reply. */

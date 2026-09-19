@@ -1,31 +1,26 @@
 import SwiftUI
 
-/// Phone or e-mail entry: the first screen a new user sees.
-///
-/// Кіру экраны: телефон нөмірі немесе пошта.
-///
-/// The country list comes from the server (`/api/v1/config`), so adding a
-/// country is a backend change, not an app release. Validation is left to the
-/// server too - the field accepts what the user types and the server answers
-/// with a precise error, which is the only rule that cannot be bypassed.
 struct SignInView: View {
 
     @Environment(AppSettings.self) private var settings
     @Environment(AccountModel.self) private var account
 
-    /// Which identifier the user is entering.
     private enum Method: String, CaseIterable {
+        case phone, email
+    }
+
+    private enum Field: Hashable {
         case phone, email
     }
 
     @State private var method: Method = .phone
     @State private var country: AccountAPI.Country?
-    @State private var digits: String = ""
-    @State private var email: String = ""
-    @FocusState private var isFieldFocused: Bool
+    @State private var digits = ""
+    @State private var email = ""
+    @FocusState private var focusedField: Field?
 
     var body: some View {
-        ScrollView {
+        AuthScreen {
             VStack(alignment: .leading, spacing: DS.Spacing.l) {
                 header
 
@@ -45,50 +40,42 @@ struct SignInView: View {
                 }
 
                 Button {
+                    focusedField = nil
                     Task { await submit() }
                 } label: {
-                    if account.isBusy {
-                        ProgressView().tint(.white)
-                    } else {
-                        Text("account.continue")
-                    }
+                    if account.isBusy { ProgressView().tint(.white) }
+                    else { Text("account.continue") }
                 }
-                .buttonStyle(DSPrimaryButtonStyle())
+                .buttonStyle(.dsPrimary)
                 .disabled(account.isBusy || !isComplete)
 
                 Text("account.legal.footer")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
-            .padding(DS.Spacing.l)
-            .frame(maxWidth: DS.Layout.readableWidth, alignment: .leading)
-            .frame(maxWidth: .infinity, alignment: .center)
         }
-        .background(Color.dsBackground)
         .task {
             await account.loadServerConfig()
             if country == nil { country = defaultCountry }
-            isFieldFocused = true
+        }
+        .onChange(of: method) { _, value in
+            focusedField = value == .phone ? .phone : .email
         }
     }
-
-    // MARK: Pieces
 
     private var header: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.s) {
             AppMarkView(size: 56)
-            Text("account.signIn.title")
-                .font(.title.weight(.semibold))
+            Text("account.signIn.title").font(.title.weight(.semibold))
             Text("account.signIn.subtitle")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }
-        .padding(.top, DS.Spacing.m)
     }
 
     private var phoneField: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-            HStack(spacing: DS.Spacing.s) {
+            HStack(spacing: 0) {
                 Menu {
                     ForEach(account.countries) { option in
                         Button {
@@ -104,31 +91,27 @@ struct SignInView: View {
                         Image(systemName: "chevron.down").font(.caption2)
                     }
                     .padding(.horizontal, DS.Spacing.s)
-                    .frame(height: DS.Layout.minimumTouchTarget)
-                    .background(
-                        RoundedRectangle(cornerRadius: DS.Radius.medium, style: .continuous)
-                            .fill(Color.dsSurface)
-                    )
+                    .frame(minHeight: 54)
                 }
                 .disabled(account.countries.isEmpty)
 
-                TextField("account.phone.placeholder", text: $digits)
+                Divider().frame(height: 30)
+
+                TextField("account.phone.placeholder", text: phoneBinding)
                     .keyboardType(.numberPad)
                     .textContentType(.telephoneNumber)
-                    .focused($isFieldFocused)
+                    .focused($focusedField, equals: .phone)
                     .padding(.horizontal, DS.Spacing.s)
-                    .frame(height: DS.Layout.minimumTouchTarget)
-                    .background(
-                        RoundedRectangle(cornerRadius: DS.Radius.medium, style: .continuous)
-                            .fill(Color.dsSurface)
-                    )
-                    .onChange(of: digits) { _, newValue in
-                        // Keep only digits: a pasted "+7 (701) 123-45-67" should
-                        // not become an error the user has to decipher.
-                        let filtered = newValue.filter(\.isNumber)
-                        if filtered != newValue { digits = filtered }
-                    }
+                    .frame(minHeight: 54)
             }
+            .background(
+                RoundedRectangle(cornerRadius: DS.Radius.large, style: .continuous)
+                    .fill(Color.dsSurface)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: DS.Radius.large, style: .continuous)
+                    .stroke(focusedField == .phone ? Color.accentColor : Color.clear, lineWidth: 2)
+            )
 
             if let example = country?.example {
                 Text(verbatim: example)
@@ -144,18 +127,37 @@ struct SignInView: View {
             .textContentType(.emailAddress)
             .textInputAutocapitalization(.never)
             .autocorrectionDisabled()
-            .focused($isFieldFocused)
-            .padding(.horizontal, DS.Spacing.s)
-            .frame(height: DS.Layout.minimumTouchTarget)
+            .focused($focusedField, equals: .email)
+            .padding(.horizontal, DS.Spacing.m)
+            .frame(minHeight: 54)
             .background(
-                RoundedRectangle(cornerRadius: DS.Radius.medium, style: .continuous)
+                RoundedRectangle(cornerRadius: DS.Radius.large, style: .continuous)
                     .fill(Color.dsSurface)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: DS.Radius.large, style: .continuous)
+                    .stroke(focusedField == .email ? Color.accentColor : Color.clear, lineWidth: 2)
             )
     }
 
-    // MARK: Logic
+    private var phoneBinding: Binding<String> {
+        Binding(
+            get: { formattedPhone(digits) },
+            set: { digits = String($0.filter(\.isNumber).prefix(12)) }
+        )
+    }
 
-    /// Falls back to Kazakhstan, then to whatever the server listed first.
+    private func formattedPhone(_ value: String) -> String {
+        var remaining = Array(value)
+        let sizes = [3, 3, 2, 2, 2]
+        var groups: [String] = []
+        for size in sizes where !remaining.isEmpty {
+            groups.append(String(remaining.prefix(size)))
+            remaining.removeFirst(min(size, remaining.count))
+        }
+        return groups.joined(separator: " ")
+    }
+
     private var defaultCountry: AccountAPI.Country? {
         let regionCode = Locale.current.region?.identifier
         return account.countries.first { $0.iso == regionCode }
@@ -164,22 +166,19 @@ struct SignInView: View {
     }
 
     private var identifier: String {
-        switch method {
-        case .phone: return (country?.dialCode ?? "+") + digits
-        case .email: return email.trimmingCharacters(in: .whitespacesAndNewlines)
-        }
+        method == .phone
+            ? (country?.dialCode ?? "+") + digits
+            : email.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
     private var isComplete: Bool {
-        switch method {
-        case .phone: return digits.count >= 6 && country != nil
-        case .email: return email.contains("@") && email.count >= 6
-        }
+        method == .phone
+            ? digits.count >= 6 && country != nil
+            : email.contains("@") && email.count >= 6
     }
 
     @MainActor
     private func submit() async {
-        await account.requestCode(identifier: identifier,
-                                  locale: settings.effectiveLanguage.rawValue)
+        await account.requestCode(identifier: identifier, locale: settings.effectiveLanguage.rawValue)
     }
 }

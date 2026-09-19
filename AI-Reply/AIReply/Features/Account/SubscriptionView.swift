@@ -19,9 +19,6 @@ struct SubscriptionView: View {
             VStack(alignment: .leading, spacing: DS.Spacing.xl) {
                 usageCard
                 if !account.plans.isEmpty { plansSection }
-                Text("subscription.demo.footer")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
             }
             .padding(.horizontal, DS.Spacing.l)
             .padding(.vertical, DS.Spacing.l)

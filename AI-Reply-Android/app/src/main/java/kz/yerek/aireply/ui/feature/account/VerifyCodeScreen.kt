@@ -29,28 +29,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kz.yerek.aireply.R
 import kz.yerek.aireply.ui.LocalServices
-import kz.yerek.aireply.ui.common.Footnote
-import kz.yerek.aireply.ui.design.AppCard
+import kz.yerek.aireply.ui.design.AuthColumn
 import kz.yerek.aireply.ui.design.PrimaryButton
-import kz.yerek.aireply.ui.design.ReadableColumn
 import kz.yerek.aireply.ui.design.Spacing
 
 private const val CODE_LENGTH = 4
 private const val RESEND_SECONDS = 30
 
-/**
- * Code entry.
- *
- * Растау коды. Демо режимінде сервер кодты жібермейді — 1111 жарайды.
- *
- * The screen never claims a message was sent when the backend is in demo mode:
- * it says plainly that the code is fixed. Pretending otherwise would be the one
- * bug a user cannot work around.
- */
 @Composable
 fun VerifyCodeScreen(
     masked: String,
-    demoMode: Boolean,
     onVerified: (isNewUser: Boolean) -> Unit
 ) {
     val services = LocalServices.current
@@ -73,7 +61,7 @@ fun VerifyCodeScreen(
         if (account.state.value.isSignedIn) onVerified(isNewUser) else code = ""
     }
 
-    ReadableColumn {
+    AuthColumn {
         Column(verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
             Text(
                 stringResource(R.string.account_code_title),
@@ -86,16 +74,10 @@ fun VerifyCodeScreen(
             )
         }
 
-        if (demoMode) {
-            AppCard { Footnote(stringResource(R.string.account_code_demo)) }
-        }
-
         OutlinedTextField(
             value = code,
             onValueChange = { value ->
                 code = value.filter(Char::isDigit).take(CODE_LENGTH)
-                // Submitting on the last digit is what everyone expects from a
-                // four-digit code; the button stays for accessibility.
                 if (code.length == CODE_LENGTH && !state.busy) scope.launch { submit() }
             },
             singleLine = true,
@@ -140,7 +122,7 @@ fun VerifyCodeScreen(
                     }
                 )
             }
-            TextButton(onClick = { account.cancelCodeEntry() }) {
+            TextButton(onClick = account::cancelCodeEntry) {
                 Text(stringResource(R.string.common_back))
             }
         }

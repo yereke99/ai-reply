@@ -74,17 +74,18 @@ type verifyOTPRequest struct {
 }
 
 type sessionResponse struct {
-	AccessToken      string          `json:"access_token"`
-	RefreshToken     string          `json:"refresh_token"`
-	TokenType        string          `json:"token_type"`
-	ExpiresIn        int             `json:"expires_in"`
-	RefreshExpiresAt string          `json:"refresh_expires_at"`
-	DeviceID         string          `json:"device_id"`
-	IsNewUser        bool            `json:"is_new_user"`
-	User             userDTO         `json:"user"`
-	Profile          profileDTO      `json:"profile"`
-	Subscription     subscriptionDTO `json:"subscription"`
-	Usage            usageDTO        `json:"usage"`
+	AccessToken      string           `json:"access_token"`
+	RefreshToken     string           `json:"refresh_token"`
+	TokenType        string           `json:"token_type"`
+	ExpiresIn        int              `json:"expires_in"`
+	RefreshExpiresAt string           `json:"refresh_expires_at"`
+	DeviceID         string           `json:"device_id"`
+	IsNewUser        bool             `json:"is_new_user"`
+	User             userDTO          `json:"user"`
+	Profile          profileDTO       `json:"profile"`
+	Subscription     subscriptionDTO  `json:"subscription"`
+	Usage            usageDTO         `json:"usage"`
+	LegalConsent     *legalConsentDTO `json:"legal_consent,omitempty"`
 }
 
 // handleVerifyOTP — кодты тексеріп, сессия ашу.
@@ -153,6 +154,11 @@ func (s *Server) writeSession(w http.ResponseWriter, r *http.Request, session au
 		httpx.Fail(w, err)
 		return
 	}
+	consent, err := s.currentLegalConsent(r, session.User.ID)
+	if err != nil {
+		httpx.Fail(w, err)
+		return
+	}
 	httpx.JSON(w, http.StatusOK, sessionResponse{
 		AccessToken:      session.AccessToken,
 		RefreshToken:     session.RefreshToken,
@@ -165,6 +171,7 @@ func (s *Server) writeSession(w http.ResponseWriter, r *http.Request, session au
 		Profile:          toProfileDTO(profile),
 		Subscription:     s.subscriptionDTO(entitlement),
 		Usage:            toUsageDTO(entitlement, s.cfg.App.Timezone),
+		LegalConsent:     consent,
 	})
 }
 

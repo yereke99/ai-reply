@@ -32,8 +32,6 @@
     <string name="kb_err_not_configured">AI Reply қолданбасын ашып, баптауды аяқтаңыз.</string>
     <string name="kb_err_offline">Интернет байланысы жоқ.</string>
     <string name="kb_err_timed_out">Тым ұзаққа созылды. Қайталап көріңіз.</string>
-    <string name="kb_err_auth_failed">API кілті қабылданбады. AI Reply қолданбасынан тексеріңіз.</string>
-    <string name="kb_err_rate_limited">Сұраныс тым көп. Сәл күте тұрыңыз.</string>
     <string name="kb_err_empty_response">Жауап келмеді. Қайталап көріңіз.</string>
     <string name="kb_err_service_unavailable">Қызмет қазір қолжетімсіз. Кейінірек көріңіз.</string>
 

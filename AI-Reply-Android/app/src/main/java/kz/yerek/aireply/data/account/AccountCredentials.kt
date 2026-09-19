@@ -2,6 +2,7 @@ package kz.yerek.aireply.data.account
 
 import kz.yerek.aireply.data.secure.SecureCredentialStore
 import kz.yerek.aireply.data.settings.SettingsStore
+import java.util.UUID
 
 /**
  * The session as stored on the device: tokens in the Keystore, everything
@@ -51,13 +52,12 @@ class AccountCredentials(
         settings.clearAccountState()
     }
 
-    /**
-     * The id the server gave this device. Falls back to the install identifier
-     * that already exists for the legacy path, so a device does not get two
-     * rows for the same phone.
-     */
+    /** Random per-install id, replaced when the server returns a canonical one. */
     var deviceId: String
-        get() = settings.accountDeviceId ?: settings.installIdentifier
+        get() {
+            settings.accountDeviceId?.let { return it }
+            return UUID.randomUUID().toString().also { settings.accountDeviceId = it }
+        }
         set(value) {
             if (value.isNotEmpty()) settings.accountDeviceId = value
         }

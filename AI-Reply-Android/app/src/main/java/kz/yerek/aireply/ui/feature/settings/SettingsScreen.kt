@@ -2,7 +2,6 @@ package kz.yerek.aireply.ui.feature.settings
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,31 +12,30 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
+import androidx.compose.material.icons.outlined.Description
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kz.yerek.aireply.R
-import kz.yerek.aireply.ai.AIConfiguration
-import kz.yerek.aireply.ai.AITransportMode
 import kz.yerek.aireply.ui.feature.account.AccountSection
-import kz.yerek.aireply.ui.feature.account.ServiceModeEditor
 import kz.yerek.aireply.core.lang.AppLanguage
 import kz.yerek.aireply.data.settings.AppearancePreference
 import kz.yerek.aireply.ui.LocalServices
@@ -56,17 +54,11 @@ import kz.yerek.aireply.ui.navigation.Routes
 @Composable
 fun SettingsScreen(onBack: () -> Unit, onOpen: (String) -> Unit) {
     val services = LocalServices.current
+    val uriHandler = LocalUriHandler.current
+    val accountState by services.account.state.collectAsStateWithLifecycle()
 
     var appearance by remember { mutableStateOf(services.settings.appearance) }
     var language by remember { mutableStateOf(services.settings.appLanguage) }
-    var model by remember { mutableStateOf(services.aiConfiguration.model) }
-    var transportMode by remember { mutableStateOf(services.aiConfiguration.mode) }
-
-    // Committed on the way out as well as on submit, so a model name typed
-    // without pressing done is not silently discarded.
-    DisposableEffect(Unit) {
-        onDispose { services.aiConfiguration.setModel(model) }
-    }
 
     AppScreen(title = stringResource(R.string.settings_title), onBack = onBack) {
         ReadableColumn {
@@ -100,44 +92,7 @@ fun SettingsScreen(onBack: () -> Unit, onOpen: (String) -> Unit) {
                 Footnote(stringResource(R.string.settings_setup_footer))
             }
 
-            if (transportMode == AITransportMode.BACKEND &&
-                services.aiConfiguration.backendBaseUrl != null
-            ) {
-                AccountSection(onOpenSubscription = { onOpen(Routes.Subscription) })
-            }
-
-            ServiceModeEditor(mode = transportMode, onModeChange = { transportMode = it })
-
-            // Only direct mode has a key or a model to configure: in service
-            // mode both live on the server, and showing them here would invite
-            // a user to change something that has no effect.
-            if (transportMode == AITransportMode.DIRECT) {
-                AppSection(stringResource(R.string.settings_ai)) {
-                    AppCard { ApiKeyEditor() }
-                    Footnote(stringResource(R.string.settings_ai_key_footer))
-                }
-            }
-
-            if (transportMode == AITransportMode.DIRECT) AppSection(stringResource(R.string.settings_ai_model)) {
-                AppCard {
-                    OutlinedTextField(
-                        value = model,
-                        onValueChange = { model = it },
-                        label = { Text(stringResource(R.string.settings_ai_model)) },
-                        singleLine = true,
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    if (model != AIConfiguration.DEFAULT_MODEL) {
-                        TextButton(onClick = {
-                            model = AIConfiguration.DEFAULT_MODEL
-                            services.aiConfiguration.setModel(model)
-                        }) {
-                            Text(stringResource(R.string.settings_ai_reset))
-                        }
-                    }
-                }
-                Footnote(stringResource(R.string.settings_ai_model_footer))
-            }
+            AccountSection(onOpenSubscription = { onOpen(Routes.Subscription) })
 
             AppSection(stringResource(R.string.settings_appearance)) {
                 SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
@@ -191,6 +146,25 @@ fun SettingsScreen(onBack: () -> Unit, onOpen: (String) -> Unit) {
 
             AppSection(stringResource(R.string.settings_privacy_title)) {
                 AppCard { Footnote(stringResource(R.string.settings_privacy_body)) }
+                RowGroup {
+                    NavigationRow(
+                        Icons.Outlined.Description,
+                        stringResource(R.string.legal_terms)
+                    ) {
+                        uriHandler.openUri(
+                            "${accountState.legalConfig.termsUrl}?lang=${services.settings.effectiveAppLanguage.code}"
+                        )
+                    }
+                    RowDividerIndented()
+                    NavigationRow(
+                        Icons.Outlined.Lock,
+                        stringResource(R.string.legal_privacy)
+                    ) {
+                        uriHandler.openUri(
+                            "${accountState.legalConfig.privacyUrl}?lang=${services.settings.effectiveAppLanguage.code}"
+                        )
+                    }
+                }
             }
 
             AppSection(stringResource(R.string.settings_setup_restart)) {

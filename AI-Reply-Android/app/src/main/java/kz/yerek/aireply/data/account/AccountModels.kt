@@ -24,7 +24,8 @@ data class AccountSessionDto(
     val user: AccountUser,
     val profile: AccountProfile,
     val subscription: SubscriptionDto,
-    val usage: UsageDto
+    val usage: UsageDto,
+    @SerialName("legal_consent") val legalConsent: LegalConsentDto? = null
 )
 
 /** Tokens only — what /auth/refresh answers with. */
@@ -122,7 +123,8 @@ data class AccountDto(
     val user: AccountUser,
     val profile: AccountProfile,
     val subscription: SubscriptionDto,
-    val usage: UsageDto
+    val usage: UsageDto,
+    @SerialName("legal_consent") val legalConsent: LegalConsentDto? = null
 )
 
 /** The OTP challenge. The code itself never travels back to the client. */
@@ -131,9 +133,35 @@ data class ChallengeDto(
     val kind: String = "phone",
     @SerialName("masked_identifier") val maskedIdentifier: String = "",
     val channel: String = "",
-    @SerialName("expires_in") val expiresIn: Int = 0,
-    @SerialName("demo_mode") val demoMode: Boolean = false
+    @SerialName("expires_in") val expiresIn: Int = 0
 )
+
+@Serializable
+data class LegalConsentDto(
+    @SerialName("terms_version") val termsVersion: String,
+    @SerialName("privacy_version") val privacyVersion: String,
+    @SerialName("accepted_at") val acceptedAt: String,
+    val locale: String,
+    val platform: String,
+    @SerialName("app_version") val appVersion: String? = null
+)
+
+@Serializable
+data class LegalConfigDto(
+    @SerialName("terms_version") val termsVersion: String,
+    @SerialName("privacy_version") val privacyVersion: String,
+    @SerialName("terms_url") val termsUrl: String,
+    @SerialName("privacy_url") val privacyUrl: String
+) {
+    companion object {
+        val PRODUCTION = LegalConfigDto(
+            termsVersion = "2026-09-19",
+            privacyVersion = "2026-09-19",
+            termsUrl = "https://api.meily.kz/offer",
+            privacyUrl = "https://api.meily.kz/privacy"
+        )
+    }
+}
 
 /** A country the backend will accept a phone number from. */
 @Serializable
@@ -156,9 +184,9 @@ data class ServerConfigDto(
     val timezone: String = "",
     @SerialName("max_source_characters") val maxSourceCharacters: Int = 300,
     @SerialName("max_instruction_length") val maxInstructionLength: Int = 400,
-    @SerialName("demo_mode") val demoMode: Boolean = false,
     @SerialName("payment_mode") val paymentMode: String = "",
-    val countries: List<CountryDto> = emptyList()
+    val countries: List<CountryDto> = emptyList(),
+    val legal: LegalConfigDto? = null
 )
 
 /** The reply endpoint's response. */

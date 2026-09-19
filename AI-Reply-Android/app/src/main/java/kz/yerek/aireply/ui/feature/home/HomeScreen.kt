@@ -14,7 +14,6 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.VpnKey
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
 import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.material3.Icon
@@ -23,8 +22,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -54,19 +51,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 /**
  * The root screen.
  *
- * Section order is the iOS order, deliberately: mark and subtitle, the
- * missing-key nudge, Try a reply, the setup links, keyboard status, how it
- * works, privacy. Someone who knows one app can find everything in the other.
+ * Section order matches iOS: mark and subtitle, a reply test, account usage,
+ * profile links, keyboard status, workflow and privacy.
  */
 @Composable
 fun HomeScreen(onOpen: (String) -> Unit) {
     val services = LocalServices.current
     val context = LocalContext.current
     val status by rememberKeyboardStatus()
-
-    // Read once per composition rather than observed: the key can only change
-    // on the Settings screen, which this one is not showing.
-    val hasApiKey = remember { mutableStateOf(services.credentials.hasApiKey()) }
 
     AppScreen(
         title = stringResource(R.string.home_title),
@@ -99,26 +91,6 @@ fun HomeScreen(onOpen: (String) -> Unit) {
                 }
             }
 
-            if (!hasApiKey.value) {
-                AppCard(modifier = Modifier.clickable { onOpen(Routes.Settings) }) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(Spacing.s),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            Icons.Filled.VpnKey,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(22.dp)
-                        )
-                        Text(
-                            stringResource(R.string.home_key_missing),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                }
-            }
-
             AppCard(modifier = Modifier.clickable { onOpen(Routes.Compose) }) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -142,9 +114,7 @@ fun HomeScreen(onOpen: (String) -> Unit) {
                 }
             }
 
-            if (services.aiConfiguration.requiresAccount) {
-                UsageCard(onOpen = onOpen)
-            }
+            UsageCard(onOpen = onOpen)
 
             AppSection(stringResource(R.string.home_profile_title)) {
                 RowGroup {

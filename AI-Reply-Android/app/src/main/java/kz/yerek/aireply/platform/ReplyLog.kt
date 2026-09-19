@@ -15,11 +15,11 @@ object ReplyLog {
 
     private const val TAG = "ReplyKeyboard"
 
-    inline fun event(message: () -> String) {
+    fun event(message: () -> String) {
         if (BuildConfig.DEBUG) Log.d(TAG, message())
     }
 
-    inline fun warn(throwable: Throwable? = null, message: () -> String) {
+    fun warn(throwable: Throwable? = null, message: () -> String) {
         if (BuildConfig.DEBUG) Log.w(TAG, message(), throwable)
     }
 }

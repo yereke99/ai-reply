@@ -88,7 +88,7 @@ final class ComposeViewModel {
                 self.isGenerating = false
                 let mapped = (error as? AIReplyError) ?? .serviceUnavailable
                 guard mapped != .cancelled else { return }
-                self.errorMessage = strings.message(for: mapped, mode: AIConfiguration.shared.mode)
+                self.errorMessage = strings.message(for: mapped)
             }
         }
     }

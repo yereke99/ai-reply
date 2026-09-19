@@ -32,8 +32,6 @@
     <string name="kb_err_not_configured">Откройте приложение AI Reply и завершите настройку.</string>
     <string name="kb_err_offline">Нет подключения к интернету.</string>
     <string name="kb_err_timed_out">Слишком долго. Попробуйте ещё раз.</string>
-    <string name="kb_err_auth_failed">Ключ API отклонён. Проверьте его в приложении AI Reply.</string>
-    <string name="kb_err_rate_limited">Слишком много запросов. Подождите немного.</string>
     <string name="kb_err_empty_response">Ответ не получен. Попробуйте ещё раз.</string>
     <string name="kb_err_service_unavailable">Сервис сейчас недоступен. Попробуйте позже.</string>
 

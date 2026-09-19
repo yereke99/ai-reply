@@ -37,14 +37,13 @@
     <string name="home_howitworks_body">Скопируйте сообщение в WhatsApp, Telegram, Instagram или любом другом приложении, переключитесь на клавиатуру AI Reply и нажмите «Ответить».</string>
     <string name="home_howitworks_fullaccess">iOS требует «Полный доступ», чтобы сторонняя клавиатура могла читать скопированный текст. Клавиатура обращается к буферу обмена только после нажатия «Ответить» — и никогда в фоне.</string>
     <string name="home_howitworks_title">Как это работает</string>
-    <string name="home_key_missing">Добавьте ключ OpenAI, чтобы генерировать ответы.</string>
     <string name="home_keyboard_fullaccessoff">Полный доступ выключен — скопированные сообщения недоступны</string>
     <string name="home_keyboard_fullaccesson">Полный доступ включён</string>
     <string name="home_keyboard_notready">Клавиатура AI Reply ещё не подключена</string>
     <string name="home_keyboard_opensettings">Открыть настройки iOS</string>
     <string name="home_keyboard_ready">Клавиатура AI Reply подключена</string>
     <string name="home_keyboard_title">Клавиатура</string>
-    <string name="home_privacy_body">Ничего не покидает устройство. Ответы формируются на устройстве, буфер обмена не отслеживается в фоне, текст сообщений не записывается в логи.</string>
+    <string name="home_privacy_body">Текст обрабатывается только когда вы просите ответ. Он передаётся через AI Reply AI-провайдеру, но не сохраняется в базе и не записывается в логи.</string>
     <string name="home_privacy_title">Конфиденциальность</string>
     <string name="home_profile_edit">Профиль</string>
     <string name="home_profile_hours">Рабочее время</string>
@@ -82,14 +81,6 @@
     <string name="onboarding_hours_footer">Необязательно. Если задано, ответы клиентам и партнёрам учитывают время суток.</string>
     <string name="onboarding_hours_prompt">У вас есть рабочее время?</string>
     <string name="onboarding_hours_title">Рабочее время</string>
-    <string name="onboarding_key_clipboardempty">Нечего вставить.</string>
-    <string name="onboarding_key_invalid">Это не похоже на ключ OpenAI.</string>
-    <string name="onboarding_key_paste">Вставить из буфера</string>
-    <string name="onboarding_key_placeholder">sk-…</string>
-    <string name="onboarding_key_prompt">Вставьте свой ключ OpenAI API. Он хранится в Связке ключей iOS только на этом устройстве и не входит в приложение.</string>
-    <string name="onboarding_key_saved">Ключ сохранён</string>
-    <string name="onboarding_key_savefailed">Не удалось сохранить ключ в Связку ключей.</string>
-    <string name="onboarding_key_title">Подключите OpenAI</string>
     <string name="onboarding_keyboard_prompt">Чтобы быстро отвечать на сообщения, добавьте клавиатуру в настройках iPhone.</string>
     <string name="onboarding_keyboard_title">Подключите AI-клавиатуру</string>
     <string name="onboarding_next">Далее</string>
@@ -111,7 +102,7 @@
     <string name="onboarding_usage_step_open">Переключитесь на Reply Keyboard кнопкой с глобусом</string>
     <string name="onboarding_usage_step_template">Нажмите подходящий шаблон: «Друг», «Клиент», «Бизнес» или «Работа»</string>
     <string name="onboarding_usage_title">Скопируйте и ответьте</string>
-    <string name="onboarding_welcome_body">Несколько коротких шагов. Всё остаётся на вашем телефоне и используется только когда вы просите ответ.</string>
+    <string name="onboarding_welcome_body">Несколько коротких шагов для настройки клавиатуры. Скопированный текст обрабатывается только когда вы просите ответ.</string>
     <string name="onboarding_welcome_point_copy">Скопируйте сообщение в любом мессенджере</string>
     <string name="onboarding_welcome_point_edit">Отредактируйте ответ и отправьте его сами</string>
     <string name="onboarding_welcome_point_templates">Выберите, кому вы отвечаете</string>
@@ -142,15 +133,6 @@
     <string name="relationship_friend">Друг</string>
     <string name="relationship_work">Работа</string>
 
-    <string name="settings_ai">OpenAI</string>
-    <string name="settings_ai_key">Ключ API</string>
-    <string name="settings_ai_key_footer">Хранится только в Связке ключей этого устройства. Никогда не входит в приложение, не пишется в файлы настроек и не отправляется никуда, кроме OpenAI.</string>
-    <string name="settings_ai_key_missing">Не задан</string>
-    <string name="settings_ai_key_remove">Удалить ключ</string>
-    <string name="settings_ai_key_set">Сохранён в Связке ключей</string>
-    <string name="settings_ai_model">Модель</string>
-    <string name="settings_ai_model_footer">Меняется в одном месте и используется приложением и клавиатурой.</string>
-    <string name="settings_ai_reset">Сбросить</string>
     <string name="settings_appearance">Оформление</string>
     <string name="settings_appearance_dark">Тёмное</string>
     <string name="settings_appearance_light">Светлое</string>
@@ -158,7 +140,7 @@
     <string name="settings_appgroup_unavailable">Приложение и клавиатура пока не могут обмениваться настройками. Пересоберите приложение, чтобы применился App Group.</string>
     <string name="settings_language">Язык</string>
     <string name="settings_language_footer">Меняет язык этого приложения. Надписи на самой клавиатуре следуют выбранной на ней раскладке.</string>
-    <string name="settings_privacy_body">Скопированные сообщения не сохраняются и не логируются. Они отправляются только когда вы нажимаете шаблон, и удаляются сразу после вставки ответа или закрытия клавиатуры.</string>
+    <string name="settings_privacy_body">Текст скопированного сообщения и созданный ответ передаются через сервер AI Reply AI-провайдеру только когда вы просите ответ. Они не сохраняются в базе и не записываются в логи.</string>
     <string name="settings_privacy_title">Конфиденциальность</string>
     <string name="settings_setup">Настройка</string>
     <string name="settings_setup_footer">Пошаговая инструкция, полный доступ и разрешение на вставку.</string>
@@ -180,12 +162,18 @@
     <string name="setup_paste_title">Разрешение на вставку</string>
     <string name="setup_privacy_clipboard">Буфер обмена никогда не отслеживается в фоне.</string>
     <string name="setup_privacy_explicit">Скопированный текст читается только после нажатия на шаблон — тогда же создаётся ответ.</string>
-    <string name="setup_privacy_nokeyinkeyboard">Ключ API хранится в Связке ключей iOS — не в клавиатуре и не в файлах приложения.</string>
+    <string name="setup_privacy_nokeyinkeyboard">Токены входа хранятся в защищённом хранилище приложения и не показываются в клавиатуре.</string>
     <string name="setup_privacy_securefields">Пароли и защищённые поля никогда не обрабатываются.</string>
     <string name="setup_privacy_title">Конфиденциальность</string>
     <string name="setup_state_done">Готово</string>
     <string name="setup_state_missing">Не включено</string>
     <string name="setup_state_unknown">Пока неизвестно</string>
+    <string name="setup_state_unavailable">Недоступно</string>
+    <string name="setup_checklist_microphone">Доступ к микрофону</string>
+    <string name="setup_checklist_speech">Распознавание речи</string>
+    <string name="setup_voice_title">Голосовой ввод</string>
+    <string name="setup_voice_body">Голосовой ввод использует распознавание речи Android. Доступность и обработка аудио на устройстве зависят от устройства и выбранной службы распознавания.</string>
+    <string name="setup_voice_enable">Разрешить доступ к микрофону</string>
     <string name="setup_steps_footer">iOS позволяет открыть только страницу самого приложения, поэтому список клавиатур нужно открыть вручную.</string>
     <string name="setup_steps_title">Как добавить</string>
     <string name="setup_subtitle">Добавьте клавиатуру в настройках iPhone, чтобы отвечать на сообщения прямо в мессенджерах.</string>
@@ -268,7 +256,7 @@
     <string name="voice_title">Голосовой ответ</string>
 
 
-    <!-- Account, plans and service mode -->
+    <!-- Account and plans -->
     <string name="common_back">Назад</string>
     <string name="account_method_phone">Телефон</string>
     <string name="account_method_email">Почта</string>
@@ -277,12 +265,18 @@
     <string name="account_phone_placeholder">Номер телефона</string>
     <string name="account_email_placeholder">Электронная почта</string>
     <string name="account_continue">Продолжить</string>
-    <string name="account_legal_footer">Продолжая, вы принимаете условия использования и политику конфиденциальности. Ваша переписка не сохраняется.</string>
+    <string name="account_legal_footer">Контакт используется только для входа. Публичная оферта и политика конфиденциальности доступны в настройках.</string>
     <string name="account_code_title">Введите код</string>
     <string name="account_code_subtitle">Мы отправили его на %1$s</string>
-    <string name="account_code_demo">Демо-режим: сервер пока ничего не отправляет — код 1111.</string>
     <string name="account_code_confirm">Подтвердить</string>
     <string name="account_code_resend">Отправить ещё раз</string>
+    <string name="legal_consent_title">Перед продолжением</string>
+    <string name="legal_consent_body">Ознакомьтесь с документами, которые регулируют работу AI Reply и объясняют обработку данных.</string>
+    <string name="legal_terms">Публичная оферта</string>
+    <string name="legal_privacy">Политика конфиденциальности</string>
+    <string name="legal_consent_checkbox">Я прочитал(а) и принимаю публичную оферту и политику конфиденциальности.</string>
+    <string name="legal_consent_continue">Принять и продолжить</string>
+    <string name="legal_consent_footer">Версии документов, время, язык и платформа сохраняются в аккаунте. Оба документа доступны в настройках.</string>
     <string name="account_error_invalid_code">Код неверный.</string>
     <string name="account_error_code_expired">Код истёк. Запросите новый.</string>
     <string name="account_error_too_many_attempts">Слишком много попыток. Подождите немного.</string>
@@ -307,7 +301,6 @@
     <string name="subscription_per_day">%1$d ответов в день</string>
     <string name="subscription_current_badge">Текущий</string>
     <string name="subscription_choose">Выбрать</string>
-    <string name="subscription_demo_footer">Платежи в демо-режиме: выбранный тариф включается сразу, без реального списания.</string>
     <string name="settings_account">Аккаунт</string>
     <string name="settings_account_identifier">Вы вошли как</string>
     <string name="settings_account_plan">Тариф и лимит</string>
@@ -315,12 +308,6 @@
     <string name="settings_account_sign_out_confirm">Выйти из этого аккаунта?</string>
     <string name="settings_account_signed_out">Вы не вошли</string>
     <string name="settings_account_footer">Клавиатура использует тот же аккаунт. После выхода ответы не будут генерироваться до повторного входа.</string>
-    <string name="settings_service">Где создаются ответы</string>
-    <string name="settings_service_direct">Свой ключ</string>
-    <string name="settings_service_backend">Сервис AI Reply</string>
-    <string name="settings_service_url">Адрес сервиса</string>
-    <string name="settings_service_url_invalid">Этот адрес использовать нельзя. Нужен HTTPS, кроме локального адреса.</string>
-    <string name="settings_service_footer">Со своим ключом запросы идут с устройства напрямую к провайдеру. С сервисом ключ остаётся на сервере, а у вас появляются аккаунт, тариф и дневной лимит.</string>
     <string name="home_usage_title">Ответы сегодня</string>
     <string name="home_usage_left">осталось из %1$d</string>
     <string name="kb_err_sign_in_required">Откройте приложение AI Reply и войдите, чтобы продолжить.</string>

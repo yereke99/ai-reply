@@ -2,9 +2,8 @@ import SwiftUI
 
 /// First run.
 ///
-/// Six screens after the welcome, in the order the brief asks for: what this
-/// is, who you are, when you work, connecting the AI, adding the keyboard in
-/// iOS Settings, how copy-to-reply works, and a field to try it in.
+/// A short first-run guide for enabling and using the keyboard. Profile details
+/// are collected during account registration and remain editable in Settings.
 ///
 /// Every question screen is skippable and every answer is written as the user
 /// leaves it, so quitting halfway through loses nothing and a user who skips
@@ -27,14 +26,14 @@ struct OnboardingView: View {
     @State private var suggestion: VoiceConfigurationParser.Suggestion?
 
     enum Step: Int, CaseIterable {
-        case welcome, profile, hours, key, keyboard, usage, test
+        case welcome, keyboard, usage, test
 
         /// The welcome screen is not numbered: "Step 1 of 6" should start at
         /// the first thing the user actually does.
         var questionIndex: Int? {
             self == .welcome ? nil : rawValue
         }
-        static let questionCount = 6
+        static let questionCount = 3
     }
 
     var body: some View {
@@ -80,9 +79,6 @@ struct OnboardingView: View {
     private var content: some View {
         switch step {
         case .welcome:  welcomeStep
-        case .profile:  profileStep
-        case .hours:    hoursStep
-        case .key:      keyStep
         case .keyboard: keyboardStep
         case .usage:    usageStep
         case .test:     testStep
@@ -198,15 +194,6 @@ struct OnboardingView: View {
         }
     }
 
-    private var keyStep: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.m) {
-            title("onboarding.key.title", "onboarding.key.prompt")
-            Form { APIKeyEditor() }
-                .frame(height: 250)
-                .scrollDisabled(true)
-        }
-    }
-
     private var keyboardStep: some View {
         VStack(alignment: .leading, spacing: DS.Spacing.m) {
             title("onboarding.keyboard.title", "onboarding.keyboard.prompt")
@@ -310,16 +297,7 @@ struct OnboardingView: View {
     /// app halfway through never loses what was already answered.
     private func persistCurrentStep() {
         switch step {
-        case .profile:
-            model.updateProfile {
-                $0.setRole(role)
-                $0.business.setOffering(offering)
-                $0.setDescription(about)
-            }
-        case .hours:
-            model.updateProfile { $0.workingHours = hours }
-        case .welcome, .key, .keyboard, .usage, .test:
-            break
+        case .welcome, .keyboard, .usage, .test: break
         }
     }
 

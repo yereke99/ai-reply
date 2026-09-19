@@ -10,10 +10,8 @@ struct GeneratedReply: Equatable, Sendable {
 
 /// What a reply source has to be able to do.
 ///
-/// Two implementations ship: `DirectOpenAITransport`, which calls OpenAI from
-/// the device, and `BackendTransport`, which calls our own service. The
-/// keyboard and the app know only this protocol, so moving between them is a
-/// configuration change rather than a rewrite.
+/// The app and keyboard depend on this protocol while production requests are
+/// handled by the authenticated account transport.
 protocol ReplyTransport: Sendable {
     func generate(prompt: ReplyPromptBuilder.Prompt) async throws -> GeneratedReply
 }

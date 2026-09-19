@@ -100,6 +100,7 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.Handle("GET /api/v1/me/usage", s.requireUser(http.HandlerFunc(s.handleUsage)))
 	mux.Handle("GET /api/v1/me/subscription", s.requireUser(http.HandlerFunc(s.handleSubscription)))
 	mux.Handle("GET /api/v1/me/devices", s.requireUser(http.HandlerFunc(s.handleListDevices)))
+	mux.Handle("POST /api/v1/me/consents", s.requireUser(http.HandlerFunc(s.handleSaveLegalConsent)))
 
 	// --- каталог
 	mux.Handle("GET /api/v1/plans", generic(http.HandlerFunc(s.handlePlans)))

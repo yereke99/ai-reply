@@ -1244,7 +1244,7 @@ extension KeyboardViewController: ReplyFlowCoordinatorDelegate {
     }
 
     func coordinator(_ coordinator: ReplyFlowCoordinator, didFailWith error: AIReplyError) {
-        let message = aiStrings.message(for: error, mode: AIConfiguration.shared.mode)
+        let message = aiStrings.message(for: error)
 
         if actionBar.isComposing {
             // A regeneration failed. Keep the composer and whatever draft was

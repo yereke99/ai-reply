@@ -7,10 +7,8 @@ import Security
 ///
 /// The tokens live in the same access group as the rest of the app's keychain
 /// items, which is what lets the keyboard extension generate a reply without
-/// asking the user to sign in twice. What deliberately does NOT live here: the
-/// provider key (there is none on device any more) and anything a plain
-/// property list could leak - App Group defaults hold only the non-secret
-/// device id and the access-token expiry.
+/// asking the user to sign in twice. App Group defaults hold only the
+/// non-secret device id and the access-token expiry.
 enum AccountCredentials {
 
     private static let service = "kz.yerek.replykeyboard.account"

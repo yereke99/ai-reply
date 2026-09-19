@@ -82,14 +82,11 @@ final class AccountAPITests: XCTestCase {
         XCTAssertEqual(AccountReplyTransport.map(.server), .serviceUnavailable)
     }
 
-    /// In backend mode "your key was rejected" is nonsense: the user never
-    /// entered one. The wording has to follow the transport.
-    func testKeyboardWordingFollowsTheTransportMode() {
+    func testKeyboardUsesAccountWording() {
         for language in AppLanguage.allCases {
             let strings = AIReplyStrings.forLanguage(language)
-            XCTAssertEqual(strings.message(for: .authenticationFailed, mode: .direct), strings.authenticationFailed)
-            XCTAssertEqual(strings.message(for: .authenticationFailed, mode: .backend), strings.signInRequired)
-            XCTAssertEqual(strings.message(for: .rateLimited, mode: .backend), strings.quotaExhausted)
+            XCTAssertEqual(strings.message(for: .authenticationFailed), strings.signInRequired)
+            XCTAssertEqual(strings.message(for: .rateLimited), strings.quotaExhausted)
             XCTAssertFalse(strings.signInRequired.isEmpty)
             XCTAssertFalse(strings.quotaExhausted.isEmpty)
         }

@@ -7,11 +7,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.onStart
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kz.yerek.aireply.core.lang.AppLanguage
 import kz.yerek.aireply.core.lang.KeyboardLanguage
 import kz.yerek.aireply.domain.model.TemplateSummary
-import java.util.UUID
 
 /**
  * The small amount of NON-SENSITIVE state the app screens and the keyboard both
@@ -111,44 +111,21 @@ class SettingsStore(context: Context) {
             prefs.edit().putString(KEY_TEMPLATE_SUMMARIES, encoded).apply()
         }
 
-    // ------------------------------------------------------------ AI settings
-
-    var transportMode: String?
-        get() = prefs.getString(KEY_AI_MODE, null)
-        set(value) = prefs.edit().putString(KEY_AI_MODE, value).apply()
-
-    var model: String?
-        get() = prefs.getString(KEY_AI_MODEL, null)?.trim()?.takeIf { it.isNotEmpty() }
-        set(value) {
-            val trimmed = value?.trim()
-            prefs.edit().apply {
-                if (trimmed.isNullOrEmpty()) remove(KEY_AI_MODEL) else putString(KEY_AI_MODEL, trimmed)
-            }.apply()
+    fun migrateToBackendOnly() {
+        if (prefs.getBoolean(KEY_BACKEND_ONLY_MIGRATED, false)) return
+        val legacyDeviceId = prefs.getString(KEY_INSTALL_ID, null)
+        val editor = prefs.edit()
+        if (accountDeviceId.isNullOrEmpty() && !legacyDeviceId.isNullOrEmpty()) {
+            editor.putString(KEY_ACCOUNT_DEVICE, legacyDeviceId)
         }
-
-    var backendBaseUrl: String?
-        get() = prefs.getString(KEY_AI_BACKEND, null)?.trim()?.takeIf { it.isNotEmpty() }
-        set(value) {
-            val trimmed = value?.trim()
-            prefs.edit().apply {
-                if (trimmed.isNullOrEmpty()) remove(KEY_AI_BACKEND) else putString(KEY_AI_BACKEND, trimmed)
-            }.apply()
-        }
-
-    /**
-     * Random per-install identifier for backend rate limiting.
-     *
-     * Generated locally and never derived from hardware. It is not the ANDROID_ID,
-     * not an advertising id, not the device name and not anything that identifies
-     * a person — uninstalling the app discards it.
-     */
-    val installIdentifier: String
-        get() {
-            prefs.getString(KEY_INSTALL_ID, null)?.let { return it }
-            val created = UUID.randomUUID().toString()
-            prefs.edit().putString(KEY_INSTALL_ID, created).apply()
-            return created
-        }
+        editor
+            .remove(KEY_AI_MODE)
+            .remove(KEY_AI_MODEL)
+            .remove(KEY_AI_BACKEND)
+            .remove(KEY_INSTALL_ID)
+            .putBoolean(KEY_BACKEND_ONLY_MIGRATED, true)
+            .commit()
+    }
 
     // ---------------------------------------------------------- account state
 
@@ -239,6 +216,7 @@ class SettingsStore(context: Context) {
         const val KEY_AI_MODEL = "ai.model"
         const val KEY_AI_BACKEND = "ai.backendBaseURL"
         const val KEY_INSTALL_ID = "ai.installIdentifier"
+        const val KEY_BACKEND_ONLY_MIGRATED = "migration.backendOnly.v1"
 
         const val KEY_ACCESS_EXPIRY = "account.accessTokenExpiry"
         const val KEY_ACCOUNT_IDENTIFIER = "account.identifier"

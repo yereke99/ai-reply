@@ -12,6 +12,7 @@ enum AppLanguage: String, CaseIterable, Identifiable, Sendable {
     case english = "en"
     case russian = "ru"
     case kazakh = "kk"
+    case uzbek = "uz"
 
     var id: String { rawValue }
 
@@ -21,6 +22,7 @@ enum AppLanguage: String, CaseIterable, Identifiable, Sendable {
         case .english: return "en_US"
         case .russian: return "ru_RU"
         case .kazakh:  return "kk_KZ"
+        case .uzbek:   return "uz_UZ"
         }
     }
 
@@ -32,6 +34,7 @@ enum AppLanguage: String, CaseIterable, Identifiable, Sendable {
         case .english: return "English"
         case .russian: return "Русский"
         case .kazakh:  return "Қазақша"
+        case .uzbek:   return "O‘zbekcha"
         }
     }
 
@@ -45,6 +48,7 @@ enum AppLanguage: String, CaseIterable, Identifiable, Sendable {
         case .english: return .english
         case .russian: return .russian
         case .kazakh:  return .kazakh
+        case .uzbek:   return .english
         }
     }
 
@@ -66,6 +70,16 @@ extension ReplyTemplate {
     /// Both exist because both questions are asked: the keys follow the layout,
     /// the product UI follows the app.
     func displayName(appLanguage: AppLanguage) -> String {
-        displayName(language: appLanguage.keyboardLanguage)
+        if appLanguage == .uzbek,
+           customName?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty != false {
+            switch relationship {
+            case .friend: return "Do‘st"
+            case .client: return "Mijoz"
+            case .business: return "Biznes"
+            case .work: return "Ish"
+            case .custom: return "Boshqa"
+            }
+        }
+        return displayName(language: appLanguage.keyboardLanguage)
     }
 }

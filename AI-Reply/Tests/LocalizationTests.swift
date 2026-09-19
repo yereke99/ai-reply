@@ -44,6 +44,7 @@ final class LocalizationTests: XCTestCase {
         }
         XCTAssertNotEqual(russian.addTemplateHint, english.addTemplateHint)
         XCTAssertNotEqual(kazakh.addTemplateHint, english.addTemplateHint)
+        XCTAssertNotEqual(AIReplyStrings.forLanguage(.uzbek).addTemplateHint, english.addTemplateHint)
     }
 
     func testTemplateNamesMatchTheBrief() {
@@ -58,6 +59,7 @@ final class LocalizationTests: XCTestCase {
         XCTAssertEqual(ReplyTemplate.builtInName(.custom, language: .russian), "Свой")
 
         XCTAssertEqual(ReplyTemplate.builtIn(.friend, sortIndex: 0).displayName(appLanguage: .english), "Friend")
+        XCTAssertEqual(ReplyTemplate.builtIn(.friend, sortIndex: 0).displayName(appLanguage: .uzbek), "Do‘st")
     }
 
     /// No product string may be identical across all three languages unless it
@@ -86,6 +88,7 @@ final class LocalizationTests: XCTestCase {
         XCTAssertEqual(AppLanguage.kazakh.keyboardLanguage, .kazakh)
         XCTAssertEqual(AppLanguage.russian.keyboardLanguage, .russian)
         XCTAssertEqual(AppLanguage.english.keyboardLanguage, .english)
+        XCTAssertEqual(AppLanguage.uzbek.keyboardLanguage, .english)
     }
 
     /// A user with a Kazakh app typing on the Russian layout must still see
@@ -106,11 +109,11 @@ final class LocalizationTests: XCTestCase {
 
     // MARK: Catalog completeness
 
-    /// Every key compiled into the app must exist in all three languages.
+    /// Every key compiled into the app must exist in every supported language.
     /// Reads the built `.lproj` tables rather than the source catalog, so it
     /// checks what actually ships.
     func testEveryStringIsTranslatedInEveryLanguage() throws {
-        let tables = try ["en", "ru", "kk"].map { language -> (String, [String: String]) in
+        let tables = try ["en", "ru", "kk", "uz"].map { language -> (String, [String: String]) in
             let path = try XCTUnwrap(
                 Bundle.main.path(forResource: "Localizable", ofType: "strings", inDirectory: "\(language).lproj"),
                 "\(language).lproj/Localizable.strings is missing from the app bundle"
@@ -148,6 +151,7 @@ final class LocalizationTests: XCTestCase {
             let en = try value(key, "en")
             XCTAssertNotEqual(try value(key, "ru"), en, "\(key) is English in Russian")
             XCTAssertNotEqual(try value(key, "kk"), en, "\(key) is English in Kazakh")
+            XCTAssertNotEqual(try value(key, "uz"), en, "\(key) is English in Uzbek")
         }
     }
 }

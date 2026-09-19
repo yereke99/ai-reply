@@ -6,14 +6,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kz.yerek.aireply.core.lang.AppLanguage
 import kz.yerek.aireply.core.lang.LocalizedContext
+import kz.yerek.aireply.data.settings.AppearancePreference
 import kz.yerek.aireply.ui.LocalServices
 import kz.yerek.aireply.ui.design.AIReplyTheme
 import kz.yerek.aireply.ui.navigation.AppNavHost
@@ -60,6 +64,19 @@ class MainActivity : ComponentActivity() {
             val appearance by services.settings.changes()
                 .map { services.settings.appearance }
                 .collectAsState(initial = services.settings.appearance)
+            val systemDark = isSystemInDarkTheme()
+            val dark = when (appearance) {
+                AppearancePreference.SYSTEM -> systemDark
+                AppearancePreference.LIGHT -> false
+                AppearancePreference.DARK -> true
+            }
+
+            SideEffect {
+                WindowCompat.getInsetsController(window, window.decorView).apply {
+                    isAppearanceLightStatusBars = !dark
+                    isAppearanceLightNavigationBars = !dark
+                }
+            }
 
             CompositionLocalProvider(LocalServices provides services) {
                 AIReplyTheme(appearance = appearance) {

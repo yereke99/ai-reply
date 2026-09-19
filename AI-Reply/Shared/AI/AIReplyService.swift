@@ -73,7 +73,7 @@ struct AIReplyService: Sendable {
         case .failure(let error): throw error
         }
 
-        guard configuration.isReady else { throw AIReplyError.notConfigured }
+        guard configuration.isReady else { throw AIReplyError.authenticationFailed }
 
         let profile = request.configuration.profile
         let templateName = request.template.displayName(appLanguage: request.uiLanguage)
@@ -123,69 +123,30 @@ struct AIReplyService: Sendable {
         templateName: String,
         business: WorkingHours.Context?
     ) -> ReplyTransport {
-        switch configuration.mode {
-        case .direct:
-            return DirectOpenAITransport(model: configuration.model)
-
-        case .backend:
-            guard let baseURL = configuration.backendBaseURL else {
-                return UnconfiguredTransport()
-            }
-            let template = request.template
-            let profile = request.configuration.profile
-
-            // Signed in: the account endpoint, which also returns the quota so
-            // the app can show what is left without a second call. Not signed
-            // in: the legacy install-token path, so an existing install keeps
-            // working until the user gets to the sign-in screen.
-            if AccountSession.shared.isSignedIn {
-                return AccountReplyTransport(
-                    context: AccountReplyTransport.RequestContext(
-                        message: message,
-                        instruction: request.instruction,
-                        templateID: template.id,
-                        templateName: templateName,
-                        templateRelationship: template.relationship.rawValue,
-                        templateTone: template.tone,
-                        templateInstructions: template.instructions,
-                        templateReplyLength: template.replyLength,
-                        templateEmojiPolicy: template.emojiPolicy,
-                        templateWorkingHoursBehaviour: template.workingHoursBehaviour,
-                        templateBusiness: template.effectiveBusiness,
-                        appLanguage: request.uiLanguage.rawValue,
-                        business: business
-                    ),
-                    onUsage: { usage in AccountUsageCache.store(usage) }
-                )
-            }
-
-            return BackendTransport(
-                baseURL: baseURL,
-                context: BackendTransport.RequestContext(
-                    message: message,
-                    templateID: template.id,
-                    keyboardLanguage: request.uiLanguage.rawValue,
-                    profileDescription: profile.promptDescription,
-                    profileRole: profile.role,
-                    preferredTone: profile.preferredTone,
-                    profileBusiness: profile.business,
-                    templateName: templateName,
-                    templateRelationship: template.relationship.rawValue,
-                    templateTone: template.tone,
-                    templateInstructions: template.instructions,
-                    templateReplyLength: template.replyLength,
-                    templateEmojiPolicy: template.emojiPolicy,
-                    templateBusiness: template.effectiveBusiness,
-                    templateWorkingHoursBehaviour: template.workingHoursBehaviour,
-                    business: business
-                )
-            )
-        }
+        guard AccountSession.shared.isSignedIn else { return UnconfiguredTransport() }
+        let template = request.template
+        return AccountReplyTransport(
+            context: AccountReplyTransport.RequestContext(
+                message: message,
+                instruction: request.instruction,
+                templateID: template.id,
+                templateName: templateName,
+                templateRelationship: template.relationship.rawValue,
+                templateTone: template.tone,
+                templateInstructions: template.instructions,
+                templateReplyLength: template.replyLength,
+                templateEmojiPolicy: template.emojiPolicy,
+                templateWorkingHoursBehaviour: template.workingHoursBehaviour,
+                templateBusiness: template.effectiveBusiness,
+                appLanguage: request.uiLanguage.rawValue,
+                business: business
+            ),
+            onUsage: { usage in AccountUsageCache.store(usage) }
+        )
     }
 }
 
-/// Fails cleanly when the chosen mode has not been set up, rather than making
-/// `makeTransport` optional and pushing the branch onto every caller.
+/// Fails cleanly when there is no authenticated account session.
 private struct UnconfiguredTransport: ReplyTransport {
     func generate(prompt: ReplyPromptBuilder.Prompt) async throws -> GeneratedReply {
         throw AIReplyError.notConfigured

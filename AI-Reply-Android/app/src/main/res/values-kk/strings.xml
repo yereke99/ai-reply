@@ -37,14 +37,13 @@
     <string name="home_howitworks_body">WhatsApp, Telegram, Instagram немесе кез келген басқа қолданбада хабарламаны көшіріңіз, содан кейін AI Reply пернетақтасына ауысып, «Жауап беру» түймесін басыңыз.</string>
     <string name="home_howitworks_fullaccess">iOS-та кез келген бөгде пернетақта көшірілген мәтінді оқуы үшін «Толық рұқсат» қажет. Пернетақта алмасу буферін тек «Жауап беру» түймесін басқанда ғана оқиды — фонда ешқашан оқымайды.</string>
     <string name="home_howitworks_title">Қалай жұмыс істейді</string>
-    <string name="home_key_missing">Жауап жасау үшін OpenAI кілтін қосыңыз.</string>
     <string name="home_keyboard_fullaccessoff">Толық рұқсат өшірулі — көшірілген хабарламалар оқылмайды</string>
     <string name="home_keyboard_fullaccesson">Толық рұқсат қосулы</string>
     <string name="home_keyboard_notready">AI Reply пернетақтасы әлі қосылмаған</string>
     <string name="home_keyboard_opensettings">iOS параметрлерін ашу</string>
     <string name="home_keyboard_ready">AI Reply пернетақтасы қосулы</string>
     <string name="home_keyboard_title">Пернетақта</string>
-    <string name="home_privacy_body">Ешнәрсе құрылғыдан шықпайды. Жауаптар құрылғының өзінде жасалады, алмасу буфері фонда бақыланбайды, хабарлама мәтіні журналға жазылмайды.</string>
+    <string name="home_privacy_body">Мәтін тек жауап сұраған кезде өңделеді. Ол AI Reply арқылы AI провайдеріне жіберіледі, бірақ дерекқорда сақталмайды және журналға жазылмайды.</string>
     <string name="home_privacy_title">Құпиялылық</string>
     <string name="home_profile_edit">Профиль</string>
     <string name="home_profile_hours">Жұмыс уақыты</string>
@@ -82,14 +81,6 @@
     <string name="onboarding_hours_footer">Міндетті емес. Орнатылса, клиенттер мен серіктестерге жауаптар тәулік уақытын ескереді.</string>
     <string name="onboarding_hours_prompt">Сізде жұмыс уақыты бар ма?</string>
     <string name="onboarding_hours_title">Жұмыс уақыты</string>
-    <string name="onboarding_key_clipboardempty">Қоятын ештеңе жоқ.</string>
-    <string name="onboarding_key_invalid">Бұл OpenAI кілтіне ұқсамайды.</string>
-    <string name="onboarding_key_paste">Буферден қою</string>
-    <string name="onboarding_key_placeholder">sk-…</string>
-    <string name="onboarding_key_prompt">OpenAI API кілтін қойыңыз. Ол тек осы құрылғының iOS Keychain қоймасында сақталады және қолданбаға кірмейді.</string>
-    <string name="onboarding_key_saved">Кілт сақталды</string>
-    <string name="onboarding_key_savefailed">Кілтті Keychain-ге сақтау мүмкін болмады.</string>
-    <string name="onboarding_key_title">OpenAI қосу</string>
     <string name="onboarding_keyboard_prompt">Хабарламаларға жылдам жауап беру үшін пернетақтаны iPhone баптауларынан қосыңыз.</string>
     <string name="onboarding_keyboard_title">AI пернетақтасын қосу</string>
     <string name="onboarding_next">Әрі қарай</string>
@@ -111,7 +102,7 @@
     <string name="onboarding_usage_step_open">Глобус пернесі арқылы Reply Keyboard-қа ауысыңыз</string>
     <string name="onboarding_usage_step_template">Қажетті үлгіні таңдаңыз: «Дос», «Клиент», «Бизнес» немесе «Жұмыс»</string>
     <string name="onboarding_usage_title">Көшіріп, жауап беріңіз</string>
-    <string name="onboarding_welcome_body">Бірнеше қысқа қадам. Барлығы телефоныңызда қалады және тек жауап сұрағанда ғана қолданылады.</string>
+    <string name="onboarding_welcome_body">Пернетақтаны баптауға арналған бірнеше қысқа қадам. Көшірілген мәтін тек жауап сұраған кезде өңделеді.</string>
     <string name="onboarding_welcome_point_copy">Кез келген мессенджерде хабарламаны көшіріңіз</string>
     <string name="onboarding_welcome_point_edit">Жауапты өңдеп, өзіңіз жіберіңіз</string>
     <string name="onboarding_welcome_point_templates">Кімге жауап беретініңізді таңдаңыз</string>
@@ -142,15 +133,6 @@
     <string name="relationship_friend">Дос</string>
     <string name="relationship_work">Жұмыс</string>
 
-    <string name="settings_ai">OpenAI</string>
-    <string name="settings_ai_key">API кілті</string>
-    <string name="settings_ai_key_footer">Тек осы құрылғының Keychain қоймасында сақталады. Қолданбаға кірмейді, баптау файлдарына жазылмайды және OpenAI-дан басқа ешқайда жіберілмейді.</string>
-    <string name="settings_ai_key_missing">Орнатылмаған</string>
-    <string name="settings_ai_key_remove">Кілтті жою</string>
-    <string name="settings_ai_key_set">Keychain-де сақталған</string>
-    <string name="settings_ai_model">Модель</string>
-    <string name="settings_ai_model_footer">Бір жерде өзгертіледі және қолданба мен пернетақта қолданады.</string>
-    <string name="settings_ai_reset">Әдепкіге қайтару</string>
     <string name="settings_appearance">Безендіру</string>
     <string name="settings_appearance_dark">Күңгірт</string>
     <string name="settings_appearance_light">Ашық</string>
@@ -158,7 +140,7 @@
     <string name="settings_appgroup_unavailable">Қолданба мен пернетақта әзірге параметрлермен алмаса алмайды. App Group қолданылуы үшін қолданбаны қайта жинаңыз.</string>
     <string name="settings_language">Тіл</string>
     <string name="settings_language_footer">Осы қолданбаның тілін өзгертеді. Пернетақтадағы жазулар пернетақтада таңдалған орналасуға сәйкес келеді.</string>
-    <string name="settings_privacy_body">Көшірілген хабарламалар сақталмайды және журналға жазылмайды. Олар тек сіз үлгіні басқанда жіберіледі және жауап кірістірілген немесе пернетақта жабылған соң жойылады.</string>
+    <string name="settings_privacy_body">Көшірілген хабарлама мен жасалған жауап AI Reply сервері арқылы AI провайдеріне тек сіз жауап сұрағанда жіберіледі. Олар дерекқорда сақталмайды және журналға жазылмайды.</string>
     <string name="settings_privacy_title">Құпиялылық</string>
     <string name="settings_setup">Баптау</string>
     <string name="settings_setup_footer">Қадамдық нұсқаулық, толық қолжетімділік және қою рұқсаты.</string>
@@ -180,12 +162,18 @@
     <string name="setup_paste_title">Қою рұқсаты</string>
     <string name="setup_privacy_clipboard">Алмасу буфері фонда ешқашан бақыланбайды.</string>
     <string name="setup_privacy_explicit">Көшірілген мәтін тек үлгіні басқаннан кейін оқылады, жауап та сол кезде ғана жасалады.</string>
-    <string name="setup_privacy_nokeyinkeyboard">API кілті iOS Кілттер тізбегінде сақталады — пернетақтада да, қолданба файлдарында да емес.</string>
+    <string name="setup_privacy_nokeyinkeyboard">Кіру токендері қолданбаның қорғалған қоймасында сақталады және пернетақтада көрсетілмейді.</string>
     <string name="setup_privacy_securefields">Құпия сөздер мен қорғалған өрістер ешқашан өңделмейді.</string>
     <string name="setup_privacy_title">Құпиялылық</string>
     <string name="setup_state_done">Дайын</string>
     <string name="setup_state_missing">Қосылмаған</string>
     <string name="setup_state_unknown">Әзірге белгісіз</string>
+    <string name="setup_state_unavailable">Қолжетімсіз</string>
+    <string name="setup_checklist_microphone">Микрофонға рұқсат</string>
+    <string name="setup_checklist_speech">Сөйлеуді тану</string>
+    <string name="setup_voice_title">Дауыспен енгізу</string>
+    <string name="setup_voice_body">Дауыспен енгізу Android сөйлеуді тану қызметін пайдаланады. Қолжетімділік және дыбыстың құрылғыда өңделуі құрылғы мен таңдалған тану қызметіне байланысты.</string>
+    <string name="setup_voice_enable">Микрофонға рұқсат беру</string>
     <string name="setup_steps_footer">iOS тек қолданбаның өз бетін аша алады, сондықтан пернетақталар тізімін қолмен ашу керек.</string>
     <string name="setup_steps_title">Қалай қосу керек</string>
     <string name="setup_subtitle">Мессенджерлерде жауап беру үшін пернетақтаны iPhone баптауларынан қосыңыз.</string>
@@ -268,7 +256,7 @@
     <string name="voice_title">Дауыстық жауап</string>
 
 
-    <!-- Account, plans and service mode -->
+    <!-- Account and plans -->
     <string name="common_back">Артқа</string>
     <string name="account_method_phone">Телефон</string>
     <string name="account_method_email">Пошта</string>
@@ -277,12 +265,18 @@
     <string name="account_phone_placeholder">Телефон нөмірі</string>
     <string name="account_email_placeholder">Электрондық пошта</string>
     <string name="account_continue">Жалғастыру</string>
-    <string name="account_legal_footer">Жалғастыру арқылы пайдалану шарттары мен құпиялық саясатын қабылдайсыз. Жазысуыңыз сақталмайды.</string>
+    <string name="account_legal_footer">Байланыс дерегі тек кіру үшін пайдаланылады. Жария оферта мен құпиялық саясаты параметрлерде қолжетімді.</string>
     <string name="account_code_title">Кодты енгізіңіз</string>
     <string name="account_code_subtitle">Ол %1$s нөміріне жіберілді</string>
-    <string name="account_code_demo">Демо режимі: сервер әзірге ештеңе жібермейді — код 1111.</string>
     <string name="account_code_confirm">Растау</string>
     <string name="account_code_resend">Қайта жіберу</string>
+    <string name="legal_consent_title">Жалғастырмас бұрын</string>
+    <string name="legal_consent_body">AI Reply жұмысын реттейтін және деректердің қалай өңделетінін түсіндіретін құжаттармен танысыңыз.</string>
+    <string name="legal_terms">Жария оферта</string>
+    <string name="legal_privacy">Құпиялық саясаты</string>
+    <string name="legal_consent_checkbox">Жария оферта мен құпиялық саясатын оқыдым және қабылдаймын.</string>
+    <string name="legal_consent_continue">Қабылдау және жалғастыру</string>
+    <string name="legal_consent_footer">Қабылданған нұсқалар, уақыт, тіл және платформа тіркелгіде сақталады. Екі құжатты да параметрлерден қайта ашуға болады.</string>
     <string name="account_error_invalid_code">Код дұрыс емес.</string>
     <string name="account_error_code_expired">Кодтың мерзімі өтті. Жаңасын сұраңыз.</string>
     <string name="account_error_too_many_attempts">Әрекет тым көп. Сәл күтіп, қайталаңыз.</string>
@@ -307,7 +301,6 @@
     <string name="subscription_per_day">Күніне %1$d жауап</string>
     <string name="subscription_current_badge">Ағымдағы</string>
     <string name="subscription_choose">Таңдау</string>
-    <string name="subscription_demo_footer">Төлемдер демо режимінде: тарифті таңдағанда ол бірден қосылады, нақты ақша алынбайды.</string>
     <string name="settings_account">Тіркелгі</string>
     <string name="settings_account_identifier">Кірген тіркелгі</string>
     <string name="settings_account_plan">Тариф және лимит</string>
@@ -315,12 +308,6 @@
     <string name="settings_account_sign_out_confirm">Осы тіркелгіден шығасыз ба?</string>
     <string name="settings_account_signed_out">Кірмегенсіз</string>
     <string name="settings_account_footer">Пернетақта да осы тіркелгіні пайдаланады. Шыққаннан кейін қайта кіргенше жауаптар жасалмайды.</string>
-    <string name="settings_service">Жауап қайда жасалады</string>
-    <string name="settings_service_direct">Өз кілтім</string>
-    <string name="settings_service_backend">AI Reply сервері</string>
-    <string name="settings_service_url">Сервер мекенжайы</string>
-    <string name="settings_service_url_invalid">Бұл мекенжай жарамсыз. HTTPS қажет (жергілікті мекенжайдан басқа).</string>
-    <string name="settings_service_footer">Өз кілтіңізбен сұраныс құрылғыдан тікелей провайдерге кетеді. Сервер режимінде кілт серверде қалады, ал сізде тіркелгі, тариф және күндік лимит болады.</string>
     <string name="home_usage_title">Бүгінгі жауаптар</string>
     <string name="home_usage_left">%1$d-тен қалды</string>
     <string name="kb_err_sign_in_required">Жалғастыру үшін AI Reply қолданбасын ашып, кіріңіз.</string>

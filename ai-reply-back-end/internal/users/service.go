@@ -4,8 +4,10 @@ package users
 import (
 	"context"
 	"strings"
+	"time"
 
 	"github.com/aireply/ai-reply-back-end/internal/domain"
+	"github.com/aireply/ai-reply-back-end/internal/legal"
 	"github.com/aireply/ai-reply-back-end/internal/repository"
 	"github.com/aireply/ai-reply-back-end/internal/traits"
 )
@@ -120,4 +122,41 @@ func (s *Service) Devices(ctx context.Context, userID string) ([]domain.Device, 
 // RemoveDevice — құрылғыны өшіру.
 func (s *Service) RemoveDevice(ctx context.Context, userID, deviceID string) error {
 	return s.repo.RevokeDevice(ctx, userID, deviceID)
+}
+
+// LegalConsentInput identifies the public documents accepted in a client.
+type LegalConsentInput struct {
+	TermsVersion   string
+	PrivacyVersion string
+	Locale         string
+	Platform       string
+	AppVersion     string
+}
+
+// SaveLegalConsent validates and stores acceptance for the current documents.
+func (s *Service) SaveLegalConsent(ctx context.Context, userID string, in LegalConsentInput) (domain.LegalConsent, error) {
+	if strings.TrimSpace(in.TermsVersion) != legal.TermsVersion ||
+		strings.TrimSpace(in.PrivacyVersion) != legal.PrivacyVersion {
+		return domain.LegalConsent{}, domain.ErrInvalidRequest
+	}
+	platform := strings.ToLower(strings.TrimSpace(in.Platform))
+	if !traits.OneOf(platform, domain.PlatformIOS, domain.PlatformAndroid, domain.PlatformWeb) {
+		return domain.LegalConsent{}, domain.ErrInvalidRequest
+	}
+	now := time.Now().UTC()
+	return s.repo.SaveLegalConsent(ctx, domain.LegalConsent{
+		UserID:         userID,
+		TermsVersion:   legal.TermsVersion,
+		PrivacyVersion: legal.PrivacyVersion,
+		AcceptedAt:     now,
+		Locale:         domain.NormalizeLocale(strings.ToLower(strings.TrimSpace(in.Locale))),
+		Platform:       platform,
+		AppVersion:     traits.Clamp(in.AppVersion, 32),
+		CreatedAt:      now,
+	})
+}
+
+// CurrentLegalConsent returns acceptance for the public versions served now.
+func (s *Service) CurrentLegalConsent(ctx context.Context, userID string) (domain.LegalConsent, error) {
+	return s.repo.LegalConsent(ctx, userID, legal.TermsVersion, legal.PrivacyVersion)
 }

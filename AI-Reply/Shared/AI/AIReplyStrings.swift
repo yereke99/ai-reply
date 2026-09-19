@@ -67,17 +67,13 @@ struct AIReplyStrings: Sendable {
         case .english: return .english
         case .russian: return .russian
         case .kazakh:  return .kazakh
+        case .uzbek:   return .uzbek
         }
     }
 
     /// Maps an error onto the sentence the user actually sees. Short, plain,
     /// actionable, and free of status codes, JSON and provider names.
-    ///
-    /// The transport mode matters for exactly two cases. In direct mode a
-    /// rejected credential is the user's own API key; in backend mode it is
-    /// their session, and telling them to check a key they never entered would
-    /// send them looking for something that does not exist.
-    func message(for error: AIReplyError, mode: AITransportMode = .direct) -> String {
+    func message(for error: AIReplyError) -> String {
         switch error {
         case .noSourceMessage:      return noSourceMessage
         case .messageTooLong:       return messageTooLong
@@ -86,8 +82,8 @@ struct AIReplyStrings: Sendable {
         case .offline:              return offline
         case .timedOut:             return timedOut
         case .cancelled:            return ""
-        case .authenticationFailed: return mode == .backend ? signInRequired : authenticationFailed
-        case .rateLimited:          return mode == .backend ? quotaExhausted : rateLimited
+        case .authenticationFailed: return signInRequired
+        case .rateLimited:          return quotaExhausted
         case .emptyResponse:        return emptyResponse
         case .serviceUnavailable:   return serviceUnavailable
         }
@@ -114,7 +110,7 @@ struct AIReplyStrings: Sendable {
         notConfigured: "Open the AI Reply app and finish setup first.",
         offline: "No internet connection.",
         timedOut: "That took too long. Try again.",
-        authenticationFailed: "Your API key was rejected. Check it in the AI Reply app.",
+        authenticationFailed: "Your session could not be verified. Sign in again in the AI Reply app.",
         rateLimited: "Too many requests. Wait a moment and try again.",
         emptyResponse: "No reply came back. Try again.",
         serviceUnavailable: "The service is unavailable right now. Try again.",
@@ -143,7 +139,7 @@ struct AIReplyStrings: Sendable {
         notConfigured: "Откройте приложение AI Reply и завершите настройку.",
         offline: "Нет подключения к интернету.",
         timedOut: "Слишком долго. Попробуйте ещё раз.",
-        authenticationFailed: "Ключ API отклонён. Проверьте его в приложении AI Reply.",
+        authenticationFailed: "Не удалось проверить сессию. Войдите снова в приложении AI Reply.",
         rateLimited: "Слишком много запросов. Подождите немного.",
         emptyResponse: "Ответ не получен. Попробуйте ещё раз.",
         serviceUnavailable: "Сервис сейчас недоступен. Попробуйте позже.",
@@ -172,12 +168,41 @@ struct AIReplyStrings: Sendable {
         notConfigured: "AI Reply қолданбасын ашып, баптауды аяқтаңыз.",
         offline: "Интернет байланысы жоқ.",
         timedOut: "Тым ұзаққа созылды. Қайталап көріңіз.",
-        authenticationFailed: "API кілті қабылданбады. AI Reply қолданбасынан тексеріңіз.",
+        authenticationFailed: "Сеанс расталмады. AI Reply қолданбасына қайта кіріңіз.",
         rateLimited: "Сұраныс тым көп. Сәл күте тұрыңыз.",
         emptyResponse: "Жауап келмеді. Қайталап көріңіз.",
         serviceUnavailable: "Қызмет қазір қолжетімсіз. Кейінірек көріңіз.",
         signInRequired: "Жалғастыру үшін AI Reply қолданбасын ашып, кіріңіз.",
         quotaExhausted: "Бүгінгі жауаптар бітті. Ертең жаңарады немесе қолданбадан тарифті ауыстырыңыз.",
         hostFieldNotEmpty: "Бұл өрісте мәтін бар."
+    )
+
+    private static let uzbek = AIReplyStrings(
+        generate: "Javob berish",
+        regenerate: "Qayta yaratish",
+        insert: "Kiritish",
+        cancel: "Bekor qilish",
+        addTemplate: "Andoza qo‘shish",
+        addTemplateHint: "Andozalar AI Reply ilovasida yaratiladi.",
+        replaceExisting: "Almashtirish",
+        appendToExisting: "Qo‘shish",
+        keepTyping: "Bekor qilish",
+        generating: "Javob tayyorlanmoqda…",
+        draftTitle: "Javobingiz",
+        sourceTitle: "Xabarga javob",
+        chooseTemplate: "Kimga javob berayotganingizni tanlang",
+        noSourceMessage: "Avval xabarni nusxalang",
+        messageTooLong: "Xabar juda uzun. 300 belgigacha matnni nusxalang.",
+        fullAccessRequired: "Nusxalangan xabardan foydalanish uchun iOS sozlamalarida klaviaturaga to‘liq ruxsat bering.",
+        notConfigured: "AI Reply ilovasini ochib, sozlashni yakunlang.",
+        offline: "Internet aloqasi yo‘q.",
+        timedOut: "Juda uzoq davom etdi. Qayta urinib ko‘ring.",
+        authenticationFailed: "Seansni tekshirib bo‘lmadi. AI Reply ilovasiga qayta kiring.",
+        rateLimited: "So‘rovlar juda ko‘p. Biroz kutib qayta urinib ko‘ring.",
+        emptyResponse: "Javob kelmadi. Qayta urinib ko‘ring.",
+        serviceUnavailable: "Xizmat hozir mavjud emas. Keyinroq urinib ko‘ring.",
+        signInRequired: "Davom etish uchun AI Reply ilovasini ochib, tizimga kiring.",
+        quotaExhausted: "Bugungi javoblar tugadi. Ular ertaga yangilanadi yoki ilovada tarifni o‘zgartiring.",
+        hostFieldNotEmpty: "Bu maydonda matn bor."
     )
 }

@@ -2,12 +2,12 @@ package kz.yerek.aireply.ui.feature.account
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SegmentedButton
-import androidx.compose.material3.SegmentedButtonDefaults
-import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,6 +37,7 @@ import kz.yerek.aireply.ui.design.Spacing
  * have their own screens and are better filled in later by someone who has seen
  * a reply first.
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun RegistrationStepScreen(onFinished: () -> Unit) {
     val services = LocalServices.current
@@ -81,13 +82,17 @@ fun RegistrationStepScreen(onFinished: () -> Unit) {
         }
 
         AppSection(stringResource(R.string.profile_tone)) {
-            SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
-                ReplyTone.entries.forEachIndexed { index, option ->
-                    SegmentedButton(
+            FlowRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(Spacing.xs),
+                verticalArrangement = Arrangement.spacedBy(Spacing.xs)
+            ) {
+                ReplyTone.entries.forEach { option ->
+                    FilterChip(
                         selected = tone == option,
                         onClick = { tone = option },
-                        shape = SegmentedButtonDefaults.itemShape(index, ReplyTone.entries.size)
-                    ) { Text(stringResource(toneLabel(option))) }
+                        label = { Text(stringResource(toneLabel(option))) }
+                    )
                 }
             }
         }

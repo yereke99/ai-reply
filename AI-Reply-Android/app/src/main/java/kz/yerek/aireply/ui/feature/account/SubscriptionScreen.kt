@@ -127,8 +127,6 @@ fun SubscriptionScreen(onBack: () -> Unit) {
                     color = MaterialTheme.colorScheme.error
                 )
             }
-
-            Footnote(stringResource(R.string.subscription_demo_footer))
         }
     }
 }

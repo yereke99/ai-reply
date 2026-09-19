@@ -12,7 +12,7 @@ import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
 
 /**
- * Storage for the OpenAI credential and the optional backend token.
+ * Keystore-backed storage for account access and refresh tokens.
  *
  * WHAT THIS GUARANTEES. The secret is encrypted with an AES-256/GCM key that
  * lives in the Android Keystore. That key is generated on the device, is not
@@ -24,8 +24,7 @@ import javax.crypto.spec.GCMParameterSpec
  * `kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly`.
  *
  * WHAT IT DOES NOT CLAIM. It is not a vault against someone holding the
- * unlocked device, and it is not protection against a rooted phone. It is the
- * right protection for a key the user themselves entered.
+ * unlocked device, and it is not protection against a rooted phone.
  *
  * WHY NOT androidx.security:security-crypto. `EncryptedSharedPreferences` does
  * exactly this, but the library has been stuck in alpha and is now deprecated,
@@ -41,29 +40,9 @@ class SecureCredentialStore(context: Context) {
     private val prefs: SharedPreferences =
         context.applicationContext.getSharedPreferences(NAME, Context.MODE_PRIVATE)
 
-    // ------------------------------------------------------------- OpenAI key
-
-    fun apiKey(): String? = read(KEY_API)
-
-    fun hasApiKey(): Boolean = apiKey() != null
-
-    /** Returns false when the Keystore refused, which is reported, not swallowed. */
-    fun setApiKey(value: String?): Boolean {
-        val trimmed = value?.trim()
-        if (trimmed.isNullOrEmpty()) return delete(KEY_API)
-        return write(KEY_API, trimmed)
-    }
-
-    fun deleteApiKey(): Boolean = delete(KEY_API)
-
-    // --------------------------------------------------------- backend token
-
-    fun backendToken(): String? = read(KEY_BACKEND_TOKEN)
-
-    fun setBackendToken(value: String?): Boolean {
-        val trimmed = value?.trim()
-        if (trimmed.isNullOrEmpty()) return delete(KEY_BACKEND_TOKEN)
-        return write(KEY_BACKEND_TOKEN, trimmed)
+    fun removeLegacySecrets() {
+        delete(KEY_API)
+        delete(KEY_BACKEND_TOKEN)
     }
 
     // -------------------------------------------------------- account tokens
@@ -73,9 +52,8 @@ class SecureCredentialStore(context: Context) {
      *
      * Тіркелгі токендері де осы шифрланған қоймада — қарапайым prefs-те емес.
      *
-     * Same protection as the provider key above, and for the same reason: the
-     * input method has to read these while the device is locked but in use, and
-     * nothing here may survive a backup restored onto another phone.
+     * The input method has to read these while the device is locked but in use,
+     * and nothing here may survive a backup restored onto another phone.
      */
     fun accessToken(): String? = read(KEY_ACCESS_TOKEN)
 

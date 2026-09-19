@@ -1,19 +1,22 @@
 package api
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/aireply/ai-reply-back-end/internal/domain"
+	"github.com/aireply/ai-reply-back-end/internal/legal"
 	"github.com/aireply/ai-reply-back-end/internal/phone"
 	"github.com/aireply/ai-reply-back-end/internal/transport/httpx"
 	"github.com/aireply/ai-reply-back-end/internal/users"
 )
 
 type meResponse struct {
-	User         userDTO         `json:"user"`
-	Profile      profileDTO      `json:"profile"`
-	Subscription subscriptionDTO `json:"subscription"`
-	Usage        usageDTO        `json:"usage"`
+	User         userDTO          `json:"user"`
+	Profile      profileDTO       `json:"profile"`
+	Subscription subscriptionDTO  `json:"subscription"`
+	Usage        usageDTO         `json:"usage"`
+	LegalConsent *legalConsentDTO `json:"legal_consent,omitempty"`
 }
 
 // handleMe — профиль, тариф және квота бір сұраныста.
@@ -29,12 +32,59 @@ func (s *Server) handleMe(w http.ResponseWriter, r *http.Request) {
 		httpx.Fail(w, err)
 		return
 	}
+	consent, err := s.currentLegalConsent(r, user.ID)
+	if err != nil {
+		httpx.Fail(w, err)
+		return
+	}
 	httpx.JSON(w, http.StatusOK, meResponse{
 		User:         toUserDTO(user, profile),
 		Profile:      toProfileDTO(profile),
 		Subscription: s.subscriptionDTO(entitlement),
 		Usage:        toUsageDTO(entitlement, s.cfg.App.Timezone),
+		LegalConsent: consent,
 	})
+}
+
+func (s *Server) currentLegalConsent(r *http.Request, userID string) (*legalConsentDTO, error) {
+	consent, err := s.users.CurrentLegalConsent(r.Context(), userID)
+	if errors.Is(err, domain.ErrNotFound) {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	dto := toLegalConsentDTO(consent)
+	return &dto, nil
+}
+
+type legalConsentRequest struct {
+	TermsVersion   string `json:"terms_version"`
+	PrivacyVersion string `json:"privacy_version"`
+	Locale         string `json:"locale"`
+	Platform       string `json:"platform"`
+	AppVersion     string `json:"app_version"`
+}
+
+func (s *Server) handleSaveLegalConsent(w http.ResponseWriter, r *http.Request) {
+	user, _ := UserFrom(r.Context())
+	var body legalConsentRequest
+	if err := httpx.Decode(w, r, s.cfg.Limits.RequestBodyBytes, &body); err != nil {
+		httpx.Fail(w, err)
+		return
+	}
+	consent, err := s.users.SaveLegalConsent(r.Context(), user.ID, users.LegalConsentInput{
+		TermsVersion:   body.TermsVersion,
+		PrivacyVersion: body.PrivacyVersion,
+		Locale:         body.Locale,
+		Platform:       body.Platform,
+		AppVersion:     body.AppVersion,
+	})
+	if err != nil {
+		httpx.Fail(w, err)
+		return
+	}
+	httpx.JSON(w, http.StatusOK, toLegalConsentDTO(consent))
 }
 
 type updateMeRequest struct {
@@ -124,6 +174,12 @@ func (s *Server) handleConfig(w http.ResponseWriter, r *http.Request) {
 		"demo_mode":              s.cfg.Auth.DemoMode,
 		"payment_mode":           s.payments.Mode(),
 		"countries":              countries,
+		"legal": map[string]string{
+			"terms_version":   legal.TermsVersion,
+			"privacy_version": legal.PrivacyVersion,
+			"terms_url":       s.cfg.App.PublicBaseURL + "/offer",
+			"privacy_url":     s.cfg.App.PublicBaseURL + "/privacy",
+		},
 	})
 }
 

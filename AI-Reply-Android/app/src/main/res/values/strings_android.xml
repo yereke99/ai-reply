@@ -56,8 +56,6 @@
     <string name="kb_err_not_configured">Open the AI Reply app and finish setup first.</string>
     <string name="kb_err_offline">No internet connection.</string>
     <string name="kb_err_timed_out">That took too long. Try again.</string>
-    <string name="kb_err_auth_failed">Your API key was rejected. Check it in the AI Reply app.</string>
-    <string name="kb_err_rate_limited">Too many requests. Wait a moment and try again.</string>
     <string name="kb_err_empty_response">No reply came back. Try again.</string>
     <string name="kb_err_service_unavailable">The service is unavailable right now. Try again.</string>
 

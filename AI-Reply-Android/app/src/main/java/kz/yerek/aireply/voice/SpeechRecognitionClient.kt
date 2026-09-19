@@ -5,13 +5,8 @@ import kotlinx.coroutines.flow.StateFlow
 /**
  * What a source of dictated text has to be able to do.
  *
- * WHY AN INTERFACE FOR ONE IMPLEMENTATION. The brief asks for the voice
- * architecture to be "abstracted enough that later we can switch to
- * server-side/OpenAI transcription without rewriting the keyboard", and this is
- * the whole of that abstraction: five methods and a state flow. On-device
- * recognition is fast, free and private, but its Kazakh coverage is unreliable,
- * so a server-side transcriber is a likely second implementation rather than a
- * hypothetical one. Nothing in the keyboard knows which one it is holding.
+ * On-device recognition is fast and private. Keeping it behind this interface
+ * lets the keyboard remain independent from the recognition implementation.
  *
  * Every implementation must be safe to call from the main thread and must
  * release its microphone in [release].

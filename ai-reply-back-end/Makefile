@@ -30,7 +30,7 @@ secrets: ## Жаңа құпия кілттер генерациялау
 	@echo "AUTH_SIGNING_SECRET=$$(openssl rand -hex 32)"
 
 docker: ## Docker арқылы көтеру
-	docker compose up --build
+	docker compose up -d --build
 
 clean:
 	rm -rf bin data

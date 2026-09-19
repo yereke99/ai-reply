@@ -12,6 +12,8 @@
 (function () {
   "use strict";
 
+  document.documentElement.classList.add("js");
+
   var data = readJSON("landing-data");
 
   function readJSON(id) {
@@ -185,9 +187,24 @@
   var toggle = document.querySelector(".nav-toggle");
   if (toggle) {
     var header = document.querySelector(".site-header");
-    toggle.addEventListener("click", function () { header.classList.toggle("is-open"); });
+    toggle.addEventListener("click", function () {
+      var open = header.classList.toggle("is-open");
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    });
     document.querySelectorAll(".nav a").forEach(function (link) {
-      link.addEventListener("click", function () { header.classList.remove("is-open"); });
+      link.addEventListener("click", function () {
+        header.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+      });
+    });
+  }
+
+  var languageSelect = document.querySelector(".lang-select");
+  if (languageSelect) {
+    languageSelect.addEventListener("change", function () {
+      var url = new URL(window.location.href);
+      url.searchParams.set("lang", languageSelect.value);
+      window.location.assign(url.toString());
     });
   }
 })();

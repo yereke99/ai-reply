@@ -18,10 +18,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // The three languages the product ships. Listing them keeps the APK
+        // The languages the product ships. Listing them keeps the APK
         // free of the ~70 locales AndroidX would otherwise drag in, and is what
         // res/xml/locales_config.xml declares to the system.
-        resourceConfigurations += listOf("en", "ru", "kk")
+        resourceConfigurations += listOf("en", "ru", "kk", "uz")
     }
 
     buildTypes {

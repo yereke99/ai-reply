@@ -1,5 +1,9 @@
 package kz.yerek.aireply.ui.feature.setup
 
+import android.Manifest
+import android.speech.SpeechRecognizer
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +16,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,6 +38,7 @@ import kz.yerek.aireply.ui.design.ReadableColumn
 import kz.yerek.aireply.ui.design.SecondaryButton
 import kz.yerek.aireply.ui.design.Spacing
 import kz.yerek.aireply.ui.design.StepRow
+import kz.yerek.aireply.voice.MicPermission
 
 /**
  * The keyboard setup guide.
@@ -50,6 +58,11 @@ import kz.yerek.aireply.ui.design.StepRow
 fun KeyboardSetupScreen(onBack: (() -> Unit)? = null, showsTitle: Boolean = true) {
     val context = LocalContext.current
     val status by rememberKeyboardStatus()
+    var microphoneGranted by remember { mutableStateOf(MicPermission.isGranted(context)) }
+    val speechAvailable = remember { SpeechRecognizer.isRecognitionAvailable(context) }
+    val microphoneLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted -> microphoneGranted = granted }
 
     val body: @Composable () -> Unit = {
         ReadableColumn {
@@ -72,8 +85,35 @@ fun KeyboardSetupScreen(onBack: (() -> Unit)? = null, showsTitle: Boolean = true
                                 if (status.isSelected) R.string.setup_state_done else R.string.setup_state_missing
                             )
                         )
+                        ChecklistRow(
+                            title = stringResource(R.string.setup_checklist_microphone),
+                            state = if (microphoneGranted) ChecklistState.DONE else ChecklistState.MISSING,
+                            statusLabel = stringResource(
+                                if (microphoneGranted) R.string.setup_state_done else R.string.setup_state_missing
+                            )
+                        )
+                        ChecklistRow(
+                            title = stringResource(R.string.setup_checklist_speech),
+                            state = if (speechAvailable) ChecklistState.DONE else ChecklistState.MISSING,
+                            statusLabel = stringResource(
+                                if (speechAvailable) R.string.setup_state_done else R.string.setup_state_unavailable
+                            )
+                        )
                         Footnote(stringResource(R.string.android_checklist_footer))
                     }
+                }
+            }
+
+            AppSection(stringResource(R.string.setup_voice_title)) {
+                AppCard {
+                    Footnote(stringResource(R.string.setup_voice_body))
+                }
+                if (!microphoneGranted) {
+                    SecondaryButton(
+                        text = stringResource(R.string.setup_voice_enable),
+                        enabled = speechAvailable,
+                        onClick = { microphoneLauncher.launch(Manifest.permission.RECORD_AUDIO) }
+                    )
                 }
             }
 

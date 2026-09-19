@@ -34,10 +34,10 @@ import kz.yerek.aireply.ui.design.Spacing
 fun NavigationRow(
     icon: ImageVector,
     title: String,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     /** Optional trailing detail, shown quietly before the chevron. */
-    value: String? = null
+    value: String? = null,
+    onClick: () -> Unit
 ) {
     Row(
         modifier = modifier

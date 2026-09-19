@@ -5,6 +5,9 @@ info:
   description: >
     Мобильный API AI Reply. Тексты сообщений не сохраняются: сервер обрабатывает
     их только в памяти во время запроса.
+externalDocs:
+  description: Публичная оферта
+  url: https://api.meily.kz/offer
 servers:
   - url: https://api.meily.kz
     description: production
@@ -16,7 +19,12 @@ paths:
   /api/v1/config:
     get:
       summary: Публичная конфигурация клиента (языки, лимиты, страны)
-      responses: { "200": { description: OK } }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/PublicConfig" }
   /api/v1/plans:
     get:
       summary: Активные тарифы
@@ -35,7 +43,7 @@ paths:
                 identifier: { type: string, example: "+7 701 123 45 67" }
                 locale: { type: string, enum: [kk, ru, en, uz] }
       responses:
-        "200": { description: Код отправлен (в демо-режиме доставки нет) }
+        "200": { description: Запрос принят, код отправлен доступным каналом }
         "400": { description: INVALID_REQUEST — номер не поддерживается }
         "429": { description: RATE_LIMITED }
   /api/v1/auth/verify-otp:
@@ -50,7 +58,7 @@ paths:
               required: [identifier, code]
               properties:
                 identifier: { type: string }
-                code: { type: string, example: "1111" }
+                code: { type: string, example: "4827" }
                 device:
                   type: object
                   properties:
@@ -92,6 +100,22 @@ paths:
       summary: Текущая подписка
       security: [{ bearerAuth: [] }]
       responses: { "200": { description: OK } }
+  /api/v1/me/consents:
+    post:
+      summary: Сохранить принятие текущей оферты и политики конфиденциальности
+      security: [{ bearerAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/LegalConsentRequest" }
+      responses:
+        "200":
+          description: Согласие сохранено
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/LegalConsent" }
+        "409": { description: LEGAL_VERSION_MISMATCH — клиент должен обновить конфигурацию }
   /api/v1/devices:
     post:
       summary: Регистрация устройства и push-токена
@@ -141,3 +165,38 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+  schemas:
+    LegalConfig:
+      type: object
+      required: [terms_version, privacy_version, terms_url, privacy_url]
+      properties:
+        terms_version: { type: string, example: "2026-09-19" }
+        privacy_version: { type: string, example: "2026-09-19" }
+        terms_url: { type: string, format: uri, example: "https://api.meily.kz/offer" }
+        privacy_url: { type: string, format: uri, example: "https://api.meily.kz/privacy" }
+    PublicConfig:
+      type: object
+      properties:
+        locales:
+          type: array
+          items: { type: string, enum: [kk, ru, en, uz] }
+        timezone: { type: string, example: "Asia/Almaty" }
+        max_source_characters: { type: integer, example: 300 }
+        max_instruction_length: { type: integer, example: 400 }
+        legal: { $ref: "#/components/schemas/LegalConfig" }
+    LegalConsentRequest:
+      type: object
+      required: [terms_version, privacy_version, locale, platform]
+      properties:
+        terms_version: { type: string }
+        privacy_version: { type: string }
+        locale: { type: string, enum: [kk, ru, en, uz] }
+        platform: { type: string, enum: [ios, android] }
+        app_version: { type: string }
+    LegalConsent:
+      allOf:
+        - { $ref: "#/components/schemas/LegalConsentRequest" }
+        - type: object
+          required: [accepted_at]
+          properties:
+            accepted_at: { type: string, format: date-time }

@@ -17,7 +17,8 @@ import java.util.Locale
 enum class AppLanguage(val code: String) {
     ENGLISH("en"),
     RUSSIAN("ru"),
-    KAZAKH("kk");
+    KAZAKH("kk"),
+    UZBEK("uz");
 
     /** Locale used for speech recognition and for formatting. */
     val locale: Locale
@@ -25,6 +26,7 @@ enum class AppLanguage(val code: String) {
             ENGLISH -> Locale("en", "US")
             RUSSIAN -> Locale("ru", "RU")
             KAZAKH -> Locale("kk", "KZ")
+            UZBEK -> Locale("uz", "UZ")
         }
 
     /** BCP-47 tag, which is what [android.speech.RecognizerIntent] wants. */
@@ -33,6 +35,7 @@ enum class AppLanguage(val code: String) {
             ENGLISH -> "en-US"
             RUSSIAN -> "ru-RU"
             KAZAKH -> "kk-KZ"
+            UZBEK -> "uz-UZ"
         }
 
     /**
@@ -45,6 +48,7 @@ enum class AppLanguage(val code: String) {
             ENGLISH -> "English"
             RUSSIAN -> "Русский"
             KAZAKH -> "Қазақша"
+            UZBEK -> "Oʻzbekcha"
         }
 
     /**
@@ -58,6 +62,7 @@ enum class AppLanguage(val code: String) {
             ENGLISH -> KeyboardLanguage.ENGLISH
             RUSSIAN -> KeyboardLanguage.RUSSIAN
             KAZAKH -> KeyboardLanguage.KAZAKH
+            UZBEK -> KeyboardLanguage.ENGLISH
         }
 
     companion object {

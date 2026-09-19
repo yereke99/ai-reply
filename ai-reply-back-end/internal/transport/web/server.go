@@ -82,6 +82,7 @@ func (s *Server) Register(mux *http.ServeMux) {
 	mux.Handle("GET /static/", http.StripPrefix("/static/", cacheStatic(http.FileServer(http.FS(static)))))
 
 	mux.HandleFunc("GET /{$}", s.handleLanding)
+	mux.HandleFunc("GET /offer", s.handleTerms)
 	mux.HandleFunc("GET /terms", s.handleTerms)
 	mux.HandleFunc("GET /privacy", s.handlePrivacy)
 

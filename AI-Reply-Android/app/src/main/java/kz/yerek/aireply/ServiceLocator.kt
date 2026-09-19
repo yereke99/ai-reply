@@ -18,6 +18,7 @@ import kz.yerek.aireply.data.account.AccountService
 import kz.yerek.aireply.data.account.AccountSession
 import kz.yerek.aireply.data.account.AccountUsageCache
 import kz.yerek.aireply.data.account.DeviceDescriptor
+import kz.yerek.aireply.data.legal.LegalConsentStore
 import kz.yerek.aireply.data.profile.ConfigurationRepository
 import kz.yerek.aireply.data.profile.ProfileStore
 import kz.yerek.aireply.data.secure.SecureCredentialStore
@@ -52,13 +53,18 @@ class ServiceLocator(context: Context) {
 
     val credentials: SecureCredentialStore by lazy { SecureCredentialStore(appContext) }
 
+    init {
+        settings.migrateToBackendOnly()
+        credentials.removeLegacySecrets()
+    }
+
     private val profileStore: ProfileStore by lazy { ProfileStore(appContext) }
 
     val configuration: ConfigurationRepository by lazy {
         ConfigurationRepository(appContext, profileStore, settings, scope)
     }
 
-    val aiConfiguration: AIConfiguration by lazy { AIConfiguration(settings, credentials) }
+    val aiConfiguration: AIConfiguration by lazy { AIConfiguration { accountCredentials.isSignedIn } }
 
     // ------------------------------------------------------------- account
 
@@ -67,6 +73,8 @@ class ServiceLocator(context: Context) {
     }
 
     val usageCache: AccountUsageCache by lazy { AccountUsageCache(settings) }
+
+    val legalConsentStore: LegalConsentStore by lazy { LegalConsentStore(appContext) }
 
     /**
      * One session object for the whole process: the app screens and the input
@@ -82,7 +90,7 @@ class ServiceLocator(context: Context) {
 
     /** UI-facing account state; one instance for the app and the keyboard. */
     val account: AccountController by lazy {
-        AccountController(accountService, accountCredentials, usageCache)
+        AccountController(accountService, accountCredentials, usageCache, legalConsentStore)
     }
 
     val accountService: AccountService by lazy {
@@ -108,16 +116,11 @@ class ServiceLocator(context: Context) {
     val replyService: AIReplyService by lazy {
         AIReplyService(
             configuration = aiConfiguration,
-            credentials = credentials,
             nameTemplate = { template, language ->
                 TemplateNaming.displayName(localized(language), template)
             },
-            // Signed in: the account endpoint, which also returns the quota.
-            // Not signed in: null, and the service falls back to the legacy
-            // install-token path so an existing install keeps working.
             accountTransport = { baseUrl, context ->
-                if (!accountSession.isSignedIn) null
-                else AccountReplyTransport(
+                AccountReplyTransport(
                     baseUrl = baseUrl,
                     session = accountSession,
                     usageCache = usageCache,

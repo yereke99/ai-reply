@@ -24,24 +24,24 @@ private val Default = FontFamily.Default
 
 val AppTypography = Typography(
     // iOS .largeTitle 34
-    displaySmall = TextStyle(Default, fontSize = 32.sp, lineHeight = 38.sp, fontWeight = FontWeight.SemiBold),
+    displaySmall = TextStyle(fontFamily = Default, fontSize = 32.sp, lineHeight = 38.sp, fontWeight = FontWeight.SemiBold),
     // iOS .title 28
-    headlineLarge = TextStyle(Default, fontSize = 26.sp, lineHeight = 32.sp, fontWeight = FontWeight.SemiBold),
+    headlineLarge = TextStyle(fontFamily = Default, fontSize = 26.sp, lineHeight = 32.sp, fontWeight = FontWeight.SemiBold),
     // iOS .title2 22
-    headlineMedium = TextStyle(Default, fontSize = 21.sp, lineHeight = 27.sp, fontWeight = FontWeight.SemiBold),
+    headlineMedium = TextStyle(fontFamily = Default, fontSize = 21.sp, lineHeight = 27.sp, fontWeight = FontWeight.SemiBold),
     // iOS .headline 17 semibold
-    titleLarge = TextStyle(Default, fontSize = 17.sp, lineHeight = 23.sp, fontWeight = FontWeight.SemiBold),
-    titleMedium = TextStyle(Default, fontSize = 16.sp, lineHeight = 22.sp, fontWeight = FontWeight.Medium),
+    titleLarge = TextStyle(fontFamily = Default, fontSize = 17.sp, lineHeight = 23.sp, fontWeight = FontWeight.SemiBold),
+    titleMedium = TextStyle(fontFamily = Default, fontSize = 16.sp, lineHeight = 22.sp, fontWeight = FontWeight.Medium),
     // iOS .subheadline 15
-    titleSmall = TextStyle(Default, fontSize = 14.sp, lineHeight = 20.sp, fontWeight = FontWeight.SemiBold),
+    titleSmall = TextStyle(fontFamily = Default, fontSize = 14.sp, lineHeight = 20.sp, fontWeight = FontWeight.SemiBold),
     // iOS .body 17
-    bodyLarge = TextStyle(Default, fontSize = 16.sp, lineHeight = 23.sp, fontWeight = FontWeight.Normal),
+    bodyLarge = TextStyle(fontFamily = Default, fontSize = 16.sp, lineHeight = 23.sp, fontWeight = FontWeight.Normal),
     // iOS .callout 16
-    bodyMedium = TextStyle(Default, fontSize = 15.sp, lineHeight = 21.sp, fontWeight = FontWeight.Normal),
+    bodyMedium = TextStyle(fontFamily = Default, fontSize = 15.sp, lineHeight = 21.sp, fontWeight = FontWeight.Normal),
     // iOS .footnote 13
-    bodySmall = TextStyle(Default, fontSize = 13.sp, lineHeight = 18.sp, fontWeight = FontWeight.Normal),
-    labelLarge = TextStyle(Default, fontSize = 15.sp, lineHeight = 20.sp, fontWeight = FontWeight.SemiBold),
-    labelMedium = TextStyle(Default, fontSize = 13.sp, lineHeight = 17.sp, fontWeight = FontWeight.Medium),
+    bodySmall = TextStyle(fontFamily = Default, fontSize = 13.sp, lineHeight = 18.sp, fontWeight = FontWeight.Normal),
+    labelLarge = TextStyle(fontFamily = Default, fontSize = 15.sp, lineHeight = 20.sp, fontWeight = FontWeight.SemiBold),
+    labelMedium = TextStyle(fontFamily = Default, fontSize = 13.sp, lineHeight = 17.sp, fontWeight = FontWeight.Medium),
     // iOS .caption 12
-    labelSmall = TextStyle(Default, fontSize = 12.sp, lineHeight = 16.sp, fontWeight = FontWeight.Normal)
+    labelSmall = TextStyle(fontFamily = Default, fontSize = 12.sp, lineHeight = 16.sp, fontWeight = FontWeight.Normal)
 )

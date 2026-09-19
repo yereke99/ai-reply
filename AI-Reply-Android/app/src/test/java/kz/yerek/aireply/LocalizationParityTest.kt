@@ -7,7 +7,8 @@ import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 
 /**
- * Every string exists in all three languages, and every format specifier agrees.
+ * Russian and Kazakh cover the full catalogue. Uzbek covers every active flow;
+ * less common legacy text uses Android's English fallback.
  *
  * WHY THIS IS A TEST AND NOT A REVIEW STEP. The iOS project has 249 strings in
  * one catalogue file; this one has them spread over six XML files. The failure
@@ -42,6 +43,7 @@ class LocalizationParityTest {
     private val english by lazy { strings("values") }
     private val russian by lazy { strings("values-ru") }
     private val kazakh by lazy { strings("values-kk") }
+    private val uzbek by lazy { strings("values-uz") }
 
     @Test
     fun `the catalogue is not empty`() {
@@ -64,6 +66,21 @@ class LocalizationParityTest {
     fun `no translation introduces a key english does not have`() {
         assertEquals(emptySet<String>(), russian.keys - english.keys)
         assertEquals(emptySet<String>(), kazakh.keys - english.keys)
+        assertEquals(emptySet<String>(), uzbek.keys - english.keys)
+    }
+
+    @Test
+    fun `uzbek covers every production entry point`() {
+        val required = setOf(
+            "account_sign_in_title", "account_code_title", "legal_consent_title",
+            "registration_title", "home_title", "settings_title", "profile_title",
+            "templates_title", "hours_title", "android_setup_title", "onboarding_welcome_title",
+            "onboarding_usage_title", "onboarding_done_title", "compose_title",
+            "subscription_title", "kb_generate", "kb_insert", "kb_err_sign_in_required",
+            "settings_privacy_body", "legal_terms", "legal_privacy"
+        )
+        assertEquals("missing Uzbek production strings", emptySet<String>(), required - uzbek.keys)
+        assertTrue("Uzbek catalogue is unexpectedly small", uzbek.size > 200)
     }
 
     /**
@@ -75,7 +92,8 @@ class LocalizationParityTest {
         val specifier = Regex("""%(\d+\$)?[sdf]""")
         english.forEach { (key, value) ->
             val expected = specifier.findAll(value).map { it.value }.toSet()
-            listOf("ru" to russian, "kk" to kazakh).forEach { (language, table) ->
+            listOf("ru" to russian, "kk" to kazakh, "uz" to uzbek).forEach { (language, table) ->
+                if (language == "uz" && key !in table) return@forEach
                 val actual = specifier.findAll(table[key].orEmpty()).map { it.value }.toSet()
                 assertEquals("$key ($language)", expected, actual)
             }

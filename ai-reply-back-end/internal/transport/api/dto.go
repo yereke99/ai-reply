@@ -46,6 +46,26 @@ type profileDTO struct {
 	UpdatedAt        string   `json:"updated_at"`
 }
 
+type legalConsentDTO struct {
+	TermsVersion   string `json:"terms_version"`
+	PrivacyVersion string `json:"privacy_version"`
+	AcceptedAt     string `json:"accepted_at"`
+	Locale         string `json:"locale"`
+	Platform       string `json:"platform"`
+	AppVersion     string `json:"app_version,omitempty"`
+}
+
+func toLegalConsentDTO(consent domain.LegalConsent) legalConsentDTO {
+	return legalConsentDTO{
+		TermsVersion:   consent.TermsVersion,
+		PrivacyVersion: consent.PrivacyVersion,
+		AcceptedAt:     consent.AcceptedAt.Format(time.RFC3339),
+		Locale:         consent.Locale,
+		Platform:       consent.Platform,
+		AppVersion:     consent.AppVersion,
+	}
+}
+
 func toProfileDTO(p domain.Profile) profileDTO {
 	rules := p.BusinessRules
 	if rules == nil {

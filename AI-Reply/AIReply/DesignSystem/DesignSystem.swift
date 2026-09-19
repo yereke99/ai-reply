@@ -62,6 +62,26 @@ extension View {
     func dsCard() -> some View { modifier(DSCardModifier()) }
 }
 
+/// Centers short account flows and naturally becomes scrollable when the
+/// keyboard, Dynamic Type or a compact screen leaves less vertical room.
+struct AuthScreen<Content: View>: View {
+    @ViewBuilder let content: Content
+
+    var body: some View {
+        GeometryReader { geometry in
+            ScrollView {
+                content
+                    .padding(DS.Spacing.l)
+                    .frame(maxWidth: DS.Layout.readableWidth, alignment: .leading)
+                    .frame(maxWidth: .infinity)
+                    .frame(minHeight: geometry.size.height, alignment: .center)
+            }
+            .scrollDismissesKeyboard(.interactively)
+        }
+        .background(Color.dsBackground)
+    }
+}
+
 // MARK: - Sections
 
 /// A titled block of content. The title is a real section header, so VoiceOver
@@ -77,6 +97,39 @@ struct DSSection<Content: View>: View {
                 .foregroundStyle(.secondary)
                 .accessibilityAddTraits(.isHeader)
             content
+        }
+    }
+}
+
+struct TonePicker: View {
+    @Binding var selection: ReplyTone
+
+    private let columns = [GridItem(.adaptive(minimum: 118), spacing: DS.Spacing.xs)]
+
+    var body: some View {
+        LazyVGrid(columns: columns, alignment: .leading, spacing: DS.Spacing.xs) {
+            ForEach(ReplyTone.allCases) { tone in
+                Button {
+                    selection = tone
+                } label: {
+                    HStack(spacing: DS.Spacing.xs) {
+                        Image(systemName: selection == tone ? "checkmark.circle.fill" : "circle")
+                        Text(tone.titleKey)
+                            .lineLimit(2)
+                            .multilineTextAlignment(.leading)
+                        Spacer(minLength: 0)
+                    }
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(selection == tone ? Color.accentColor : Color.primary)
+                    .padding(.horizontal, DS.Spacing.s)
+                    .frame(maxWidth: .infinity, minHeight: DS.Layout.minimumTouchTarget, alignment: .leading)
+                    .background(
+                        RoundedRectangle(cornerRadius: DS.Radius.small, style: .continuous)
+                            .fill(selection == tone ? Color.accentColor.opacity(0.12) : Color.dsSurface)
+                    )
+                }
+                .buttonStyle(.plain)
+            }
         }
     }
 }

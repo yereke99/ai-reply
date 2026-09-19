@@ -20,7 +20,7 @@ struct RegistrationStepView: View {
     @State private var tone: ReplyTone = .natural
 
     var body: some View {
-        ScrollView {
+        AuthScreen {
             VStack(alignment: .leading, spacing: DS.Spacing.l) {
                 VStack(alignment: .leading, spacing: DS.Spacing.s) {
                     Text("registration.title").font(.title.weight(.semibold))
@@ -50,15 +50,7 @@ struct RegistrationStepView: View {
                         )
                 }
 
-                DSSection(title: "profile.tone") {
-                    Picker("profile.tone", selection: $tone) {
-                        ForEach(ReplyTone.allCases) { option in
-                            Text(LocalizedStringKey("tone.\(option.rawValue)")).tag(option)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .labelsHidden()
-                }
+                DSSection(title: "profile.tone") { TonePicker(selection: $tone) }
 
                 if let errorKey = account.errorKey {
                     Label(LocalizedStringKey(errorKey), systemImage: "exclamationmark.triangle")
@@ -82,11 +74,7 @@ struct RegistrationStepView: View {
                     .buttonStyle(DSSecondaryButtonStyle())
                     .disabled(account.isBusy)
             }
-            .padding(DS.Spacing.l)
-            .frame(maxWidth: DS.Layout.readableWidth, alignment: .leading)
-            .frame(maxWidth: .infinity, alignment: .center)
         }
-        .background(Color.dsBackground)
         .onAppear {
             // Pre-fill from whatever the local profile already knows, so a user
             // who set this up before signing in does not type it twice.

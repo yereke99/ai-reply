@@ -80,13 +80,7 @@ struct ProfileEditorView: View {
             }
 
             Section("profile.tone") {
-                Picker("profile.tone", selection: $tone) {
-                    ForEach(ReplyTone.allCases) { option in
-                        Text(option.titleKey).tag(option)
-                    }
-                }
-                .labelsHidden()
-                .pickerStyle(.inline)
+                TonePicker(selection: $tone)
             }
         }
         .navigationTitle("profile.title")

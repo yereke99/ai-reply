@@ -1,6 +1,7 @@
 package kz.yerek.aireply
 
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.encodeToString
 import kz.yerek.aireply.domain.model.BusinessContext
 import kz.yerek.aireply.domain.model.EmojiPolicy
 import kz.yerek.aireply.domain.model.RelationshipKind

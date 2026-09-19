@@ -37,14 +37,13 @@
     <string name="home_howitworks_body">Copy a message in WhatsApp, Telegram, Instagram or any other app, then switch to the AI Reply keyboard and tap Reply.</string>
     <string name="home_howitworks_fullaccess">iOS requires Allow Full Access before any third-party keyboard can read copied text. The keyboard reads the clipboard only when you tap Reply — never in the background.</string>
     <string name="home_howitworks_title">How it works</string>
-    <string name="home_key_missing">Add your OpenAI key to start generating replies.</string>
     <string name="home_keyboard_fullaccessoff">Full Access is off — copied messages cannot be read</string>
     <string name="home_keyboard_fullaccesson">Full Access is on</string>
     <string name="home_keyboard_notready">AI Reply keyboard is not set up yet</string>
     <string name="home_keyboard_opensettings">Open iOS Settings</string>
     <string name="home_keyboard_ready">AI Reply keyboard is set up</string>
     <string name="home_keyboard_title">Keyboard</string>
-    <string name="home_privacy_body">Nothing leaves your device. Replies are produced on device, the clipboard is never monitored in the background, and message text is never written to logs.</string>
+    <string name="home_privacy_body">Text is processed only when you request a reply. It is sent through AI Reply to the AI provider, but is not stored in the database or written to logs.</string>
     <string name="home_privacy_title">Privacy</string>
     <string name="home_profile_edit">Profile</string>
     <string name="home_profile_hours">Working hours</string>
@@ -82,14 +81,6 @@
     <string name="onboarding_hours_footer">Optional. When set, replies to clients and partners can take the time of day into account.</string>
     <string name="onboarding_hours_prompt">Do you have working or business hours?</string>
     <string name="onboarding_hours_title">Working hours</string>
-    <string name="onboarding_key_clipboardempty">Nothing to paste.</string>
-    <string name="onboarding_key_invalid">That does not look like an OpenAI key.</string>
-    <string name="onboarding_key_paste">Paste from clipboard</string>
-    <string name="onboarding_key_placeholder">sk-…</string>
-    <string name="onboarding_key_prompt">Paste your OpenAI API key. It is stored in the iOS Keychain on this device only and is never included in the app.</string>
-    <string name="onboarding_key_saved">Key saved</string>
-    <string name="onboarding_key_savefailed">Could not save the key to the Keychain.</string>
-    <string name="onboarding_key_title">Connect OpenAI</string>
     <string name="onboarding_keyboard_prompt">Add the keyboard in iPhone Settings to generate contextual replies in messaging apps.</string>
     <string name="onboarding_keyboard_title">Enable Reply Keyboard</string>
     <string name="onboarding_next">Continue</string>
@@ -111,7 +102,7 @@
     <string name="onboarding_usage_step_open">Switch to Reply Keyboard with the globe key</string>
     <string name="onboarding_usage_step_template">Tap the template that fits: Friend, Client, Business or Work</string>
     <string name="onboarding_usage_title">Copy, then reply</string>
-    <string name="onboarding_welcome_body">A few short steps. Everything stays on your phone and is used only when you ask for a reply.</string>
+    <string name="onboarding_welcome_body">A few short steps to set up the keyboard. Copied text is processed only when you ask for a reply.</string>
     <string name="onboarding_welcome_point_copy">Copy a message in any chat app</string>
     <string name="onboarding_welcome_point_edit">Edit the reply before you send it yourself</string>
     <string name="onboarding_welcome_point_templates">Choose who you are replying to</string>
@@ -142,15 +133,6 @@
     <string name="relationship_friend">Friend</string>
     <string name="relationship_work">Work</string>
 
-    <string name="settings_ai">OpenAI</string>
-    <string name="settings_ai_key">API key</string>
-    <string name="settings_ai_key_footer">Stored only in this device\'s Keychain. It is never part of the app, never written to settings files, and never sent anywhere except OpenAI.</string>
-    <string name="settings_ai_key_missing">Not set</string>
-    <string name="settings_ai_key_remove">Remove key</string>
-    <string name="settings_ai_key_set">Saved in Keychain</string>
-    <string name="settings_ai_model">Model</string>
-    <string name="settings_ai_model_footer">Changed in one place and used by both the app and the keyboard.</string>
-    <string name="settings_ai_reset">Reset to default</string>
     <string name="settings_appearance">Appearance</string>
     <string name="settings_appearance_dark">Dark</string>
     <string name="settings_appearance_light">Light</string>
@@ -158,7 +140,7 @@
     <string name="settings_appgroup_unavailable">The app and the keyboard cannot share settings yet. Rebuild the app so the App Group entitlement is applied.</string>
     <string name="settings_language">Language</string>
     <string name="settings_language_footer">Changes the language of this app. The keyboard\'s own labels follow the layout you select on the keyboard itself.</string>
-    <string name="settings_privacy_body">Copied messages are never stored and never logged. They are sent only when you tap a template, and are discarded as soon as the reply is inserted or the keyboard closes.</string>
+    <string name="settings_privacy_body">Copied message text and generated replies are sent through the AI Reply server to the AI provider only when you request a reply. They are not stored in the database or written to logs.</string>
     <string name="settings_privacy_title">Privacy</string>
     <string name="settings_setup">Setup</string>
     <string name="settings_setup_footer">Step-by-step instructions, Full Access and paste permission explained.</string>
@@ -180,12 +162,18 @@
     <string name="setup_paste_title">Paste permission</string>
     <string name="setup_privacy_clipboard">The clipboard is never monitored in the background.</string>
     <string name="setup_privacy_explicit">Copied text is read only after you tap a template, and a reply is generated only then.</string>
-    <string name="setup_privacy_nokeyinkeyboard">The API key lives in the iOS Keychain, never inside the keyboard or the app\'s files.</string>
+    <string name="setup_privacy_nokeyinkeyboard">Your sign-in tokens are kept in protected app storage and are not shown in the keyboard.</string>
     <string name="setup_privacy_securefields">Passwords and secure fields are never processed.</string>
     <string name="setup_privacy_title">Privacy</string>
     <string name="setup_state_done">Ready</string>
     <string name="setup_state_missing">Not enabled</string>
     <string name="setup_state_unknown">Not known yet</string>
+    <string name="setup_state_unavailable">Unavailable</string>
+    <string name="setup_checklist_microphone">Microphone access</string>
+    <string name="setup_checklist_speech">Speech recognition</string>
+    <string name="setup_voice_title">Voice input</string>
+    <string name="setup_voice_body">Voice input uses Android speech recognition. Availability and whether audio is processed on device depend on your device and selected recognition service.</string>
+    <string name="setup_voice_enable">Allow microphone access</string>
     <string name="setup_steps_footer">iOS only lets an app open its own settings page, so the keyboard list has to be opened by hand.</string>
     <string name="setup_steps_title">How to add it</string>
     <string name="setup_subtitle">Add the keyboard in iPhone Settings to generate contextual replies in messaging apps.</string>
@@ -268,7 +256,7 @@
     <string name="voice_title">Voice reply</string>
 
 
-    <!-- Account, plans and service mode -->
+    <!-- Account and plans -->
     <string name="common_back">Back</string>
     <string name="account_method_phone">Phone</string>
     <string name="account_method_email">E-mail</string>
@@ -277,12 +265,18 @@
     <string name="account_phone_placeholder">Phone number</string>
     <string name="account_email_placeholder">E-mail address</string>
     <string name="account_continue">Continue</string>
-    <string name="account_legal_footer">By continuing you accept the terms of use and the privacy policy. Your conversations are not stored.</string>
+    <string name="account_legal_footer">We use this contact only to sign you in. The public offer and privacy policy are available in Settings.</string>
     <string name="account_code_title">Enter the code</string>
     <string name="account_code_subtitle">We sent it to %1$s</string>
-    <string name="account_code_demo">Demo mode: the server does not send anything yet — the code is 1111.</string>
     <string name="account_code_confirm">Confirm</string>
     <string name="account_code_resend">Send again</string>
+    <string name="legal_consent_title">Before you continue</string>
+    <string name="legal_consent_body">Please review the documents that govern AI Reply and explain how your data is handled.</string>
+    <string name="legal_terms">Public offer</string>
+    <string name="legal_privacy">Privacy policy</string>
+    <string name="legal_consent_checkbox">I have read and accept the public offer and privacy policy.</string>
+    <string name="legal_consent_continue">Accept and continue</string>
+    <string name="legal_consent_footer">The accepted versions, time, language and platform are saved with your account. You can reopen both documents in Settings.</string>
     <string name="account_error_invalid_code">That code is not correct.</string>
     <string name="account_error_code_expired">The code has expired. Ask for a new one.</string>
     <string name="account_error_too_many_attempts">Too many attempts. Wait a little and try again.</string>
@@ -307,7 +301,6 @@
     <string name="subscription_per_day">%1$d replies a day</string>
     <string name="subscription_current_badge">Current</string>
     <string name="subscription_choose">Choose</string>
-    <string name="subscription_demo_footer">Payments run in demo mode: choosing a plan applies it immediately, without a real charge.</string>
     <string name="settings_account">Account</string>
     <string name="settings_account_identifier">Signed in as</string>
     <string name="settings_account_plan">Plan and limit</string>
@@ -315,12 +308,6 @@
     <string name="settings_account_sign_out_confirm">Sign out of this account?</string>
     <string name="settings_account_signed_out">Not signed in</string>
     <string name="settings_account_footer">The keyboard uses the same account. Signing out stops replies until you sign in again.</string>
-    <string name="settings_service">Where replies are generated</string>
-    <string name="settings_service_direct">My own key</string>
-    <string name="settings_service_backend">AI Reply service</string>
-    <string name="settings_service_url">Service address</string>
-    <string name="settings_service_url_invalid">That address cannot be used. HTTPS is required, except for a local address.</string>
-    <string name="settings_service_footer">With your own key, requests go straight to the provider from this device. With the service, the key stays on the server and you get an account, a plan and a daily limit.</string>
     <string name="home_usage_title">Replies today</string>
     <string name="home_usage_left">of %1$d left</string>
     <string name="kb_err_sign_in_required">Open the AI Reply app and sign in to keep replying.</string>

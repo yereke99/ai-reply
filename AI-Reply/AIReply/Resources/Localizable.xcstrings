@@ -25,28 +25,11 @@
             "state": "translated",
             "value": "Подтвердить"
           }
-        }
-      }
-    },
-    "account.code.demo": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Demo mode: the server does not send anything yet — the code is 1111."
-          }
         },
-        "kk": {
+        "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Демо режимі: сервер әзірге ештеңе жібермейді — код 1111."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Демо-режим: сервер пока ничего не отправляет — код 1111."
+            "value": "Tasdiqlash"
           }
         }
       }
@@ -71,6 +54,12 @@
             "state": "translated",
             "value": "Отправить ещё раз"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qayta yuborish"
+          }
         }
       }
     },
@@ -93,6 +82,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Мы отправили его на %@"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kod %@ manziliga yuborildi"
           }
         }
       }
@@ -117,6 +112,12 @@
             "state": "translated",
             "value": "Введите код"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kodni kiriting"
+          }
         }
       }
     },
@@ -139,6 +140,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Продолжить"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Davom etish"
           }
         }
       }
@@ -163,6 +170,12 @@
             "state": "translated",
             "value": "Электронная почта"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "E-pochta manzili"
+          }
         }
       }
     },
@@ -185,6 +198,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Код истёк. Запросите новый."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kodning muddati tugadi. Yangi kod soʻrang."
           }
         }
       }
@@ -209,6 +228,12 @@
             "state": "translated",
             "value": "Этот аккаунт отключён."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu hisob bloklangan."
+          }
         }
       }
     },
@@ -231,6 +256,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Что-то пошло не так. Попробуйте ещё раз."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Xatolik yuz berdi. Qayta urinib koʻring."
           }
         }
       }
@@ -255,6 +286,12 @@
             "state": "translated",
             "value": "Код неверный."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kod notoʻgʻri."
+          }
         }
       }
     },
@@ -277,6 +314,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Проверьте номер или почту и попробуйте снова."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Telefon raqami yoki e-pochtani tekshirib, qayta urinib koʻring."
           }
         }
       }
@@ -301,6 +344,12 @@
             "state": "translated",
             "value": "Ответы на сегодня закончились."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bugungi javoblar tugadi."
+          }
         }
       }
     },
@@ -323,6 +372,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Для этого тарифа сначала нужна оплата."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu tarif avval toʻlovni talab qiladi."
           }
         }
       }
@@ -347,6 +402,12 @@
             "state": "translated",
             "value": "Сессия завершена. Войдите снова."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seans tugadi. Qayta kiring."
+          }
         }
       }
     },
@@ -370,6 +431,12 @@
             "state": "translated",
             "value": "Слишком много попыток. Подождите немного."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Urinishlar juda koʻp. Biroz kutib, qayta urinib koʻring."
+          }
         }
       }
     },
@@ -379,19 +446,25 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "By continuing you accept the terms of use and the privacy policy. Your conversations are not stored."
+            "value": "We use this contact only to sign you in. The public offer and privacy policy are available in Settings."
           }
         },
         "kk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Жалғастыру арқылы пайдалану шарттары мен құпиялық саясатын қабылдайсыз. Жазысуыңыз сақталмайды."
+            "value": "Байланыс дерегі тек кіру үшін пайдаланылады. Жария оферта мен құпиялық саясаты параметрлерде қолжетімді."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Продолжая, вы принимаете условия использования и политику конфиденциальности. Ваша переписка не сохраняется."
+            "value": "Контакт используется только для входа. Публичная оферта и политика конфиденциальности доступны в настройках."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aloqa maʼlumoti faqat kirish uchun ishlatiladi. Ommaviy oferta va maxfiylik siyosati Sozlamalarda mavjud."
           }
         }
       }
@@ -416,6 +489,12 @@
             "state": "translated",
             "value": "Способ входа"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign-in method"
+          }
         }
       }
     },
@@ -438,6 +517,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Почта"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "E-pochta"
           }
         }
       }
@@ -462,6 +547,12 @@
             "state": "translated",
             "value": "Телефон"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Telefon"
+          }
         }
       }
     },
@@ -484,6 +575,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Номер телефона"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Telefon raqami"
           }
         }
       }
@@ -508,6 +605,12 @@
             "state": "translated",
             "value": "Отправим короткий код для подтверждения. Пароль запоминать не нужно."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu siz ekaningizni tasdiqlash uchun qisqa kod yuboramiz. Parol eslab qolish shart emas."
+          }
         }
       }
     },
@@ -530,6 +633,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Вход"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kirish"
           }
         }
       }
@@ -554,6 +663,12 @@
             "state": "translated",
             "value": "Добавить"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qoʻshish"
+          }
         }
       }
     },
@@ -576,6 +691,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Қолдану"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apply"
           }
         }
       }
@@ -600,6 +721,12 @@
             "state": "translated",
             "value": "Назад"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orqaga"
+          }
         }
       }
     },
@@ -622,6 +749,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Отмена"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bekor qilish"
           }
         }
       }
@@ -646,6 +779,12 @@
             "state": "translated",
             "value": "Очистить"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear"
+          }
         }
       }
     },
@@ -668,6 +807,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Копировать"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nusxalash"
           }
         }
       }
@@ -692,6 +837,12 @@
             "state": "translated",
             "value": "Удалить"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oʻchirish"
+          }
         }
       }
     },
@@ -714,6 +865,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Готово"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tayyor"
           }
         }
       }
@@ -738,6 +895,12 @@
             "state": "translated",
             "value": "Изменить"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit"
+          }
         }
       }
     },
@@ -760,6 +923,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Выкл"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
           }
         }
       }
@@ -784,6 +953,12 @@
             "state": "translated",
             "value": "Вкл"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On"
+          }
         }
       }
     },
@@ -806,6 +981,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Сохранить"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saqlash"
           }
         }
       }
@@ -830,6 +1011,12 @@
             "state": "translated",
             "value": "Настройки"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
         }
       }
     },
@@ -852,6 +1039,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Системный"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tizim"
           }
         }
       }
@@ -876,6 +1069,12 @@
             "state": "translated",
             "value": "Скопировано"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nusxalandi"
+          }
         }
       }
     },
@@ -895,6 +1094,12 @@
           }
         },
         "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$d / %2$d"
+          }
+        },
+        "uz": {
           "stringUnit": {
             "state": "translated",
             "value": "%1$d / %2$d"
@@ -922,6 +1127,12 @@
             "state": "translated",
             "value": "Сгенерировать ответ"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Javob yaratish"
+          }
         }
       }
     },
@@ -944,6 +1155,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Используется тот же профиль, шаблон и контекст времени, что и в клавиатуре."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu klaviaturadagi profil, shablon va vaqt kontekstidan foydalanadi."
           }
         }
       }
@@ -968,6 +1185,12 @@
             "state": "translated",
             "value": "Входящее сообщение"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kiruvchi xabar"
+          }
         }
       }
     },
@@ -990,6 +1213,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Вставьте или надиктуйте сообщение, на которое хотите ответить"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Javob bermoqchi boʻlgan xabarni joylang yoki ayting"
           }
         }
       }
@@ -1014,6 +1243,12 @@
             "state": "translated",
             "value": "Вставить"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Joylash"
+          }
         }
       }
     },
@@ -1036,6 +1271,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Сгенерировать заново"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qayta yaratish"
           }
         }
       }
@@ -1060,6 +1301,12 @@
             "state": "translated",
             "value": "Ответ"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Javob"
+          }
         }
       }
     },
@@ -1082,6 +1329,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Отвечаете"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kimga javob"
           }
         }
       }
@@ -1106,6 +1359,12 @@
             "state": "translated",
             "value": "Попробовать ответ"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Javobni sinash"
+          }
         }
       }
     },
@@ -1128,6 +1387,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Нет подключения к интернету."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Internet aloqasi yoʻq."
           }
         }
       }
@@ -1152,6 +1417,12 @@
             "state": "translated",
             "value": "Слишком долго. Попробуйте ещё раз."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Juda uzoq davom etdi. Qayta urinib koʻring."
+          }
         }
       }
     },
@@ -1174,6 +1445,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Скопируйте сообщение в WhatsApp, Telegram, Instagram или любом другом приложении, переключитесь на клавиатуру AI Reply и нажмите «Ответить»."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WhatsApp, Telegram, Instagram yoki boshqa ilovada xabarni nusxalang, AI Reply klaviaturasiga oʻting va Javob tugmasini bosing."
           }
         }
       }
@@ -1198,6 +1475,12 @@
             "state": "translated",
             "value": "iOS требует «Полный доступ», чтобы сторонняя клавиатура могла читать скопированный текст. Клавиатура обращается к буферу обмена только после нажатия «Ответить» — и никогда в фоне."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS requires Allow Full Access before any third-party keyboard can read copied text. The keyboard reads the clipboard only when you tap Reply — never in the background."
+          }
         }
       }
     },
@@ -1221,28 +1504,11 @@
             "state": "translated",
             "value": "Как это работает"
           }
-        }
-      }
-    },
-    "home.key.missing": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Add your OpenAI key to start generating replies."
-          }
         },
-        "kk": {
+        "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Жауап жасау үшін OpenAI кілтін қосыңыз."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Добавьте ключ OpenAI, чтобы генерировать ответы."
+            "value": "Qanday ishlaydi"
           }
         }
       }
@@ -1267,6 +1533,12 @@
             "state": "translated",
             "value": "Полный доступ выключен — скопированные сообщения недоступны"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toʻliq kirish oʻchiq — nusxalangan xabarlarni oʻqib boʻlmaydi"
+          }
         }
       }
     },
@@ -1289,6 +1561,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Полный доступ включён"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toʻliq kirish yoqilgan"
           }
         }
       }
@@ -1313,6 +1591,12 @@
             "state": "translated",
             "value": "Клавиатура AI Reply ещё не подключена"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI Reply klaviaturasi hali sozlanmagan"
+          }
         }
       }
     },
@@ -1335,6 +1619,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Открыть настройки iOS"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS sozlamalarini ochish"
           }
         }
       }
@@ -1359,6 +1649,12 @@
             "state": "translated",
             "value": "Клавиатура AI Reply подключена"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI Reply klaviaturasi sozlangan"
+          }
         }
       }
     },
@@ -1382,6 +1678,12 @@
             "state": "translated",
             "value": "Клавиатура"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klaviatura"
+          }
         }
       }
     },
@@ -1391,19 +1693,25 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nothing leaves your device. Replies are produced on device, the clipboard is never monitored in the background, and message text is never written to logs."
+            "value": "Text is processed only when you request a reply. It is sent through AI Reply to the AI provider, but is not stored in the database or written to logs."
           }
         },
         "kk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ешнәрсе құрылғыдан шықпайды. Жауаптар құрылғының өзінде жасалады, алмасу буфері фонда бақыланбайды, хабарлама мәтіні журналға жазылмайды."
+            "value": "Мәтін тек жауап сұраған кезде өңделеді. Ол AI Reply арқылы AI провайдеріне жіберіледі, бірақ дерекқорда сақталмайды және журналға жазылмайды."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ничего не покидает устройство. Ответы формируются на устройстве, буфер обмена не отслеживается в фоне, текст сообщений не записывается в логи."
+            "value": "Текст обрабатывается только когда вы просите ответ. Он передаётся через AI Reply AI-провайдеру, но не сохраняется в базе и не записывается в логи."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text is processed only when you request a reply. It is sent through AI Reply to the AI provider, but is not stored in the database or written to logs."
           }
         }
       }
@@ -1428,6 +1736,12 @@
             "state": "translated",
             "value": "Конфиденциальность"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maxfiylik"
+          }
         }
       }
     },
@@ -1450,6 +1764,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Профиль"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profil"
           }
         }
       }
@@ -1474,6 +1794,12 @@
             "state": "translated",
             "value": "Рабочее время"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ish vaqti"
+          }
         }
       }
     },
@@ -1496,6 +1822,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Шаблоны ответов"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Javob shablonlari"
           }
         }
       }
@@ -1520,6 +1852,12 @@
             "state": "translated",
             "value": "Ваша настройка"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sizning sozlamalaringiz"
+          }
         }
       }
     },
@@ -1542,6 +1880,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Новые клавиатуры"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add New Keyboard"
           }
         }
       }
@@ -1566,6 +1910,12 @@
             "state": "translated",
             "value": "Выберите AI Reply"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose AI Reply"
+          }
         }
       }
     },
@@ -1588,6 +1938,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Включите «Полный доступ»"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turn on Allow Full Access"
           }
         }
       }
@@ -1612,6 +1968,12 @@
             "state": "translated",
             "value": "Основные"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "General"
+          }
         }
       }
     },
@@ -1634,6 +1996,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Клавиатура"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keyboard"
           }
         }
       }
@@ -1658,6 +2026,12 @@
             "state": "translated",
             "value": "Клавиатуры"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keyboards"
+          }
         }
       }
     },
@@ -1680,6 +2054,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Откройте «Настройки»"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Settings"
           }
         }
       }
@@ -1704,6 +2084,12 @@
             "state": "translated",
             "value": "Подключение клавиатуры"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Set up the keyboard"
+          }
         }
       }
     },
@@ -1727,6 +2113,12 @@
             "state": "translated",
             "value": "Готовые ответы прямо с клавиатуры."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yaxshi javoblar bevosita klaviaturangizda."
+          }
         }
       }
     },
@@ -1746,6 +2138,12 @@
           }
         },
         "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI Reply"
+          }
+        },
+        "uz": {
           "stringUnit": {
             "state": "translated",
             "value": "AI Reply"
@@ -1773,6 +2171,12 @@
             "state": "translated",
             "value": "Попробовать ответ"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Javobni sinash"
+          }
         }
       }
     },
@@ -1795,6 +2199,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "осталось"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "qoldi"
           }
         }
       }
@@ -1819,6 +2229,12 @@
             "state": "translated",
             "value": "Ответы сегодня"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bugungi javoblar"
+          }
         }
       }
     },
@@ -1841,6 +2257,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Выходной"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yopiq"
           }
         }
       }
@@ -1865,6 +2287,12 @@
             "state": "translated",
             "value": "Использовать рабочее время"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ish vaqtidan foydalanish"
+          }
         }
       }
     },
@@ -1887,6 +2315,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Используется часовой пояс устройства. Отправляется только доступность, но не ваше местоположение."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qurilmangizning vaqt mintaqasi ishlatiladi. Joylashuvingiz emas, faqat hozir mavjudligingiz yuboriladi."
           }
         }
       }
@@ -1911,6 +2345,12 @@
             "state": "translated",
             "value": "С"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From"
+          }
         }
       }
     },
@@ -1933,6 +2373,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Время окончания должно быть позже начала."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tugash vaqti boshlanish vaqtidan keyin boʻlishi kerak."
           }
         }
       }
@@ -1957,6 +2403,12 @@
             "state": "translated",
             "value": "Сейчас вы в рабочем времени."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hozir ish vaqti ichida."
+          }
         }
       }
     },
@@ -1979,6 +2431,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Сейчас вы вне рабочего времени."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hozir ish vaqtidan tashqari."
           }
         }
       }
@@ -2003,6 +2461,12 @@
             "state": "translated",
             "value": "Рабочее время"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ish vaqti"
+          }
         }
       }
     },
@@ -2025,6 +2489,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "До"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To"
           }
         }
       }
@@ -2049,6 +2519,12 @@
             "state": "translated",
             "value": "Назад"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orqaga"
+          }
         }
       }
     },
@@ -2071,6 +2547,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Они появятся в панели шаблонов клавиатуры. Это можно изменить позже."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "These appear in the keyboard's template bar. You can change them later."
           }
         }
       }
@@ -2095,6 +2577,12 @@
             "state": "translated",
             "value": "Для каких разговоров вы будете использовать клавиатуру?"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What kind of conversations will you use this keyboard for?"
+          }
         }
       }
     },
@@ -2117,6 +2605,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ваши разговоры"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your conversations"
           }
         }
       }
@@ -2141,6 +2635,12 @@
             "state": "translated",
             "value": "Пернетақтаны осында байқап көріңіз, содан кейін WhatsApp, Telegram және Instagram-да қолданыңыз."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klaviaturani shu yerda sinab koʻring, keyin WhatsApp, Telegram va Instagramda ishlating."
+          }
         }
       }
     },
@@ -2163,6 +2663,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Всё готово"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hammasi tayyor"
           }
         }
       }
@@ -2187,6 +2693,12 @@
             "state": "translated",
             "value": "Готово"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tugatish"
+          }
         }
       }
     },
@@ -2209,6 +2721,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Необязательно. Если задано, ответы клиентам и партнёрам учитывают время суток."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional. When set, replies to clients and partners can take the time of day into account."
           }
         }
       }
@@ -2233,6 +2751,12 @@
             "state": "translated",
             "value": "У вас есть рабочее время?"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Do you have working or business hours?"
+          }
         }
       }
     },
@@ -2256,189 +2780,11 @@
             "state": "translated",
             "value": "Рабочее время"
           }
-        }
-      }
-    },
-    "onboarding.key.clipboardEmpty": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nothing to paste."
-          }
         },
-        "kk": {
+        "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Қоятын ештеңе жоқ."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Нечего вставить."
-          }
-        }
-      }
-    },
-    "onboarding.key.invalid": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "That does not look like an OpenAI key."
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бұл OpenAI кілтіне ұқсамайды."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Это не похоже на ключ OpenAI."
-          }
-        }
-      }
-    },
-    "onboarding.key.paste": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Paste from clipboard"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Буферден қою"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вставить из буфера"
-          }
-        }
-      }
-    },
-    "onboarding.key.placeholder": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "sk-…"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "sk-…"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "sk-…"
-          }
-        }
-      }
-    },
-    "onboarding.key.prompt": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Paste your OpenAI API key. It is stored in the iOS Keychain on this device only and is never included in the app."
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OpenAI API кілтін қойыңыз. Ол тек осы құрылғының iOS Keychain қоймасында сақталады және қолданбаға кірмейді."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вставьте свой ключ OpenAI API. Он хранится в Связке ключей iOS только на этом устройстве и не входит в приложение."
-          }
-        }
-      }
-    },
-    "onboarding.key.saveFailed": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Could not save the key to the Keychain."
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Кілтті Keychain-ге сақтау мүмкін болмады."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не удалось сохранить ключ в Связку ключей."
-          }
-        }
-      }
-    },
-    "onboarding.key.saved": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Key saved"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Кілт сақталды"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ключ сохранён"
-          }
-        }
-      }
-    },
-    "onboarding.key.title": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Connect OpenAI"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OpenAI қосу"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Подключите OpenAI"
+            "value": "Working hours"
           }
         }
       }
@@ -2463,6 +2809,12 @@
             "state": "translated",
             "value": "Хабарламаларға жылдам жауап беру үшін пернетақтаны iPhone баптауларынан қосыңыз."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Messenjerlarda javob yaratish uchun Android sozlamalarida klaviaturani yoqing."
+          }
         }
       }
     },
@@ -2485,6 +2837,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "AI пернетақтасын қосу"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI Reply klaviaturasini yoqing"
           }
         }
       }
@@ -2509,6 +2867,12 @@
             "state": "translated",
             "value": "Далее"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Davom etish"
+          }
         }
       }
     },
@@ -2531,6 +2895,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Я руковожу небольшой логистической компанией и обычно общаюсь с клиентами и партнёрами."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Men kichik logistika kompaniyasini boshqaraman va mijozlar hamda hamkorlar bilan ishlayman."
           }
         }
       }
@@ -2555,6 +2925,12 @@
             "state": "translated",
             "value": "Өз сөзіңізбен жауап беріңіз. Қолданба мұны жауаптарға арналған контекстке айналдырады."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Answer in your own words. The app turns this into context for your replies."
+          }
         }
       }
     },
@@ -2577,6 +2953,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "О вас"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About you"
           }
         }
       }
@@ -2601,6 +2983,12 @@
             "state": "translated",
             "value": "Пропустить"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oʻtkazib yuborish"
+          }
         }
       }
     },
@@ -2623,6 +3011,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Начать"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boshlash"
           }
         }
       }
@@ -2647,6 +3041,12 @@
             "state": "translated",
             "value": "Шаг %1$d из %2$d"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$d qadamdan %1$d-qadam"
+          }
         }
       }
     },
@@ -2669,6 +3069,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Пернетақтаны ауыстыру үшін глобус пернесін басып ұстаңыз."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Press and hold the globe key to switch keyboards."
           }
         }
       }
@@ -2693,6 +3099,12 @@
             "state": "translated",
             "value": "Бірдеңе жазыңыз…"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biror narsa yozing…"
+          }
         }
       }
     },
@@ -2715,6 +3127,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Осында байқап көріңіз: Reply Keyboard-қа ауысып, бірдеңе жазыңыз."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shu yerda sinang: AI Reply klaviaturasiga oʻting va matn kiriting."
           }
         }
       }
@@ -2739,6 +3157,12 @@
             "state": "translated",
             "value": "Отправная точка. Каждый шаблон может её изменить."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A starting point. Each template can override it."
+          }
         }
       }
     },
@@ -2761,6 +3185,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Какой тон вы предпочитаете?"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What tone do you prefer?"
           }
         }
       }
@@ -2785,6 +3215,12 @@
             "state": "translated",
             "value": "Ваш тон"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your tone"
+          }
         }
       }
     },
@@ -2807,6 +3243,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Пернетақта өзіңіз көшірген хабарламаға жауап береді. Ол жазбаларыңызды оқи алмайды."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klaviatura faqat siz nusxalagan xabarga javob beradi. U chatlaringizni oʻqiy olmaydi."
           }
         }
       }
@@ -2831,6 +3273,12 @@
             "state": "translated",
             "value": "WhatsApp, Telegram немесе Instagram-да хабарламаны басып тұрып, «Көшіру» таңдаңыз"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "WhatsApp, Telegram yoki Instagramda xabarni bosib turing va Nusxalashni tanlang"
+          }
         }
       }
     },
@@ -2853,6 +3301,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Қажет болса жауапты өңдеп, «Кірістіру» түймесін басыңыз да, өзіңіз жіберіңіз"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qoralamani tekshiring, Kiritish tugmasini bosing va oʻzingiz yuboring"
           }
         }
       }
@@ -2877,6 +3331,12 @@
             "state": "translated",
             "value": "Глобус пернесі арқылы Reply Keyboard-қа ауысыңыз"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klaviatura tugmasi orqali AI Replyga oʻting"
+          }
         }
       }
     },
@@ -2899,6 +3359,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Қажетті үлгіні таңдаңыз: «Дос», «Клиент», «Бизнес» немесе «Жұмыс»"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mos shablonni tanlang: Doʻst, Mijoz, Biznes yoki Ish"
           }
         }
       }
@@ -2923,6 +3389,12 @@
             "state": "translated",
             "value": "Көшіріп, жауап беріңіз"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nusxalang va javob bering"
+          }
         }
       }
     },
@@ -2932,19 +3404,25 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "A few short steps. Everything stays on your phone and is used only when you ask for a reply."
+            "value": "A few short steps to set up the keyboard. Copied text is processed only when you ask for a reply."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Несколько коротких шагов. Всё остаётся на вашем телефоне и используется только когда вы просите ответ."
+            "value": "Несколько коротких шагов для настройки клавиатуры. Скопированный текст обрабатывается только когда вы просите ответ."
           }
         },
         "kk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Бірнеше қысқа қадам. Барлығы телефоныңызда қалады және тек жауап сұрағанда ғана қолданылады."
+            "value": "Пернетақтаны баптауға арналған бірнеше қысқа қадам. Көшірілген мәтін тек жауап сұраған кезде өңделеді."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klaviaturani sozlash uchun bir nechta qisqa qadam. Nusxalangan matn faqat javob soʻraganingizda qayta ishlanadi."
           }
         }
       }
@@ -2969,6 +3447,12 @@
             "state": "translated",
             "value": "Кез келген мессенджерде хабарламаны көшіріңіз"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Istalgan chat ilovasida xabarni nusxalang"
+          }
         }
       }
     },
@@ -2991,6 +3475,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Жауапты өңдеп, өзіңіз жіберіңіз"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Javobni yuborishdan oldin tahrirlang"
           }
         }
       }
@@ -3015,6 +3505,12 @@
             "state": "translated",
             "value": "Кімге жауап беретініңізді таңдаңыз"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kimga javob berayotganingizni tanlang"
+          }
         }
       }
     },
@@ -3037,6 +3533,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Настроим ваши ответы"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Javoblaringizni sozlaymiz"
           }
         }
       }
@@ -3061,6 +3563,12 @@
             "state": "translated",
             "value": "Өзім туралы"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Men haqimda"
+          }
         }
       }
     },
@@ -3083,6 +3591,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Менің жұмысым"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mening ishim"
           }
         }
       }
@@ -3107,6 +3621,12 @@
             "state": "translated",
             "value": "Тек хабарлама шынымен жұмысыңызға қатысты болғанда қолданылады."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faqat kiruvchi xabar ishingizga tegishli boʻlganda ishlatiladi."
+          }
         }
       }
     },
@@ -3129,6 +3649,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$d из %2$d символов"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%2$d belgidan %1$d tasi"
           }
         }
       }
@@ -3153,6 +3679,12 @@
             "state": "translated",
             "value": "О вас"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siz haqingizda"
+          }
         }
       }
     },
@@ -3175,6 +3707,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Используется как контекст для ответов. Отправляется только когда вы просите ответ."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Har bir javob uchun kontekst sifatida ishlatiladi. Faqat javob soʻraganingizda yuboriladi."
           }
         }
       }
@@ -3199,6 +3737,12 @@
             "state": "translated",
             "value": "Надиктовать"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aytib yozish"
+          }
         }
       }
     },
@@ -3221,6 +3765,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Не сатасыз немесе ұсынасыз?"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nima sotasiz yoki qanday xizmat koʻrsatasiz?"
           }
         }
       }
@@ -3245,6 +3795,12 @@
             "state": "translated",
             "value": "Ерлер мен әйелдер киімі"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erkaklar va ayollar kiyimi"
+          }
         }
       }
     },
@@ -3267,6 +3823,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Немен айналысасыз?"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nima bilan shugʻullanasiz?"
           }
         }
       }
@@ -3291,6 +3853,12 @@
             "state": "translated",
             "value": "Киім интернет-дүкенінің иесі"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Onlayn kiyim doʻkoni egasi"
+          }
         }
       }
     },
@@ -3313,6 +3881,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Маңызды ережелер"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muhim qoidalar"
           }
         }
       }
@@ -3337,6 +3911,12 @@
             "state": "translated",
             "value": "Ереже қосу"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qoida qoʻshish"
+          }
         }
       }
     },
@@ -3359,6 +3939,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ассистент әр жауапта ұстанатын қысқа ережелер."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yordamchi har bir javobda amal qiladigan qisqa qoidalar."
           }
         }
       }
@@ -3383,6 +3969,12 @@
             "state": "translated",
             "value": "Нақты білмесең, тауар бар деп айтпау"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mavjudligini bilmasak, mahsulot bor demang"
+          }
         }
       }
     },
@@ -3405,6 +3997,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ерлер мен әйелдер киімін сатамыз, ел бойынша жеткіземіз"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erkaklar va ayollar kiyimini sotamiz va mamlakat boʻylab yetkazamiz"
           }
         }
       }
@@ -3429,6 +4027,12 @@
             "state": "translated",
             "value": "Профиль"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profil"
+          }
         }
       }
     },
@@ -3451,6 +4055,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Предпочитаемый тон"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Afzal ohang"
           }
         }
       }
@@ -3475,6 +4085,12 @@
             "state": "translated",
             "value": "Сохранить и продолжить"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saqlash va davom etish"
+          }
         }
       }
     },
@@ -3497,6 +4113,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Пропустить пока"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hozircha oʻtkazib yuborish"
           }
         }
       }
@@ -3521,6 +4143,12 @@
             "state": "translated",
             "value": "Двух ответов достаточно, чтобы ответы звучали как ваши. Изменить можно в любой момент."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Javoblar sizga oʻxshashi uchun ikki javob yetarli. Keyin istalgan payt oʻzgartirishingiz mumkin."
+          }
         }
       }
     },
@@ -3543,6 +4171,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Расскажите немного о себе"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oʻzingiz haqingizda qisqacha ayting"
           }
         }
       }
@@ -3567,6 +4201,12 @@
             "state": "translated",
             "value": "Бизнес"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biznes"
+          }
         }
       }
     },
@@ -3589,6 +4229,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Клиент"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mijoz"
           }
         }
       }
@@ -3613,6 +4259,12 @@
             "state": "translated",
             "value": "Свой"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Boshqa"
+          }
         }
       }
     },
@@ -3635,6 +4287,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Друг"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doʻst"
           }
         }
       }
@@ -3659,6 +4317,12 @@
             "state": "translated",
             "value": "Работа"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ish"
+          }
         }
       }
     },
@@ -3681,6 +4345,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Аккаунт"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hisob"
           }
         }
       }
@@ -3705,6 +4375,12 @@
             "state": "translated",
             "value": "Клавиатура использует тот же аккаунт. После выхода ответы не будут генерироваться до повторного входа."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klaviatura ham shu hisobdan foydalanadi. Chiqsangiz, qayta kirguningizcha javoblar ishlamaydi."
+          }
         }
       }
     },
@@ -3727,6 +4403,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Вы вошли как"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kirgan hisob"
           }
         }
       }
@@ -3751,6 +4433,12 @@
             "state": "translated",
             "value": "Тариф и лимит"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tarif va limit"
+          }
         }
       }
     },
@@ -3773,6 +4461,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Выйти"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chiqish"
           }
         }
       }
@@ -3797,6 +4491,12 @@
             "state": "translated",
             "value": "Выйти из этого аккаунта?"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu hisobdan chiqilsinmi?"
+          }
         }
       }
     },
@@ -3820,212 +4520,11 @@
             "state": "translated",
             "value": "Вы не вошли"
           }
-        }
-      }
-    },
-    "settings.ai": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OpenAI"
-          }
         },
-        "kk": {
+        "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "OpenAI"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "OpenAI"
-          }
-        }
-      }
-    },
-    "settings.ai.key": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "API key"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "API кілті"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ключ API"
-          }
-        }
-      }
-    },
-    "settings.ai.key.footer": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stored only in this device's Keychain. It is never part of the app, never written to settings files, and never sent anywhere except OpenAI."
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Тек осы құрылғының Keychain қоймасында сақталады. Қолданбаға кірмейді, баптау файлдарына жазылмайды және OpenAI-дан басқа ешқайда жіберілмейді."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Хранится только в Связке ключей этого устройства. Никогда не входит в приложение, не пишется в файлы настроек и не отправляется никуда, кроме OpenAI."
-          }
-        }
-      }
-    },
-    "settings.ai.key.missing": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Not set"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Орнатылмаған"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Не задан"
-          }
-        }
-      }
-    },
-    "settings.ai.key.remove": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Remove key"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Кілтті жою"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Удалить ключ"
-          }
-        }
-      }
-    },
-    "settings.ai.key.set": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Saved in Keychain"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keychain-де сақталған"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сохранён в Связке ключей"
-          }
-        }
-      }
-    },
-    "settings.ai.model": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Model"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Модель"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Модель"
-          }
-        }
-      }
-    },
-    "settings.ai.model.footer": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Changed in one place and used by both the app and the keyboard."
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бір жерде өзгертіледі және қолданба мен пернетақта қолданады."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Меняется в одном месте и используется приложением и клавиатурой."
-          }
-        }
-      }
-    },
-    "settings.ai.reset": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reset to default"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Әдепкіге қайтару"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сбросить"
+            "value": "Hisobga kirilmagan"
           }
         }
       }
@@ -4050,6 +4549,12 @@
             "state": "translated",
             "value": "Приложение и клавиатура пока не могут обмениваться настройками. Пересоберите приложение, чтобы применился App Group."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The app and the keyboard cannot share settings yet. Rebuild the app so the App Group entitlement is applied."
+          }
         }
       }
     },
@@ -4072,6 +4577,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Оформление"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Koʻrinish"
           }
         }
       }
@@ -4096,6 +4607,12 @@
             "state": "translated",
             "value": "Тёмное"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qorongʻi"
+          }
         }
       }
     },
@@ -4118,6 +4635,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Светлое"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yorugʻ"
           }
         }
       }
@@ -4142,6 +4665,12 @@
             "state": "translated",
             "value": "Как в системе"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tizim"
+          }
         }
       }
     },
@@ -4164,6 +4693,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Язык"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Til"
           }
         }
       }
@@ -4188,6 +4723,12 @@
             "state": "translated",
             "value": "Меняет язык этого приложения. Надписи на самой клавиатуре следуют выбранной на ней раскладке."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ilova tilini oʻzgartiradi. Klaviatura tugmalari tanlangan klaviatura tartibiga mos keladi."
+          }
         }
       }
     },
@@ -4197,19 +4738,25 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Copied messages are never stored and never logged. They are sent only when you tap a template, and are discarded as soon as the reply is inserted or the keyboard closes."
+            "value": "Copied message text and generated replies are sent through the AI Reply server to the AI provider only when you request a reply. They are not stored in the database or written to logs."
           }
         },
         "kk": {
           "stringUnit": {
             "state": "translated",
-            "value": "Көшірілген хабарламалар сақталмайды және журналға жазылмайды. Олар тек сіз үлгіні басқанда жіберіледі және жауап кірістірілген немесе пернетақта жабылған соң жойылады."
+            "value": "Көшірілген хабарлама мен жасалған жауап AI Reply сервері арқылы AI провайдеріне тек сіз жауап сұрағанда жіберіледі. Олар дерекқорда сақталмайды және журналға жазылмайды."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Скопированные сообщения не сохраняются и не логируются. Они отправляются только когда вы нажимаете шаблон, и удаляются сразу после вставки ответа или закрытия клавиатуры."
+            "value": "Текст скопированного сообщения и созданный ответ передаются через сервер AI Reply AI-провайдеру только когда вы просите ответ. Они не сохраняются в базе и не записываются в логи."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nusxalangan xabar va yaratilgan javob faqat javob soʻraganingizda AI Reply serveri orqali AI provayderiga yuboriladi. Ular bazada saqlanmaydi va jurnallarga yozilmaydi."
           }
         }
       }
@@ -4234,166 +4781,11 @@
             "state": "translated",
             "value": "Конфиденциальность"
           }
-        }
-      }
-    },
-    "settings.service": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Where replies are generated"
-          }
         },
-        "kk": {
+        "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Жауап қайда жасалады"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Где создаются ответы"
-          }
-        }
-      }
-    },
-    "settings.service.backend": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "AI Reply service"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "AI Reply сервері"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сервис AI Reply"
-          }
-        }
-      }
-    },
-    "settings.service.direct": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "My own key"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Өз кілтім"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Свой ключ"
-          }
-        }
-      }
-    },
-    "settings.service.footer": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "With your own key, requests go straight to the provider from this device. With the service, the key stays on the server and you get an account, a plan and a daily limit."
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Өз кілтіңізбен сұраныс құрылғыдан тікелей провайдерге кетеді. Сервер режимінде кілт серверде қалады, ал сізде тіркелгі, тариф және күндік лимит болады."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Со своим ключом запросы идут с устройства напрямую к провайдеру. С сервисом ключ остаётся на сервере, а у вас появляются аккаунт, тариф и дневной лимит."
-          }
-        }
-      }
-    },
-    "settings.service.mode": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mode"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Режим"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Режим"
-          }
-        }
-      }
-    },
-    "settings.service.url.invalid": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "That address cannot be used. HTTPS is required, except for a local address."
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бұл мекенжай жарамсыз. HTTPS қажет (жергілікті мекенжайдан басқа)."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Этот адрес использовать нельзя. Нужен HTTPS, кроме локального адреса."
-          }
-        }
-      }
-    },
-    "settings.service.url.placeholder": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "https://api.example.com"
-          }
-        },
-        "kk": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "https://api.example.com"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "https://api.example.com"
+            "value": "Maxfiylik"
           }
         }
       }
@@ -4418,6 +4810,12 @@
             "state": "translated",
             "value": "Настройка"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sozlash"
+          }
         }
       }
     },
@@ -4440,6 +4838,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Қадамдық нұсқаулық, толық қолжетімділік және қою рұқсаты."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klaviatura, mikrofon va nusxalangan matn uchun bosqichma-bosqich yoʻriqnoma."
           }
         }
       }
@@ -4464,6 +4868,12 @@
             "state": "translated",
             "value": "Пернетақтаны баптау"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klaviaturani sozlash"
+          }
         }
       }
     },
@@ -4486,6 +4896,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Пройти настройку заново"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sozlashni qayta boshlash"
           }
         }
       }
@@ -4510,6 +4926,12 @@
             "state": "translated",
             "value": "Кіріспе нұсқаулықты қайта көрсетеді. Жауаптарыңыз сақталады."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Birinchi ishga tushirish yoʻriqnomasini qayta koʻrsatadi. Javoblaringiz saqlanadi."
+          }
         }
       }
     },
@@ -4532,6 +4954,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Общий контейнер недоступен, клавиатура не видит ваш профиль. Пересоберите приложение с включённой возможностью App Group."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The shared container is unavailable, so the keyboard cannot see your profile. Rebuild the app with the App Group capability enabled."
           }
         }
       }
@@ -4556,6 +4984,12 @@
             "state": "translated",
             "value": "Настройки"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sozlamalar"
+          }
         }
       }
     },
@@ -4578,6 +5012,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Пернетақта қосылған"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klaviatura qoʻshilgan va yoqilgan"
           }
         }
       }
@@ -4602,6 +5042,12 @@
             "state": "translated",
             "value": "Толық қолжетімділік"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toʻliq kirish"
+          }
         }
       }
     },
@@ -4624,6 +5070,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Күйі"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Holat"
           }
         }
       }
@@ -4648,6 +5100,12 @@
             "state": "translated",
             "value": "iOS қолданбаға пернетақтасының қосылғанын хабарламайды. Белгі пернетақта алғаш іске қосылғанда пайда болады."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS ilovaga oʻz klaviaturasi yoqilganini bildirmaydi. Klaviatura birinchi marta ishga tushganda bu holat yangilanadi."
+          }
         }
       }
     },
@@ -4670,6 +5128,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Оны тек өзіңіз қоса аласыз: «Баптаулар» ▸ «Негізгі» ▸ «Пернетақта» ▸ «Пернетақталар» ▸ AI Reply. Мұны ешбір қолданба сіздің орныңызға жасай алмайды."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Buni faqat siz Sozlamalar ▸ Asosiy ▸ Klaviatura ▸ Klaviaturalar ▸ AI Reply boʻlimida yoqa olasiz."
           }
         }
       }
@@ -4694,6 +5158,12 @@
             "state": "translated",
             "value": "Толық қолжетімділік"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toʻliq kirish"
+          }
         }
       }
     },
@@ -4716,6 +5186,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Толық қолжетімділік пернетақтаға сіз көшірген хабарламаны оқып, жауап алу үшін интернетке шығуға мүмкіндік береді. Онсыз да пернетақта әдеттегідей жаза береді."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toʻliq kirish klaviaturaga siz nusxalagan xabarni oʻqish va javob yaratish uchun internetga ulanish imkonini beradi. Usiz klaviatura oddiy yozishda davom etadi."
           }
         }
       }
@@ -4740,6 +5216,12 @@
             "state": "translated",
             "value": "iOS көшірілген мәтінді қоюға рұқсат сұраса, «Рұқсат беру» таңдаңыз. Бұл сіз көшірген хабарламаны өңдеу үшін қажет."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS nusxalangan matnni joylashga ruxsat soʻraganda Ruxsat berishni tanlang. Klaviatura faqat siz ataylab nusxalagan matnni qayta ishlaydi."
+          }
         }
       }
     },
@@ -4762,6 +5244,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Бұл сұрауды iOS өзі көрсетеді — тек үлгіні басқаннан кейін пернетақта алмасу буферін оқығанда."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS bu soʻrovni shablonni bosganingizdan keyin klaviatura buferni oʻqigandagina koʻrsatadi."
           }
         }
       }
@@ -4786,6 +5274,12 @@
             "state": "translated",
             "value": "Қою рұқсаты"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Joylashga ruxsat"
+          }
         }
       }
     },
@@ -4808,6 +5302,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Алмасу буфері фонда ешқашан бақыланбайды."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bufer fonda hech qachon kuzatilmaydi."
           }
         }
       }
@@ -4832,6 +5332,12 @@
             "state": "translated",
             "value": "Көшірілген мәтін тек үлгіні басқаннан кейін оқылады, жауап та сол кезде ғана жасалады."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nusxalangan matn faqat shablonni bosganingizdan keyin oʻqiladi va shundan keyingina javob yaratiladi."
+          }
         }
       }
     },
@@ -4841,19 +5347,25 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "The API key lives in the iOS Keychain, never inside the keyboard or the app's files."
+            "value": "Your sign-in tokens are kept in protected app storage and are not shown in the keyboard."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ключ API хранится в Связке ключей iOS — не в клавиатуре и не в файлах приложения."
+            "value": "Токены входа хранятся в защищённом хранилище приложения и не показываются в клавиатуре."
           }
         },
         "kk": {
           "stringUnit": {
             "state": "translated",
-            "value": "API кілті iOS Кілттер тізбегінде сақталады — пернетақтада да, қолданба файлдарында да емес."
+            "value": "Кіру токендері қолданбаның қорғалған қоймасында сақталады және пернетақтада көрсетілмейді."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kirish tokenlari ilovaning himoyalangan xotirasida saqlanadi va klaviaturada koʻrsatilmaydi."
           }
         }
       }
@@ -4878,6 +5390,12 @@
             "state": "translated",
             "value": "Құпия сөздер мен қорғалған өрістер ешқашан өңделмейді."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Parollar va himoyalangan maydonlar qayta ishlanmaydi."
+          }
         }
       }
     },
@@ -4900,6 +5418,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Құпиялылық"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maxfiylik"
           }
         }
       }
@@ -4924,6 +5448,12 @@
             "state": "translated",
             "value": "Дайын"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tayyor"
+          }
         }
       }
     },
@@ -4946,6 +5476,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Қосылмаған"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yoqilmagan"
           }
         }
       }
@@ -4970,6 +5506,12 @@
             "state": "translated",
             "value": "Әзірге белгісіз"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hozircha nomaʼlum"
+          }
         }
       }
     },
@@ -4992,6 +5534,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "iOS тек қолданбаның өз бетін аша алады, сондықтан пернетақталар тізімін қолмен ашу керек."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS faqat ilovaning oʻz sozlamalarini ocha oladi, shuning uchun klaviaturalar roʻyxatini qoʻlda ochish kerak."
           }
         }
       }
@@ -5016,6 +5564,12 @@
             "state": "translated",
             "value": "Қалай қосу керек"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qanday qoʻshiladi"
+          }
         }
       }
     },
@@ -5038,6 +5592,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Мессенджерлерде жауап беру үшін пернетақтаны iPhone баптауларынан қосыңыз."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Messenjerlarda kontekstli javoblar yaratish uchun iPhone sozlamalarida klaviaturani qoʻshing."
           }
         }
       }
@@ -5062,6 +5622,12 @@
             "state": "translated",
             "value": "Пернетақтаны баптау"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klaviaturani sozlash"
+          }
         }
       }
     },
@@ -5084,6 +5650,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Доступные тарифы"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mavjud tariflar"
           }
         }
       }
@@ -5108,6 +5680,12 @@
             "state": "translated",
             "value": "Выбрать"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tanlash"
+          }
         }
       }
     },
@@ -5130,6 +5708,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Текущий тариф"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Joriy tarif"
           }
         }
       }
@@ -5154,28 +5738,11 @@
             "state": "translated",
             "value": "Текущий"
           }
-        }
-      }
-    },
-    "subscription.demo.footer": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Payments run in demo mode: choosing a plan applies it immediately, without a real charge."
-          }
         },
-        "kk": {
+        "uz": {
           "stringUnit": {
             "state": "translated",
-            "value": "Төлемдер демо режимінде: тарифті таңдағанда ол бірден қосылады, нақты ақша алынбайды."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Платежи в демо-режиме: выбранный тариф включается сразу, без реального списания."
+            "value": "Joriy"
           }
         }
       }
@@ -5200,6 +5767,12 @@
             "state": "translated",
             "value": "%lld ответов в день"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kuniga %lld ta javob"
+          }
         }
       }
     },
@@ -5222,6 +5795,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "осталось сегодня"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "bugun qoldi"
           }
         }
       }
@@ -5246,6 +5825,12 @@
             "state": "translated",
             "value": "Действует до %@"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ gacha amal qiladi"
+          }
         }
       }
     },
@@ -5268,6 +5853,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Тариф"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tarif"
           }
         }
       }
@@ -5292,6 +5883,12 @@
             "state": "translated",
             "value": "Использовано %1$lld из %2$lld за сегодня"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bugun %2$lld tadan %1$lld tasi ishlatildi"
+          }
         }
       }
     },
@@ -5314,6 +5911,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Новый шаблон"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yangi shablon"
           }
         }
       }
@@ -5338,6 +5941,12 @@
             "state": "translated",
             "value": "Назовите шаблон, например Поставщик или Близкий друг."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shablonga nom bering, masalan Yetkazib beruvchi yoki Yaqin doʻst."
+          }
         }
       }
     },
@@ -5360,6 +5969,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Встроенные"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Built-in"
           }
         }
       }
@@ -5384,6 +5999,12 @@
             "state": "translated",
             "value": "Встроенные шаблоны можно менять и скрывать, но не удалять."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tayyor shablonlarni tahrirlash va yashirish mumkin, lekin oʻchirib boʻlmaydi."
+          }
         }
       }
     },
@@ -5406,6 +6027,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ваши шаблоны"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your templates"
           }
         }
       }
@@ -5430,6 +6057,12 @@
             "state": "translated",
             "value": "Удалить шаблон"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shablonni oʻchirish"
+          }
         }
       }
     },
@@ -5452,6 +6085,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Удалить этот шаблон?"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu shablon oʻchirilsinmi?"
           }
         }
       }
@@ -5476,6 +6115,12 @@
             "state": "translated",
             "value": "Эмодзи"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Emoji"
+          }
         }
       }
     },
@@ -5498,6 +6143,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Рұқсат"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mumkin"
           }
         }
       }
@@ -5522,6 +6173,12 @@
             "state": "translated",
             "value": "Ең аз"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kam"
+          }
         }
       }
     },
@@ -5544,6 +6201,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Қолданылмайды"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yoʻq"
           }
         }
       }
@@ -5568,6 +6231,12 @@
             "state": "translated",
             "value": "Скрыт"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yashirin"
+          }
         }
       }
     },
@@ -5590,6 +6259,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Рабочее время"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Working hours"
           }
         }
       }
@@ -5614,6 +6289,12 @@
             "state": "translated",
             "value": "Всегда учитывать"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Har doim aytish"
+          }
         }
       }
     },
@@ -5636,6 +6317,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Не упоминать"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aytmaslik"
           }
         }
       }
@@ -5660,6 +6347,12 @@
             "state": "translated",
             "value": "Когда уместно"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kerak boʻlganda"
+          }
         }
       }
     },
@@ -5682,6 +6375,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Бұл үлгіге бөлек жұмыс уақыты"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu shablon uchun boshqa vaqt"
           }
         }
       }
@@ -5706,6 +6405,12 @@
             "state": "translated",
             "value": "Инструкции"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Koʻrsatmalar"
+          }
         }
       }
     },
@@ -5728,6 +6433,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Необязательно. Стиль и правила шаблона, а не готовый ответ."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ixtiyoriy. Tayyor javob emas, bu shablon uslubi va qoidalari."
           }
         }
       }
@@ -5752,6 +6463,12 @@
             "state": "translated",
             "value": "Отвечать формально. Работаем с понедельника по пятницу. Не подтверждать заказ до проверки наличия."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rasmiy yozing. Dushanbadan jumagacha ishlaymiz. Ombor tekshirilmaguncha buyurtmani tasdiqlamang."
+          }
         }
       }
     },
@@ -5774,6 +6491,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Длина ответа"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Javob uzunligi"
           }
         }
       }
@@ -5798,6 +6521,12 @@
             "state": "translated",
             "value": "Средний"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oʻrtacha"
+          }
         }
       }
     },
@@ -5820,6 +6549,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Короткий"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qisqa"
           }
         }
       }
@@ -5844,6 +6579,12 @@
             "state": "translated",
             "value": "Название"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nomi"
+          }
         }
       }
     },
@@ -5866,6 +6607,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Не сатасыз немесе ұсынасыз"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nima sotasiz yoki qanday xizmat koʻrsatasiz"
           }
         }
       }
@@ -5890,6 +6637,12 @@
             "state": "translated",
             "value": "Тип общения"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Relationship"
+          }
         }
       }
     },
@@ -5912,6 +6665,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Перетащите, чтобы изменить порядок. Он отражается в клавиатуре."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tartibni oʻzgartirish uchun suring. Klaviaturada ham shu tartib koʻrinadi."
           }
         }
       }
@@ -5936,6 +6695,12 @@
             "state": "translated",
             "value": "Тек осы үлгіге арналған ережелер. Жалпы ережелер де күшінде."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faqat shu shablon qoidalari. Umumiy qoidalaringiz ham amal qiladi."
+          }
         }
       }
     },
@@ -5958,6 +6723,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Негізгі"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Asosiy"
           }
         }
       }
@@ -5982,6 +6753,12 @@
             "state": "translated",
             "value": "Жұмысыңыз туралы"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ishingiz haqida"
+          }
         }
       }
     },
@@ -6004,6 +6781,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Тек мұндай хабарлама шынымен жұмысыңызға қатысты болғанда қолданылады."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Faqat bu turdagi suhbatdoshingizning xabari ishingizga tegishli boʻlsa ishlatiladi."
           }
         }
       }
@@ -6028,6 +6811,12 @@
             "state": "translated",
             "value": "Жұмыс уақыты"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ish vaqti"
+          }
         }
       }
     },
@@ -6050,6 +6839,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Өшірулі болса, үлгі негізгі жұмыс уақытыңызды пайдаланады."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Oʻchirilsa, shablon asosiy ish vaqtiga amal qiladi."
           }
         }
       }
@@ -6074,6 +6869,12 @@
             "state": "translated",
             "value": "Жауап стилі"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Javob uslubi"
+          }
         }
       }
     },
@@ -6096,6 +6897,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ісіңіз туралы бір-екі сөз"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biznesingiz haqida bir jumla"
           }
         }
       }
@@ -6120,6 +6927,12 @@
             "state": "translated",
             "value": "Шаблоны ответов"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Javob shablonlari"
+          }
         }
       }
     },
@@ -6142,6 +6955,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Тон"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ohang"
           }
         }
       }
@@ -6166,6 +6985,12 @@
             "state": "translated",
             "value": "Показывать в клавиатуре"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klaviaturada koʻrsatish"
+          }
         }
       }
     },
@@ -6188,6 +7013,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Формальный"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rasmiy"
           }
         }
       }
@@ -6212,6 +7043,12 @@
             "state": "translated",
             "value": "Дружелюбный"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Doʻstona"
+          }
         }
       }
     },
@@ -6234,6 +7071,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Естественный"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tabiiy"
           }
         }
       }
@@ -6258,6 +7101,12 @@
             "state": "translated",
             "value": "Деловой"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Professional"
+          }
         }
       }
     },
@@ -6280,6 +7129,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Короткий"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qisqa"
           }
         }
       }
@@ -6304,6 +7159,12 @@
             "state": "translated",
             "value": "%@ · на устройстве"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · on device"
+          }
         }
       }
     },
@@ -6326,6 +7187,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ · сервис Apple"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ · Apple speech service"
           }
         }
       }
@@ -6350,6 +7217,12 @@
             "state": "translated",
             "value": "Микрофонды басып, сөйлеңіз. Мәтінді кейін өңдеуге болады."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mikrofonni bosing va gapiring. Keyin matnni tahrirlashingiz mumkin."
+          }
         }
       }
     },
@@ -6372,6 +7245,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Распознанный текст"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recognized text"
           }
         }
       }
@@ -6396,6 +7275,12 @@
             "state": "translated",
             "value": "Запись %1$@ / %2$@"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recording %1$@ / %2$@"
+          }
         }
       }
     },
@@ -6418,6 +7303,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Скопировано"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copied"
           }
         }
       }
@@ -6442,6 +7333,12 @@
             "state": "translated",
             "value": "Ошибка распознавания: %@"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recognition failed: %@"
+          }
         }
       }
     },
@@ -6464,6 +7361,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ошибка распознавания. Для распознавания речи Apple может потребоваться интернет: %@"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recognition failed. Apple speech recognition may need a network connection: %@"
           }
         }
       }
@@ -6488,6 +7391,12 @@
             "state": "translated",
             "value": "Распознавание речи недоступно для языка «%@» на этом устройстве."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu qurilmada %@ tili uchun nutqni aniqlash mavjud emas."
+          }
         }
       }
     },
@@ -6510,6 +7419,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Доступ к микрофону выключен."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mikrofonga kirish oʻchirilgan."
           }
         }
       }
@@ -6534,6 +7449,12 @@
             "state": "translated",
             "value": "Речь не распознана."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutq aniqlanmadi."
+          }
         }
       }
     },
@@ -6556,6 +7477,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Идёт запись"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yozilmoqda"
           }
         }
       }
@@ -6580,6 +7507,12 @@
             "state": "translated",
             "value": "Запрашиваем разрешение…"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ruxsat soʻralmoqda…"
+          }
         }
       }
     },
@@ -6602,6 +7535,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Доступ к распознаванию речи выключен."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speech recognition access is turned off."
           }
         }
       }
@@ -6626,6 +7565,12 @@
             "state": "translated",
             "value": "Разрешение на распознавание речи не получено."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speech recognition permission was not granted."
+          }
         }
       }
     },
@@ -6648,6 +7593,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Распознавание речи ограничено на этом устройстве."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speech recognition is restricted on this device."
           }
         }
       }
@@ -6672,6 +7623,12 @@
             "state": "translated",
             "value": "Остановлено"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toʻxtatildi"
+          }
         }
       }
     },
@@ -6694,6 +7651,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Остановлено на 60 секундах"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stopped at 60 seconds"
           }
         }
       }
@@ -6718,6 +7681,12 @@
             "state": "translated",
             "value": "Остановлено на 60 секундах. Речь не распознана."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stopped at 60 seconds. No speech recognized."
+          }
         }
       }
     },
@@ -6740,6 +7709,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Распознавание речи недоступно."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutqni aniqlash mavjud emas."
           }
         }
       }
@@ -6764,6 +7739,12 @@
             "state": "translated",
             "value": "Распознавание речи сейчас недоступно."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speech recognition is unavailable right now."
+          }
         }
       }
     },
@@ -6786,6 +7767,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Остановить"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toʻxtatish"
           }
         }
       }
@@ -6810,6 +7797,12 @@
             "state": "translated",
             "value": "Нені сақтайтыныңызды таңдаңыз. Айтқаныңыз кез келген жағдайда жазбаларда қалады."
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose what to save. Everything you said is kept in your notes either way."
+          }
         }
       }
     },
@@ -6832,6 +7825,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Жұмыс уақыты"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Working hours"
           }
         }
       }
@@ -6856,6 +7855,12 @@
             "state": "translated",
             "value": "Ережелер"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rules"
+          }
         }
       }
     },
@@ -6878,6 +7883,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ереже болуға тиіс сөйлемдерді белгілеңіз."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tick the sentences that should become rules."
           }
         }
       }
@@ -6902,6 +7913,12 @@
             "state": "translated",
             "value": "Өткізіп жіберу"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Skip"
+          }
         }
       }
     },
@@ -6924,6 +7941,12 @@
           "stringUnit": {
             "state": "translated",
             "value": "Біз түсінгеніміз"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What we understood"
           }
         }
       }
@@ -6948,6 +7971,12 @@
             "state": "translated",
             "value": "Нажмите и говорите"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gapirish uchun bosing"
+          }
         }
       }
     },
@@ -6971,12 +8000,308 @@
             "state": "translated",
             "value": "Голосовой ответ"
           }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ovozli javob"
+          }
         }
       }
     },
     "·": {
       "comment": "A period.",
       "isCommentAutoGenerated": true
+    },
+    "legal.consent.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Before you continue"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Перед продолжением"
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Жалғастырмас бұрын"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Davom etishdan oldin"
+          }
+        }
+      }
+    },
+    "legal.consent.body": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Please review the documents that govern AI Reply and explain how your data is handled."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ознакомьтесь с документами, которые регулируют работу AI Reply и объясняют обработку данных."
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI Reply жұмысын реттейтін және деректердің қалай өңделетінін түсіндіретін құжаттармен танысыңыз."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AI Reply ishini tartibga soluvchi va maʼlumotlaringiz qanday qayta ishlanishini tushuntiruvchi hujjatlarni koʻrib chiqing."
+          }
+        }
+      }
+    },
+    "legal.terms": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Public offer"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Публичная оферта"
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Жария оферта"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ommaviy oferta"
+          }
+        }
+      }
+    },
+    "legal.privacy": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Privacy policy"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Политика конфиденциальности"
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Құпиялық саясаты"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Maxfiylik siyosati"
+          }
+        }
+      }
+    },
+    "legal.consent.checkbox": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "I have read and accept the public offer and privacy policy."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Я прочитал(а) и принимаю публичную оферту и политику конфиденциальности."
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Жария оферта мен құпиялық саясатын оқыдым және қабылдаймын."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ommaviy oferta va maxfiylik siyosatini oʻqidim hamda qabul qilaman."
+          }
+        }
+      }
+    },
+    "legal.consent.continue": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Accept and continue"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Принять и продолжить"
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Қабылдау және жалғастыру"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qabul qilish va davom etish"
+          }
+        }
+      }
+    },
+    "legal.consent.footer": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The accepted versions, time, language and platform are saved with your account. You can reopen both documents in Settings."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Версии документов, время, язык и платформа сохраняются в аккаунте. Оба документа доступны в настройках."
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Қабылданған нұсқалар, уақыт, тіл және платформа тіркелгіде сақталады. Екі құжатты да параметрлерден қайта ашуға болады."
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Qabul qilingan versiyalar, vaqt, til va platforma hisobingizda saqlanadi. Ikkala hujjatni Sozlamalarda qayta ochish mumkin."
+          }
+        }
+      }
+    },
+    "setup.checklist.microphone": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Microphone access"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Доступ к микрофону"
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Микрофонға рұқсат"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mikrofonga ruxsat"
+          }
+        }
+      }
+    },
+    "setup.checklist.speech": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speech recognition"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Распознавание речи"
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сөйлеуді тану"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutqni aniqlash"
+          }
+        }
+      }
+    },
+    "setup.voice.enable": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Enable voice input"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Включить голосовой ввод"
+          }
+        },
+        "kk": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дауыспен енгізуді қосу"
+          }
+        },
+        "uz": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mikrofonga ruxsat berish"
+          }
+        }
+      }
     }
   },
   "version": "1.1"

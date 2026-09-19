@@ -4,12 +4,8 @@ import Foundation
 ///
 /// Жауап серверде жасалады: құрылғыда провайдер кілті жоқ.
 ///
-/// This is the transport a signed-in user gets. Compared with the legacy
-/// install-token path it adds exactly two things: the request is attributed to
-/// a real account, and the response carries the quota back, so the app can show
-/// "3 left today" without a second round trip. The profile is not sent - the
-/// server holds it - but the template and working-hours context still are,
-/// because those are per-reply choices the user just made on screen.
+/// Requests are attributed to an account and the response carries quota state,
+/// so the app can update the remaining count without another round trip.
 struct AccountReplyTransport: ReplyTransport {
 
     /// What this one reply needs. No device identifier, no contacts, no chat

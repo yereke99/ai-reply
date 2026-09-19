@@ -1,135 +1,99 @@
 import Foundation
 import Security
 
-/// Keychain storage for the OpenAI credential, shared between the app and the
-/// keyboard extension.
-///
-/// WHY THE KEYCHAIN AND NOWHERE ELSE. The brief forbids the key in source, in
-/// Info.plist, in an xcconfig, in UserDefaults, in App Group defaults, in a
-/// bundled resource and in anything compiled into the IPA. Every one of those
-/// prohibitions still holds in this build: the key is typed by the user at
-/// runtime, on device, and only ever exists in the keychain item below. A build
-/// of this project contains no credential, so distributing the IPA distributes
-/// no secret.
-///
-/// What this does NOT claim: the keychain is not a vault against someone
-/// holding the unlocked device. It is device-only (never synced to iCloud) and
-/// unreadable by other apps, which is the right protection for a key the user
-/// themselves entered.
-enum SecureCredentialStore {
-
-    /// App Group identifiers are usable as keychain access groups on iOS with no
-    /// additional entitlement, which is what lets the keyboard read what the
-    /// app wrote.
-    private static let accessGroup = AppGroup.identifier
+/// Removes credentials and overrides written by builds that supported direct
+/// provider access. Account access and refresh tokens use a different service.
+enum LegacyCredentialMigration {
+    private static let migrationKey = "migration.backendOnly.v1"
     private static let service = "kz.yerek.replykeyboard.openai"
-    private static let account = "openai.api.key"
+    private static let legacyAccounts = ["openai.api.key", "backend.client.token"]
+    private static let legacyDefaults = [
+        "ai.transportMode",
+        "ai.model",
+        "ai.backendBaseURL",
+        "ai.installIdentifier"
+    ]
 
-    private static func baseQuery() -> [String: Any] {
-        [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service,
-            kSecAttrAccount as String: account,
-            kSecAttrAccessGroup as String: accessGroup
-        ]
-    }
+    static func runOnce(defaults: UserDefaults = AppGroup.defaults) {
+        guard !defaults.bool(forKey: migrationKey) else { return }
 
-    /// Reads the stored key, or nil when none has been entered.
-    static func apiKey() -> String? {
-        var query = baseQuery()
-        query[kSecReturnData as String] = true
-        query[kSecMatchLimit as String] = kSecMatchLimitOne
-
-        var item: CFTypeRef?
-        guard SecItemCopyMatching(query as CFDictionary, &item) == errSecSuccess,
-              let data = item as? Data,
-              let value = String(data: data, encoding: .utf8),
-              !value.isEmpty else {
-            return nil
+        for account in legacyAccounts {
+            let query: [String: Any] = [
+                kSecClass as String: kSecClassGenericPassword,
+                kSecAttrService as String: service,
+                kSecAttrAccount as String: account,
+                kSecAttrAccessGroup as String: AppGroup.identifier
+            ]
+            SecItemDelete(query as CFDictionary)
         }
-        return value
+        legacyDefaults.forEach(defaults.removeObject(forKey:))
+        defaults.set(true, forKey: migrationKey)
+    }
+}
+
+struct StoredLegalConsent: Codable, Equatable, Sendable {
+    let termsVersion: String
+    let privacyVersion: String
+    let acceptedAt: String
+    let locale: String
+    let platform: String
+    let appVersion: String
+    var isPendingSync: Bool
+}
+
+/// Non-secret acceptance state shared by the host app and its keyboard.
+enum LegalConsentStore {
+    private static let key = "account.legalConsent.v1"
+
+    static func load(defaults: UserDefaults = AppGroup.defaults) -> StoredLegalConsent? {
+        guard let data = defaults.data(forKey: key) else { return nil }
+        return try? JSONDecoder().decode(StoredLegalConsent.self, from: data)
     }
 
-    static var hasAPIKey: Bool { apiKey() != nil }
-
-    /// Stores or replaces the key. Returns false when the keychain refused,
-    /// which is reported to the user rather than silently swallowed.
-    @discardableResult
-    static func setAPIKey(_ key: String) -> Bool {
-        let trimmed = key.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else { return deleteAPIKey() }
-        guard let data = trimmed.data(using: .utf8) else { return false }
-
-        let query = baseQuery()
-        let attributes: [String: Any] = [
-            kSecValueData as String: data,
-            // After-first-unlock so the keyboard can read it while the device is
-            // in use; ThisDeviceOnly so it is never carried to another device by
-            // iCloud Keychain or a backup.
-            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
-        ]
-
-        let updateStatus = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
-        if updateStatus == errSecSuccess { return true }
-        guard updateStatus == errSecItemNotFound else { return false }
-
-        var insert = query
-        insert.merge(attributes) { current, _ in current }
-        return SecItemAdd(insert as CFDictionary, nil) == errSecSuccess
+    static func hasAccepted(_ config: AccountAPI.LegalConfig,
+                            defaults: UserDefaults = AppGroup.defaults) -> Bool {
+        guard let record = load(defaults: defaults) else { return false }
+        return record.termsVersion == config.termsVersion
+            && record.privacyVersion == config.privacyVersion
     }
 
     @discardableResult
-    static func deleteAPIKey() -> Bool {
-        let status = SecItemDelete(baseQuery() as CFDictionary)
-        return status == errSecSuccess || status == errSecItemNotFound
+    static func accept(_ config: AccountAPI.LegalConfig, locale: String,
+                       defaults: UserDefaults = AppGroup.defaults) -> StoredLegalConsent {
+        let record = StoredLegalConsent(
+            termsVersion: config.termsVersion,
+            privacyVersion: config.privacyVersion,
+            acceptedAt: ISO8601DateFormatter().string(from: Date()),
+            locale: locale,
+            platform: "ios",
+            appVersion: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "",
+            isPendingSync: true
+        )
+        save(record, defaults: defaults)
+        return record
     }
 
-    // MARK: Backend token
-
-    private static let tokenAccount = "backend.client.token"
-
-    private static func tokenQuery() -> [String: Any] {
-        [
-            kSecClass as String: kSecClassGenericPassword,
-            kSecAttrService as String: service,
-            kSecAttrAccount as String: tokenAccount,
-            kSecAttrAccessGroup as String: accessGroup
-        ]
+    static func restore(_ consent: AccountAPI.LegalConsent,
+                        defaults: UserDefaults = AppGroup.defaults) {
+        save(StoredLegalConsent(
+            termsVersion: consent.termsVersion,
+            privacyVersion: consent.privacyVersion,
+            acceptedAt: consent.acceptedAt,
+            locale: consent.locale,
+            platform: consent.platform,
+            appVersion: consent.appVersion ?? "",
+            isPendingSync: false
+        ), defaults: defaults)
     }
 
-    /// Bearer token for the optional backend transport. Same storage rules.
-    static func backendToken() -> String? {
-        var query = tokenQuery()
-        query[kSecReturnData as String] = true
-        query[kSecMatchLimit as String] = kSecMatchLimitOne
-
-        var item: CFTypeRef?
-        guard SecItemCopyMatching(query as CFDictionary, &item) == errSecSuccess,
-              let data = item as? Data,
-              let value = String(data: data, encoding: .utf8),
-              !value.isEmpty else {
-            return nil
-        }
-        return value
+    static func markSynced(defaults: UserDefaults = AppGroup.defaults) {
+        guard var record = load(defaults: defaults) else { return }
+        record.isPendingSync = false
+        save(record, defaults: defaults)
     }
 
-    @discardableResult
-    static func setBackendToken(_ token: String?) -> Bool {
-        guard let token, !token.isEmpty else {
-            let status = SecItemDelete(tokenQuery() as CFDictionary)
-            return status == errSecSuccess || status == errSecItemNotFound
-        }
-        guard let data = token.data(using: .utf8) else { return false }
-        let query = tokenQuery()
-        let attributes: [String: Any] = [
-            kSecValueData as String: data,
-            kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
-        ]
-        let updateStatus = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
-        if updateStatus == errSecSuccess { return true }
-        guard updateStatus == errSecItemNotFound else { return false }
-        var insert = query
-        insert.merge(attributes) { current, _ in current }
-        return SecItemAdd(insert as CFDictionary, nil) == errSecSuccess
+    private static func save(_ record: StoredLegalConsent, defaults: UserDefaults) {
+        guard let data = try? JSONEncoder().encode(record) else { return }
+        defaults.set(data, forKey: key)
     }
 }

@@ -232,6 +232,11 @@ struct VoiceConfigurationParser {
                 "don't", "do not", "never", "always", "avoid", "make sure",
                 "tell them", "must not", "should not"
             ]
+        case .uzbek:
+            return shared + [
+                "aytmang", "va'da bermang", "yozmang", "mumkin emas",
+                "har doim", "hech qachon", "albatta", "tasdiqlamang"
+            ]
         }
     }
 

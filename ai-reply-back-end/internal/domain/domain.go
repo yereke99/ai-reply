@@ -88,6 +88,19 @@ type Profile struct {
 	UpdatedAt           time.Time
 }
 
+// LegalConsent records the exact public document versions accepted by an account.
+type LegalConsent struct {
+	ID             string
+	UserID         string
+	TermsVersion   string
+	PrivacyVersion string
+	AcceptedAt     time.Time
+	Locale         string
+	Platform       string
+	AppVersion     string
+	CreatedAt      time.Time
+}
+
 // Device — тіркелген құрылғы (push негізі осында).
 type Device struct {
 	ID         string

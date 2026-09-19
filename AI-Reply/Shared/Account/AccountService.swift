@@ -24,7 +24,7 @@ struct AccountService: Sendable {
 
     // MARK: Public endpoints
 
-    /// Countries, limits and whether the demo OTP is on. Called before sign-in.
+    /// Countries, limits and current legal versions. Called before sign-in.
     func serverConfig() async throws -> AccountAPI.ServerConfig {
         try await client().get("api/v1/config")
     }
@@ -36,8 +36,7 @@ struct AccountService: Sendable {
 
     // MARK: Sign-in
 
-    /// Asks for a code. The server decides how it is delivered - in demo mode
-    /// nothing is sent at all and `demoMode` comes back true.
+    /// Asks for a code. The server decides how it is delivered.
     func requestCode(identifier: String, locale: String) async throws -> AccountAPI.Challenge {
         struct Request: Encodable {
             let identifier: String
@@ -132,6 +131,27 @@ struct AccountService: Sendable {
         )
         let _: APIClient.Empty = try await session.authenticated { token in
             try await client().post("api/v1/devices", body: request, token: token)
+        }
+    }
+
+    @discardableResult
+    func recordLegalConsent(_ consent: StoredLegalConsent) async throws -> AccountAPI.LegalConsent {
+        struct Request: Encodable {
+            let terms_version: String
+            let privacy_version: String
+            let locale: String
+            let platform: String
+            let app_version: String
+        }
+        let request = Request(
+            terms_version: consent.termsVersion,
+            privacy_version: consent.privacyVersion,
+            locale: consent.locale,
+            platform: consent.platform,
+            app_version: consent.appVersion
+        )
+        return try await session.authenticated { token in
+            try await client().post("api/v1/me/consents", body: request, token: token)
         }
     }
 

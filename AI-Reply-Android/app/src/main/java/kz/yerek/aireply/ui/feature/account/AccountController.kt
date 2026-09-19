@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kz.yerek.aireply.BuildConfig
 import kz.yerek.aireply.R
 import kz.yerek.aireply.data.account.AccountCredentials
 import kz.yerek.aireply.data.account.AccountService
@@ -13,10 +14,13 @@ import kz.yerek.aireply.data.account.AccountUser
 import kz.yerek.aireply.data.account.ApiError
 import kz.yerek.aireply.data.account.ApiException
 import kz.yerek.aireply.data.account.CountryDto
+import kz.yerek.aireply.data.account.LegalConfigDto
+import kz.yerek.aireply.data.account.LegalConsentDto
 import kz.yerek.aireply.data.account.PlanDto
 import kz.yerek.aireply.data.account.ProfileUpdate
 import kz.yerek.aireply.data.account.SubscriptionDto
 import kz.yerek.aireply.data.account.UsageDto
+import kz.yerek.aireply.data.legal.LegalConsentStore
 import java.util.TimeZone
 
 /**
@@ -34,7 +38,8 @@ import java.util.TimeZone
 class AccountController(
     private val service: AccountService,
     private val credentials: AccountCredentials,
-    private val usageCache: AccountUsageCache
+    private val usageCache: AccountUsageCache,
+    private val legalConsentStore: LegalConsentStore
 ) {
 
     /** Where the user is in the sign-in flow. */
@@ -42,8 +47,7 @@ class AccountController(
         data object SignedOut : Phase
         data class AwaitingCode(
             val identifier: String,
-            val masked: String,
-            val demoMode: Boolean
+            val masked: String
         ) : Phase
         data object SignedIn : Phase
     }
@@ -55,6 +59,9 @@ class AccountController(
         val usage: UsageDto = UsageDto.UNKNOWN,
         val plans: List<PlanDto> = emptyList(),
         val countries: List<CountryDto> = emptyList(),
+        val legalConfig: LegalConfigDto = LegalConfigDto.PRODUCTION,
+        val hasAcceptedLegal: Boolean = false,
+        val bootstrapComplete: Boolean = false,
         val busy: Boolean = false,
         /** A string resource, never a server sentence. */
         @StringRes val errorMessage: Int? = null
@@ -64,7 +71,10 @@ class AccountController(
     }
 
     private val _state = MutableStateFlow(
-        State(phase = if (credentials.isSignedIn) Phase.SignedIn else Phase.SignedOut)
+        State(
+            phase = if (credentials.isSignedIn) Phase.SignedIn else Phase.SignedOut,
+            hasAcceptedLegal = legalConsentStore.hasAccepted(LegalConfigDto.PRODUCTION)
+        )
     )
     val state: StateFlow<State> = _state.asStateFlow()
 
@@ -74,11 +84,32 @@ class AccountController(
 
     // ------------------------------------------------------------- loading
 
-    /** Countries and limits, needed before the first screen is drawn. */
+    /** Countries and current legal versions, needed before the first screen. */
     suspend fun loadServerConfig() {
-        if (_state.value.countries.isNotEmpty()) return
         runCatching { service.serverConfig() }.getOrNull()?.let { config ->
-            _state.update { it.copy(countries = config.countries) }
+            val legal = config.legal ?: LegalConfigDto.PRODUCTION
+            _state.update {
+                it.copy(
+                    countries = config.countries,
+                    legalConfig = legal,
+                    hasAcceptedLegal = legalConsentStore.hasAccepted(legal)
+                )
+            }
+        }
+    }
+
+    suspend fun bootstrap() {
+        if (_state.value.bootstrapComplete) return
+        loadServerConfig()
+        if (credentials.isSignedIn) {
+            refresh()
+            syncPendingLegalConsent()
+        }
+        _state.update {
+            it.copy(
+                hasAcceptedLegal = legalConsentStore.hasAccepted(it.legalConfig),
+                bootstrapComplete = true
+            )
         }
     }
 
@@ -99,6 +130,7 @@ class AccountController(
             usageCache.store(account.usage)
             usageCache.storePlanCode(account.subscription.plan.code)
             credentials.displayIdentifier = account.user.identifier
+            applyLegalConsent(account.legalConsent)
             _state.update {
                 it.copy(
                     phase = Phase.SignedIn,
@@ -137,7 +169,7 @@ class AccountController(
             val challenge = service.requestCode(identifier, locale)
             _state.update {
                 it.copy(
-                    phase = Phase.AwaitingCode(identifier, challenge.maskedIdentifier, challenge.demoMode),
+                    phase = Phase.AwaitingCode(identifier, challenge.maskedIdentifier),
                     busy = false
                 )
             }
@@ -157,6 +189,7 @@ class AccountController(
             val session = service.verifyCode(phase.identifier, code)
             usageCache.store(session.usage)
             usageCache.storePlanCode(session.subscription.plan.code)
+            applyLegalConsent(session.legalConsent)
             _state.update {
                 it.copy(
                     phase = Phase.SignedIn,
@@ -168,6 +201,7 @@ class AccountController(
             }
             // Best effort: a failed device registration must not block sign-in.
             runCatching { service.registerDevice() }
+            syncPendingLegalConsent()
             session.isNewUser
         } catch (exception: Throwable) {
             _state.update { it.copy(busy = false, errorMessage = messageFor(exception)) }
@@ -189,6 +223,12 @@ class AccountController(
         }
     }
 
+    suspend fun acceptLegal(locale: String) {
+        legalConsentStore.accept(_state.value.legalConfig, locale, BuildConfig.VERSION_NAME)
+        _state.update { it.copy(hasAcceptedLegal = true) }
+        syncPendingLegalConsent()
+    }
+
     suspend fun signOut() {
         _state.update { it.copy(busy = true) }
         service.signOut()
@@ -198,7 +238,37 @@ class AccountController(
 
     private fun signOutLocally() {
         credentials.clear()
-        _state.value = State(phase = Phase.SignedOut)
+        _state.update {
+            it.copy(
+                phase = Phase.SignedOut,
+                user = null,
+                subscription = null,
+                usage = UsageDto.UNKNOWN,
+                plans = emptyList(),
+                busy = false
+            )
+        }
+    }
+
+    private fun applyLegalConsent(consent: LegalConsentDto?) {
+        val config = _state.value.legalConfig
+        if (consent == null || consent.termsVersion != config.termsVersion ||
+            consent.privacyVersion != config.privacyVersion
+        ) return
+        legalConsentStore.restore(consent)
+        _state.update { it.copy(hasAcceptedLegal = true) }
+    }
+
+    private suspend fun syncPendingLegalConsent() {
+        if (!credentials.isSignedIn) return
+        val record = legalConsentStore.current() ?: return
+        val config = _state.value.legalConfig
+        if (!record.pendingSync || record.termsVersion != config.termsVersion ||
+            record.privacyVersion != config.privacyVersion
+        ) return
+        runCatching { service.recordLegalConsent(record) }
+            .getOrNull()
+            ?.let(::applyLegalConsent)
     }
 
     // ------------------------------------------------------------- profile

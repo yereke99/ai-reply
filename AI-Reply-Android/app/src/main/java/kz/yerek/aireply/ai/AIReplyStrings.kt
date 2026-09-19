@@ -36,12 +36,8 @@ class AppStrings(private val context: Context) {
      * Maps an error onto the sentence the user actually sees. Short, plain,
      * actionable, and free of status codes, JSON and provider names.
      *
-     * The transport mode matters for exactly two cases. In direct mode a
-     * rejected credential is the user's own API key; in service mode it is
-     * their session, and telling them to check a key they never entered would
-     * send them looking for something that does not exist.
      */
-    fun message(error: AIReplyError, mode: AITransportMode = AITransportMode.DIRECT): String = when (error) {
+    fun message(error: AIReplyError): String = when (error) {
         AIReplyError.NoSourceMessage -> get(R.string.kb_err_no_source)
         is AIReplyError.MessageTooLong -> get(R.string.kb_err_message_too_long, error.limit)
         AIReplyError.ClipboardUnavailable -> get(R.string.kb_err_clipboard_unavailable)
@@ -51,12 +47,8 @@ class AppStrings(private val context: Context) {
         // Cancelling is something the user did on purpose. Telling them it
         // happened is noise, so this is the one error with no sentence.
         AIReplyError.Cancelled -> ""
-        AIReplyError.AuthenticationFailed ->
-            if (mode == AITransportMode.BACKEND) get(R.string.kb_err_sign_in_required)
-            else get(R.string.kb_err_auth_failed)
-        AIReplyError.RateLimited ->
-            if (mode == AITransportMode.BACKEND) get(R.string.kb_err_quota_exhausted)
-            else get(R.string.kb_err_rate_limited)
+        AIReplyError.AuthenticationFailed -> get(R.string.kb_err_sign_in_required)
+        AIReplyError.RateLimited -> get(R.string.kb_err_quota_exhausted)
         AIReplyError.EmptyResponse -> get(R.string.kb_err_empty_response)
         AIReplyError.ServiceUnavailable -> get(R.string.kb_err_service_unavailable)
     }

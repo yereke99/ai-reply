@@ -5,9 +5,9 @@ import (
 	"html/template"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/aireply/ai-reply-back-end/internal/domain"
+	"github.com/aireply/ai-reply-back-end/internal/legal"
 	"github.com/aireply/ai-reply-back-end/internal/localization"
 	"github.com/aireply/ai-reply-back-end/internal/traits"
 	"github.com/aireply/ai-reply-back-end/internal/transport/httpx"
@@ -97,8 +97,8 @@ func (s *Server) handleTerms(w http.ResponseWriter, r *http.Request) {
 	s.render(w, "legal", "public_layout", legalView{
 		baseView: s.base(locale),
 		Title:    s.bundle.T(locale, "legal.terms.title"),
-		Updated:  time.Now().Format("2006-01-02"),
-		Body:     template.HTML(termsBody(locale)),
+		Updated:  legal.UpdatedDate,
+		Body:     template.HTML(termsBody(locale, s.cfg.App.ContactEmail())),
 		Boot:     template.JS("{}"),
 	})
 }
@@ -109,7 +109,7 @@ func (s *Server) handlePrivacy(w http.ResponseWriter, r *http.Request) {
 	s.render(w, "legal", "public_layout", legalView{
 		baseView: s.base(locale),
 		Title:    s.bundle.T(locale, "legal.privacy.title"),
-		Updated:  time.Now().Format("2006-01-02"),
+		Updated:  legal.UpdatedDate,
 		Body:     template.HTML(privacyBody(locale)),
 		Boot:     template.JS("{}"),
 	})
@@ -124,36 +124,51 @@ func (s *Server) locale(w http.ResponseWriter, r *http.Request) string {
 	return domain.NormalizeLocale(locale)
 }
 
-// Заң мәтіндері — демо нұсқасы. Нақты жариялау алдында заңгермен келісіледі.
-func termsBody(locale string) string {
+func termsBody(locale, contactEmail string) string {
 	sections := map[string][][2]string{
 		"kk": {
-			{"Қызмет туралы", "AI Reply — мессенджерлерде жауап жазуға көмектесетін мобильді қосымша және пернетақта. Қызмет «қалай бар, солай» ұсынылады."},
-			{"Есептік жазба", "Тіркелу телефон нөмірі немесе электрондық пошта арқылы жүреді. Есептік жазбаңыздың қауіпсіздігі үшін жауапкершілік сізде."},
-			{"Лимиттер мен тарифтер", "Әр тарифте күндік генерация лимиті бар. Лимит сервер уақыт белдеуі бойынша тәулік сайын жаңарады."},
-			{"Жауапкершілік", "Жасалған мәтін — ұсыныс. Жіберер алдында оны өзіңіз тексересіз; мазмұн үшін жауапкершілік жіберушіде."},
-			{"Өзгерістер", "Шарттар жаңарғанда бет жаңартылады. Қызметті пайдалануды жалғастыру жаңа редакцияны қабылдағаныңызды білдіреді."},
+			{"1. Жалпы ережелер", "Бұл құжат AI Reply цифрлық қызметін пайдалану туралы жария оферта болып табылады. «Қабылдаймын» түймесін басу, тіркелу немесе қызметті пайдалану осы офертаның толық акцепті болып саналады."},
+			{"2. Қызмет", "AI Reply — мессенджерлерге арналған жауап жобаларын жасауға көмектесетін мобильді қосымша мен пернетақта. Қызмет нәтижені автоматты түрде жасайды және мәтінді алушыға өзі жібермейді."},
+			{"3. Есептік жазба", "Кіру телефон нөмірі немесе электрондық пошта арқылы орындалады. Пайдаланушы өз құрылғысы мен есептік жазбасына қолжетімділіктің қауіпсіздігіне жауап береді."},
+			{"4. Тарифтер мен төлем", "Қолжетімді тариф, баға, мерзім және лимит сатып алу алдында көрсетіледі. Төлем мен қайтару қолданылған дүкеннің немесе төлем провайдерінің ережелеріне және міндетті заң талаптарына сәйкес жүргізіледі."},
+			{"5. Пайдалану шарттары", "Қызметті заңсыз, зиянды, алдамшы контент жасауға немесе басқа тұлғалардың құқықтарын бұзуға пайдалануға болмайды. Елеулі бұзушылық кезінде қолжетімділік шектелуі мүмкін."},
+			{"6. Жауапкершілік", "Жасалған мәтін — тек жоба. Пайдаланушы оны жіберер алдында тексереді және жіберілген мазмұнға өзі жауап береді. Қызмет үздіксіз немесе қатесіз жұмыс істейтініне кепілдік берілмейді."},
+			{"7. Деректер мен зияткерлік құқықтар", "Дербес деректер бөлек Құпиялық саясатына сәйкес өңделеді. Қосымшаға, дизайнға және бағдарламалық кодқа құқықтар AI Reply құқық иесіне тиесілі; пайдаланушыға жеке пайдалану үшін шектеулі құқық беріледі."},
+			{"8. Өзгерту және тоқтату", "Офертаның жаңа редакциясы осы бетте жарияланады. Қызметті пайдалануды тоқтату үшін пайдаланушы жазылымнан бас тартып, есептік жазбаны жою туралы сұраныс бере алады."},
+			{"9. Байланыс", "Оферта, төлем немесе есептік жазба бойынша сұрақтар: " + contactEmail + "."},
 		},
 		"ru": {
-			{"О сервисе", "AI Reply — мобильное приложение и клавиатура, которые помогают писать ответы в мессенджерах. Сервис предоставляется «как есть»."},
-			{"Аккаунт", "Регистрация выполняется по номеру телефона или электронной почте. Ответственность за сохранность доступа к аккаунту лежит на вас."},
-			{"Лимиты и тарифы", "У каждого тарифа есть дневной лимит генераций. Лимит обновляется ежедневно по часовому поясу сервера."},
-			{"Ответственность", "Сгенерированный текст — это черновик. Вы проверяете его перед отправкой; ответственность за содержание несёт отправитель."},
-			{"Изменения", "При обновлении условий эта страница изменяется. Продолжение использования означает согласие с новой редакцией."},
+			{"1. Общие положения", "Настоящий документ является публичной офертой на использование цифрового сервиса AI Reply. Нажатие кнопки согласия, регистрация или использование сервиса означают полный и безоговорочный акцепт оферты."},
+			{"2. Предмет оферты", "AI Reply предоставляет мобильное приложение и клавиатуру для подготовки черновиков ответов в мессенджерах. Сервис генерирует текст автоматически и не отправляет его получателю без действия пользователя."},
+			{"3. Аккаунт", "Вход выполняется по номеру телефона или электронной почте. Пользователь отвечает за сохранность доступа к своему устройству и аккаунту."},
+			{"4. Тарифы, оплата и возврат", "Доступный тариф, цена, срок и лимиты показываются до покупки. Оплата и возврат выполняются по правилам магазина приложений или платёжного провайдера с учётом обязательных требований закона."},
+			{"5. Правила использования", "Запрещено использовать сервис для незаконного, вредоносного или вводящего в заблуждение контента и нарушения прав третьих лиц. При существенном нарушении доступ может быть ограничен."},
+			{"6. Ответственность", "Сгенерированный текст является черновиком. Пользователь проверяет его до отправки и самостоятельно отвечает за отправленное содержание. Бесперебойная и безошибочная работа сервиса не гарантируется."},
+			{"7. Данные и интеллектуальные права", "Персональные данные обрабатываются по отдельной Политике конфиденциальности. Права на приложение, дизайн и программный код принадлежат правообладателю AI Reply; пользователю предоставляется ограниченное право личного использования."},
+			{"8. Изменение и прекращение", "Новая редакция оферты публикуется на этой странице. Пользователь может прекратить использование, отменить подписку и направить запрос на удаление аккаунта."},
+			{"9. Контакты", "Вопросы по оферте, оплате или аккаунту можно направить на " + contactEmail + "."},
 		},
 		"en": {
-			{"About the service", "AI Reply is a mobile app and keyboard that helps you write replies in messengers. The service is provided as is."},
-			{"Account", "You sign in with a phone number or an email address. Keeping access to your account safe is your responsibility."},
-			{"Limits and plans", "Every plan has a daily generation limit. The limit resets each day in the server's timezone."},
-			{"Responsibility", "A generated reply is a draft. You review it before sending; the sender remains responsible for the content."},
-			{"Changes", "This page is updated when the terms change. Continued use means you accept the current version."},
+			{"1. General", "This document is a public offer governing use of the AI Reply digital service. Selecting the consent control, registering, or using the service constitutes full acceptance of this offer."},
+			{"2. Service", "AI Reply provides a mobile app and keyboard that prepare draft replies for messengers. The service generates text automatically and does not send it to a recipient without a user action."},
+			{"3. Account", "You sign in with a phone number or email address. You are responsible for keeping access to your device and account secure."},
+			{"4. Plans, payment and refunds", "The available plan, price, term, and limits are shown before purchase. Payments and refunds follow the applicable app store or payment provider rules and mandatory law."},
+			{"5. Acceptable use", "The service must not be used for illegal, harmful, or deceptive content or to violate third-party rights. Access may be restricted for a material violation."},
+			{"6. Responsibility", "Generated text is a draft. You review it before sending and remain responsible for sent content. Uninterrupted or error-free operation is not guaranteed."},
+			{"7. Data and intellectual property", "Personal data is handled under the separate Privacy Policy. Rights in the app, design, and software belong to the AI Reply rights holder; users receive a limited right of personal use."},
+			{"8. Changes and termination", "A new version of this offer is published on this page. You may stop using the service, cancel a subscription, and request account deletion."},
+			{"9. Contact", "Questions about this offer, payments, or an account may be sent to " + contactEmail + "."},
 		},
 		"uz": {
-			{"Xizmat haqida", "AI Reply — messenjerlarda javob yozishga yordam beradigan mobil ilova va klaviatura. Xizmat «qanday boʻlsa, shundayligicha» taqdim etiladi."},
-			{"Hisob", "Roʻyxatdan oʻtish telefon raqami yoki elektron pochta orqali amalga oshiriladi. Hisobingiz xavfsizligi uchun javobgarlik sizda."},
-			{"Limitlar va tariflar", "Har bir tarifda kunlik generatsiya limiti bor. Limit server vaqt mintaqasi boʻyicha har kuni yangilanadi."},
-			{"Javobgarlik", "Yaratilgan matn — qoralama. Yuborishdan oldin uni oʻzingiz tekshirasiz; mazmun uchun javobgarlik yuboruvchida."},
-			{"Oʻzgarishlar", "Shartlar yangilanganda bu sahifa oʻzgaradi. Foydalanishni davom ettirish yangi tahrirni qabul qilganingizni bildiradi."},
+			{"1. Umumiy qoidalar", "Ushbu hujjat AI Reply raqamli xizmatidan foydalanish boʻyicha ommaviy ofertadir. Rozilik tugmasini bosish, roʻyxatdan oʻtish yoki xizmatdan foydalanish ofertani toʻliq qabul qilishni anglatadi."},
+			{"2. Xizmat", "AI Reply messenjerlar uchun javob qoralamalarini tayyorlaydigan mobil ilova va klaviaturani taqdim etadi. Xizmat matnni avtomatik yaratadi va foydalanuvchi harakatisiz uni oluvchiga yubormaydi."},
+			{"3. Hisob", "Kirish telefon raqami yoki elektron pochta orqali amalga oshiriladi. Foydalanuvchi qurilmasi va hisobiga kirish xavfsizligi uchun javob beradi."},
+			{"4. Tarif, toʻlov va qaytarish", "Mavjud tarif, narx, muddat va limitlar xariddan oldin koʻrsatiladi. Toʻlov va qaytarish ilovalar doʻkoni yoki toʻlov provayderi qoidalari hamda majburiy qonun talablariga muvofiq bajariladi."},
+			{"5. Foydalanish qoidalari", "Xizmatdan noqonuniy, zararli yoki chalgʻituvchi kontent yaratish va uchinchi shaxslar huquqlarini buzish uchun foydalanish mumkin emas. Jiddiy buzilishda kirish cheklanishi mumkin."},
+			{"6. Javobgarlik", "Yaratilgan matn qoralamadir. Foydalanuvchi uni yuborishdan oldin tekshiradi va yuborilgan mazmun uchun oʻzi javob beradi. Xizmat uzluksiz yoki xatosiz ishlashi kafolatlanmaydi."},
+			{"7. Maʼlumotlar va intellektual huquqlar", "Shaxsiy maʼlumotlar alohida Maxfiylik siyosatiga muvofiq qayta ishlanadi. Ilova, dizayn va dasturiy kod huquqlari AI Reply huquq egasiga tegishli; foydalanuvchiga shaxsiy foydalanish uchun cheklangan huquq beriladi."},
+			{"8. Oʻzgartirish va bekor qilish", "Ofertaning yangi tahriri ushbu sahifada eʼlon qilinadi. Foydalanuvchi xizmatdan foydalanishni toʻxtatishi, obunani bekor qilishi va hisobni oʻchirishni soʻrashi mumkin."},
+			{"9. Aloqa", "Oferta, toʻlov yoki hisob boʻyicha savollarni " + contactEmail + " manziliga yuborish mumkin."},
 		},
 	}
 	return renderSections(sections, locale)

@@ -3,6 +3,7 @@ package kz.yerek.aireply.data.account
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kz.yerek.aireply.data.legal.StoredLegalConsent
 
 /**
  * What the client tells the server about itself.
@@ -70,6 +71,15 @@ private data class RegisterDeviceRequest(
 @Serializable
 private data class CheckoutRequest(@SerialName("plan_id") val planId: String)
 
+@Serializable
+private data class LegalConsentRequest(
+    @SerialName("terms_version") val termsVersion: String,
+    @SerialName("privacy_version") val privacyVersion: String,
+    val locale: String,
+    val platform: String,
+    @SerialName("app_version") val appVersion: String
+)
+
 /**
  * Every call the app makes to the AI Reply backend.
  *
@@ -94,7 +104,7 @@ class AccountService(
 
     // ------------------------------------------------------ public endpoints
 
-    /** Countries, limits and whether the demo OTP is on. Called before sign-in. */
+    /** Countries, limits and current legal versions. Called before sign-in. */
     suspend fun serverConfig(): ServerConfigDto {
         val client = client()
         return decode(ServerConfigDto.serializer(), client.request("GET", "api/v1/config"))
@@ -107,10 +117,7 @@ class AccountService(
 
     // -------------------------------------------------------------- sign-in
 
-    /**
-     * Asks for a code. The server decides how it is delivered — in demo mode
-     * nothing is sent at all and `demoMode` comes back true.
-     */
+    /** Asks for a code. The server decides how it is delivered. */
     suspend fun requestCode(identifier: String, locale: String): ChallengeDto {
         val client = client()
         val body = json.encodeToString(
@@ -180,6 +187,22 @@ class AccountService(
             client().request("POST", "api/v1/devices", body, token)
         }
     }
+
+    suspend fun recordLegalConsent(consent: StoredLegalConsent): LegalConsentDto =
+        session.authenticated { token ->
+            val request = LegalConsentRequest(
+                termsVersion = consent.termsVersion,
+                privacyVersion = consent.privacyVersion,
+                locale = consent.locale,
+                platform = consent.platform,
+                appVersion = consent.appVersion
+            )
+            val body = json.encodeToString(LegalConsentRequest.serializer(), request)
+            decode(
+                LegalConsentDto.serializer(),
+                client().request("POST", "api/v1/me/consents", body, token)
+            )
+        }
 
     // --------------------------------------- subscription (demo payment flow)
 

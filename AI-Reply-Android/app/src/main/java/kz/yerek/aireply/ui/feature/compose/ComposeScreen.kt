@@ -120,8 +120,7 @@ fun ComposeScreen(onBack: () -> Unit) {
                 generating = false
                 val mapped = (exception as? AIReplyException)?.error ?: AIReplyError.ServiceUnavailable
                 if (mapped != AIReplyError.Cancelled) {
-                    error = services.strings(services.settings.effectiveAppLanguage)
-                        .message(mapped, services.aiConfiguration.mode)
+                    error = services.strings(services.settings.effectiveAppLanguage).message(mapped)
                 }
             }
         }

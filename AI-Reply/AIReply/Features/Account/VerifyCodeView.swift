@@ -3,18 +3,13 @@ import SwiftUI
 
 /// Code entry.
 ///
-/// Растау коды. Демо режимінде сервер кодты жібермейді — 1111 жарайды.
-///
-/// The screen never claims a message was sent when the backend is running in
-/// demo mode: it says plainly that the code is fixed. Pretending otherwise
-/// would be the one bug a user cannot work around.
+/// Растау коды.
 struct VerifyCodeView: View {
 
     @Environment(AppSettings.self) private var settings
     @Environment(AccountModel.self) private var account
 
     let masked: String
-    let demoMode: Bool
     /// Called with `true` when the account was created just now.
     let onVerified: (Bool) -> Void
 
@@ -26,21 +21,13 @@ struct VerifyCodeView: View {
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
-        ScrollView {
+        AuthScreen {
             VStack(alignment: .leading, spacing: DS.Spacing.l) {
                 VStack(alignment: .leading, spacing: DS.Spacing.s) {
                     Text("account.code.title").font(.title.weight(.semibold))
                     Text("account.code.subtitle \(masked)")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
-                }
-                .padding(.top, DS.Spacing.m)
-
-                if demoMode {
-                    Label("account.code.demo", systemImage: "info.circle")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                        .dsCard()
                 }
 
                 codeField
@@ -82,15 +69,10 @@ struct VerifyCodeView: View {
                 }
                 .font(.subheadline)
             }
-            .padding(DS.Spacing.l)
-            .frame(maxWidth: DS.Layout.readableWidth, alignment: .leading)
-            .frame(maxWidth: .infinity, alignment: .center)
         }
-        .background(Color.dsBackground)
         .onReceive(timer) { _ in
             if secondsUntilResend > 0 { secondsUntilResend -= 1 }
         }
-        .task { isFocused = true }
     }
 
     private var codeField: some View {

@@ -16,7 +16,7 @@
 <body>
 <header class="site-header">
   <div class="wrap">
-    <a class="logo" href="/"><span class="logo-mark">AI</span> AI&nbsp;Reply</a>
+    <a class="logo" href="/"><span class="logo-mark">AI</span><span class="logo-name">AI&nbsp;Reply</span></a>
     <nav class="nav">
       <a href="/#how">{{call .T "nav.how"}}</a>
       <a href="/#features">{{call .T "nav.features"}}</a>
@@ -25,11 +25,14 @@
       <a href="/#faq">{{call .T "nav.faq"}}</a>
     </nav>
     <div class="header-right">
-      <div class="lang">
+      <div class="lang lang-links">
         {{range .Locales}}<a href="?lang={{.}}" class="{{if eq . $.Locale}}is-active{{end}}">{{.}}</a>{{end}}
       </div>
+      <select class="lang-select" aria-label="Language">
+        {{range .Locales}}<option value="{{.}}" {{if eq . $.Locale}}selected{{end}}>{{.}}</option>{{end}}
+      </select>
       <a class="btn btn-primary btn-sm" href="/#download">{{call .T "nav.download"}}</a>
-      <button class="nav-toggle" type="button" aria-label="menu"><span></span><span></span><span></span></button>
+      <button class="nav-toggle" type="button" aria-label="menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
   </div>
 </header>
@@ -40,7 +43,7 @@
   <div class="wrap">
     <span>© {{.Year}} AI Reply. {{call .T "footer.rights"}}.</span>
     <nav>
-      <a href="/terms?lang={{.Locale}}">{{call .T "footer.terms"}}</a>
+      <a href="/offer?lang={{.Locale}}">{{call .T "footer.terms"}}</a>
       <a href="/privacy?lang={{.Locale}}">{{call .T "footer.privacy"}}</a>
       <a href="mailto:{{.ContactEmail}}">{{call .T "footer.contact"}}</a>
     </nav>

@@ -22,6 +22,7 @@ extension AccountAPI {
         let profile: Profile
         let subscription: Subscription
         let usage: Usage
+        let legalConsent: LegalConsent?
 
         enum CodingKeys: String, CodingKey {
             case accessToken = "access_token"
@@ -30,6 +31,7 @@ extension AccountAPI {
             case deviceID = "device_id"
             case isNewUser = "is_new_user"
             case user, profile, subscription, usage
+            case legalConsent = "legal_consent"
         }
     }
 
@@ -154,6 +156,7 @@ extension AccountAPI {
         let profile: Profile
         let subscription: Subscription
         let usage: Usage
+        let legalConsent: LegalConsent?
     }
 
     /// The OTP challenge. The code itself never travels back to the client.
@@ -162,14 +165,50 @@ extension AccountAPI {
         let maskedIdentifier: String
         let channel: String
         let expiresIn: Int
-        let demoMode: Bool
 
         enum CodingKeys: String, CodingKey {
             case kind, channel
             case maskedIdentifier = "masked_identifier"
             case expiresIn = "expires_in"
-            case demoMode = "demo_mode"
         }
+    }
+
+    struct LegalConsent: Decodable, Sendable, Equatable {
+        let termsVersion: String
+        let privacyVersion: String
+        let acceptedAt: String
+        let locale: String
+        let platform: String
+        let appVersion: String?
+
+        enum CodingKeys: String, CodingKey {
+            case termsVersion = "terms_version"
+            case privacyVersion = "privacy_version"
+            case acceptedAt = "accepted_at"
+            case locale, platform
+            case appVersion = "app_version"
+        }
+    }
+
+    struct LegalConfig: Decodable, Sendable, Equatable {
+        let termsVersion: String
+        let privacyVersion: String
+        let termsURL: String
+        let privacyURL: String
+
+        enum CodingKeys: String, CodingKey {
+            case termsVersion = "terms_version"
+            case privacyVersion = "privacy_version"
+            case termsURL = "terms_url"
+            case privacyURL = "privacy_url"
+        }
+
+        static let production = LegalConfig(
+            termsVersion: "2026-09-19",
+            privacyVersion: "2026-09-19",
+            termsURL: "https://api.meily.kz/offer",
+            privacyURL: "https://api.meily.kz/privacy"
+        )
     }
 
     /// A country the backend will accept a phone number from.
@@ -202,15 +241,14 @@ extension AccountAPI {
         let timezone: String
         let maxSourceCharacters: Int
         let maxInstructionLength: Int
-        let demoMode: Bool
         let paymentMode: String
         let countries: [Country]
+        let legal: LegalConfig?
 
         enum CodingKeys: String, CodingKey {
-            case locales, timezone, countries
+            case locales, timezone, countries, legal
             case maxSourceCharacters = "max_source_characters"
             case maxInstructionLength = "max_instruction_length"
-            case demoMode = "demo_mode"
             case paymentMode = "payment_mode"
         }
     }

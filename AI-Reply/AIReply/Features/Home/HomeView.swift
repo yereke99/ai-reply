@@ -10,17 +10,12 @@ struct HomeView: View {
     /// Read once per appearance rather than polled: the keyboard writes this
     /// flag when it runs, and it cannot change while this screen is in front.
     @State private var keyboardStatus = KeyboardStatus.current()
-    @State private var hasAPIKey = SecureCredentialStore.hasAPIKey
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: DS.Spacing.xl) {
                 header
-                if AIConfiguration.shared.requiresAccount {
-                    if account.isSignedIn { usageCard }
-                } else if !hasAPIKey {
-                    missingKeyCard
-                }
+                if account.isSignedIn { usageCard }
                 tryItCard
                 setupCard
                 keyboardCard
@@ -45,10 +40,8 @@ struct HomeView: View {
         }
         .onAppear {
             keyboardStatus = .current()
-            hasAPIKey = SecureCredentialStore.hasAPIKey
         }
         .task {
-            guard AIConfiguration.shared.requiresAccount else { return }
             await account.refresh()
         }
     }
@@ -92,16 +85,6 @@ struct HomeView: View {
 
     private var planName: String {
         account.subscription?.plan.localizedName(settings.effectiveLanguage.rawValue) ?? ""
-    }
-
-    private var missingKeyCard: some View {
-        NavigationLink { SettingsView() } label: {
-            Label("home.key.missing", systemImage: "key.horizontal")
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(.primary)
-                .dsCard()
-        }
-        .buttonStyle(.plain)
     }
 
     private var tryItCard: some View {

@@ -6,7 +6,6 @@ import kz.yerek.aireply.BuildConfig
 import kz.yerek.aireply.core.lang.AppLanguage
 import kz.yerek.aireply.core.text.clampToCodePoints
 import kz.yerek.aireply.core.text.codePointLength
-import kz.yerek.aireply.data.secure.SecureCredentialStore
 import kz.yerek.aireply.domain.model.ReplyConfiguration
 import kz.yerek.aireply.domain.model.ReplyTemplate
 import java.time.LocalDateTime
@@ -25,14 +24,12 @@ import kotlin.coroutines.coroutineContext
  */
 class AIReplyService(
     private val configuration: AIConfiguration,
-    private val credentials: SecureCredentialStore,
     private val nameTemplate: (ReplyTemplate, AppLanguage) -> String,
     /**
-     * Builds the account transport when a session exists, or returns null so
-     * the legacy install-token path is used. Injected rather than constructed
-     * here, because this class must stay free of storage and DI concerns.
+     * Builds the authenticated account transport. Injected rather than
+     * constructed here so this class stays free of storage and DI concerns.
      */
-    private val accountTransport: ((String, AccountReplyTransport.RequestContext) -> ReplyTransport?)? = null,
+    private val accountTransport: (String, AccountReplyTransport.RequestContext) -> ReplyTransport,
     private val transportOverride: ((Request, ReplyPromptBuilder.Prompt) -> ReplyTransport)? = null
 ) {
 
@@ -65,7 +62,7 @@ class AIReplyService(
             is ValidationResult.Invalid -> result.error.raise()
         }
 
-        if (!configuration.isReady) AIReplyError.NotConfigured.raise()
+        if (!configuration.isReady) AIReplyError.AuthenticationFailed.raise()
 
         val profile = request.configuration.profile
         val templateName = nameTemplate(request.template, request.uiLanguage)
@@ -119,63 +116,27 @@ class AIReplyService(
         templateName: String,
         instruction: String,
         businessContext: kz.yerek.aireply.domain.model.WorkingHours.Context?
-    ): ReplyTransport = when (configuration.mode) {
-        AITransportMode.DIRECT ->
-            DirectOpenAITransport(configuration.model, credentials)
-
-        AITransportMode.BACKEND -> {
-            val baseUrl = configuration.backendBaseUrl
-                ?: return UnconfiguredTransport
-            val template = request.template
-            val profile = request.configuration.profile
-
-            // A signed-in account gets the endpoint that knows who it is and
-            // answers with the quota; everyone else keeps the old path.
-            accountTransport?.invoke(
-                baseUrl,
-                AccountReplyTransport.RequestContext(
-                    message = message,
-                    userInstruction = instruction,
-                    templateId = template.id,
-                    templateName = templateName,
-                    templateRelationship = template.relationship.raw,
-                    templateTone = template.tone,
-                    templateInstructions = template.instructions,
-                    templateReplyLength = template.replyLength,
-                    templateEmojiPolicy = template.emojiPolicy,
-                    templateWorkingHoursBehaviour = template.workingHoursBehaviour,
-                    templateBusiness = template.effectiveBusiness,
-                    appLanguage = request.uiLanguage.code,
-                    business = businessContext,
-                    appVersion = BuildConfig.VERSION_NAME
-                )
-            )?.let { return it }
-
-            BackendTransport(
-                baseUrl = baseUrl,
-                credentials = credentials,
-                installIdentifier = configuration.installIdentifier,
-                context = BackendTransport.RequestContext(
-                    message = message,
-                    templateId = template.id,
-                    appLanguage = request.uiLanguage.code,
-                    profileDescription = profile.promptDescription,
-                    profileRole = profile.role,
-                    preferredTone = profile.preferredTone,
-                    profileBusiness = profile.business,
-                    templateName = templateName,
-                    templateRelationship = template.relationship.raw,
-                    templateTone = template.tone,
-                    templateInstructions = template.instructions,
-                    templateReplyLength = template.replyLength,
-                    templateEmojiPolicy = template.emojiPolicy,
-                    templateBusiness = template.effectiveBusiness,
-                    templateWorkingHoursBehaviour = template.workingHoursBehaviour,
-                    business = businessContext,
-                    userInstruction = instruction
-                )
+    ): ReplyTransport {
+        val template = request.template
+        return accountTransport(
+            configuration.backendBaseUrl,
+            AccountReplyTransport.RequestContext(
+                message = message,
+                userInstruction = instruction,
+                templateId = template.id,
+                templateName = templateName,
+                templateRelationship = template.relationship.raw,
+                templateTone = template.tone,
+                templateInstructions = template.instructions,
+                templateReplyLength = template.replyLength,
+                templateEmojiPolicy = template.emojiPolicy,
+                templateWorkingHoursBehaviour = template.workingHoursBehaviour,
+                templateBusiness = template.effectiveBusiness,
+                appLanguage = request.uiLanguage.code,
+                business = businessContext,
+                appVersion = BuildConfig.VERSION_NAME
             )
-        }
+        )
     }
 
     sealed interface ValidationResult {
@@ -208,13 +169,4 @@ class AIReplyService(
 
         fun characterCount(message: String): Int = message.trim().codePointLength()
     }
-}
-
-/**
- * Fails cleanly when the chosen mode has not been set up, rather than making
- * the transport optional and pushing the branch onto every caller.
- */
-private object UnconfiguredTransport : ReplyTransport {
-    override suspend fun generate(prompt: ReplyPromptBuilder.Prompt): GeneratedReply =
-        AIReplyError.NotConfigured.raise()
 }

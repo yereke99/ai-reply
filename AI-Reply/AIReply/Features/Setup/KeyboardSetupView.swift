@@ -1,3 +1,5 @@
+import AVFoundation
+import Speech
 import SwiftUI
 import UIKit
 
@@ -22,6 +24,8 @@ struct KeyboardSetupView: View {
     var showsTitle = true
 
     @State private var status = KeyboardStatus.current()
+    @State private var microphoneStatus = AVCaptureDevice.authorizationStatus(for: .audio)
+    @State private var speechStatus = SFSpeechRecognizer.authorizationStatus()
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
@@ -66,10 +70,22 @@ struct KeyboardSetupView: View {
                     title: "setup.checklist.fullAccess",
                     state: fullAccessState
                 )
+                ChecklistRow(
+                    title: "setup.checklist.microphone",
+                    state: permissionState(microphoneStatus)
+                )
+                ChecklistRow(
+                    title: "setup.checklist.speech",
+                    state: permissionState(speechStatus)
+                )
                 if !status.isConfigured {
                     Text("setup.checklist.unknown.footer")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
+                }
+                if microphoneStatus != .authorized || speechStatus != .authorized {
+                    Button("setup.voice.enable") { Task { await requestVoicePermissions() } }
+                        .buttonStyle(.dsSecondary)
                 }
             }
             .dsCard()
@@ -81,6 +97,43 @@ struct KeyboardSetupView: View {
     private var fullAccessState: ChecklistRow.State {
         guard status.isConfigured else { return .unknown }
         return status.hasFullAccess ? .done : .missing
+    }
+
+    private func permissionState(_ status: AVAuthorizationStatus) -> ChecklistRow.State {
+        switch status {
+        case .authorized: return .done
+        case .notDetermined: return .unknown
+        case .denied, .restricted: return .missing
+        @unknown default: return .unknown
+        }
+    }
+
+    private func permissionState(_ status: SFSpeechRecognizerAuthorizationStatus) -> ChecklistRow.State {
+        switch status {
+        case .authorized: return .done
+        case .notDetermined: return .unknown
+        case .denied, .restricted: return .missing
+        @unknown default: return .unknown
+        }
+    }
+
+    @MainActor
+    private func requestVoicePermissions() async {
+        if microphoneStatus == .notDetermined {
+            _ = await AVCaptureDevice.requestAccess(for: .audio)
+        }
+        if speechStatus == .notDetermined {
+            _ = await withCheckedContinuation { continuation in
+                SFSpeechRecognizer.requestAuthorization { status in
+                    continuation.resume(returning: status)
+                }
+            }
+        }
+        microphoneStatus = AVCaptureDevice.authorizationStatus(for: .audio)
+        speechStatus = SFSpeechRecognizer.authorizationStatus()
+        if microphoneStatus == .denied || speechStatus == .denied {
+            openSystemSettings()
+        }
     }
 
     // MARK: Steps

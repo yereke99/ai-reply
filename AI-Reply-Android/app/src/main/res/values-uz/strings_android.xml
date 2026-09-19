@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="kb_generate">Javob berish</string>
+    <string name="kb_regenerate">Qayta yaratish</string>
+    <string name="kb_insert">Kiritish</string>
+    <string name="kb_cancel">Bekor qilish</string>
+    <string name="kb_add_template">Shablon qoʻshish</string>
+    <string name="kb_add_template_hint">AI Reply ochilmoqda…</string>
+    <string name="kb_replace_existing">Almashtirish</string>
+    <string name="kb_append_existing">Qoʻshish</string>
+    <string name="kb_keep_typing">Bekor qilish</string>
+    <string name="kb_generating">Javob yaratilmoqda…</string>
+    <string name="kb_draft_title">Javobingiz</string>
+    <string name="kb_source_title">Javob beriladigan xabar</string>
+    <string name="kb_choose_template">Kimga javob berayotganingizni tanlang</string>
+    <string name="kb_host_field_not_empty">Bu maydonda matn bor.</string>
+    <string name="kb_close">Yopish</string>
+    <string name="kb_expand_source">Xabarni toʻliq koʻrsatish</string>
+
+    <string name="kb_err_no_source">Avval xabarni nusxalang</string>
+    <string name="kb_err_message_too_long">Xabar juda uzun. %1$d belgigacha matnni nusxalang.</string>
+    <string name="kb_err_clipboard_unavailable">Nusxalangan xabarni oʻqib boʻlmadi.</string>
+    <string name="kb_err_not_configured">AI Reply ilovasini ochib, sozlashni yakunlang.</string>
+    <string name="kb_err_offline">Internet aloqasi yoʻq.</string>
+    <string name="kb_err_timed_out">Juda uzoq davom etdi. Qayta urinib koʻring.</string>
+    <string name="kb_err_empty_response">Javob kelmadi. Qayta urinib koʻring.</string>
+    <string name="kb_err_service_unavailable">Xizmat hozir mavjud emas. Keyinroq urinib koʻring.</string>
+
+    <string name="kb_instruction_label">Koʻrsatma</string>
+    <string name="kb_instruction_placeholder">Qanday javob berishni ayting…</string>
+    <string name="kb_instruction_optional">Ixtiyoriy</string>
+    <string name="kb_context_label">Kontekst</string>
+    <string name="kb_secure_field">Parol maydonlarida AI Reply ishlamaydi.</string>
+
+    <string name="voice_kb_start">Koʻrsatmani aytib yozish</string>
+    <string name="voice_kb_stop">Toʻxtatish</string>
+    <string name="voice_kb_listening">Tinglanmoqda…</string>
+    <string name="voice_kb_processing">Aniqlanmoqda…</string>
+    <string name="voice_kb_permission_needed">Mikrofonga ruxsat berish uchun bosing</string>
+    <string name="voice_kb_permission_denied">Mikrofonga ruxsat oʻchirilgan. Sozlamalar ▸ Ilovalar ▸ AI Reply ▸ Ruxsatlar boʻlimida yoqing.</string>
+    <string name="voice_kb_no_speech">Hech narsa eshitilmadi. Qayta urinib koʻring.</string>
+    <string name="voice_kb_failed">Nutqni aniqlab boʻlmadi. Qayta urinib koʻring.</string>
+    <string name="voice_kb_unavailable">Bu qurilmada nutqni aniqlash mavjud emas.</string>
+    <string name="voice_permission_title">Mikrofon</string>
+
+    <string name="android_setup_title">Klaviaturani sozlash</string>
+    <string name="android_setup_subtitle">Android sozlamalarida ikki qadam, soʻng klaviatura barcha messenjerlarda tayyor boʻladi.</string>
+    <string name="android_checklist_enabled">Klaviatura yoqilgan</string>
+    <string name="android_checklist_selected">Klaviatura tanlangan</string>
+    <string name="android_checklist_footer">Android bu holatlarni toʻgʻridan-toʻgʻri koʻrsatadi, shuning uchun roʻyxat doim yangilanadi.</string>
+    <string name="android_step_enable">Ekran klaviaturalari roʻyxatida AI Replyni yoqing</string>
+    <string name="android_step_select">Klaviatura tugmasi bilan AI Replyga oʻting</string>
+    <string name="android_step_test">Shu yerga qaytib, yozib koʻring</string>
+    <string name="android_open_keyboard_settings">Klaviatura sozlamalarini ochish</string>
+    <string name="android_switch_keyboard">Klaviaturani almashtirish</string>
+    <string name="android_keyboard_ready">AI Reply klaviaturasi tayyor</string>
+    <string name="android_keyboard_enabled_not_selected">AI Reply yoqilgan, ammo tanlanmagan</string>
+    <string name="android_keyboard_not_enabled">AI Reply klaviaturasi hali yoqilmagan</string>
+    <string name="android_howitworks_clipboard">Android faol klaviaturaga nusxalangan matnni oʻqishga ruxsat beradi. AI Reply uni faqat shablonni bosganingizda oʻqiydi, fonda hech qachon emas.</string>
+    <string name="android_privacy_sensitive">Boshqa ilova maxfiy deb belgilagan matn, masalan parol menejeridagi yozuv, hech qachon oʻqilmaydi.</string>
+
+    <string name="compose_instruction">Koʻrsatma</string>
+    <string name="compose_instruction_placeholder">Ixtiyoriy: qanday javob berishni ayting</string>
+    <string name="compose_dictate_instruction">Koʻrsatmani aytib yozish</string>
+
+    <string name="cd_back">Orqaga</string>
+    <string name="cd_settings">Sozlamalar</string>
+    <string name="cd_delete">Oʻchirish</string>
+    <string name="cd_move_up">Yuqoriga</string>
+    <string name="cd_move_down">Pastga</string>
+    <string name="cd_shift">Registr</string>
+    <string name="cd_backspace">Oʻchirish</string>
+    <string name="cd_switch_keyboard">Klaviaturani almashtirish</string>
+    <string name="cd_switch_layout">Tartibni almashtirish</string>
+</resources>

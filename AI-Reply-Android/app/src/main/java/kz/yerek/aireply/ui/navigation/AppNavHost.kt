@@ -1,11 +1,16 @@
 package kz.yerek.aireply.ui.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -14,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import kz.yerek.aireply.ui.LocalServices
 import kz.yerek.aireply.ui.feature.account.AccountController
 import kz.yerek.aireply.ui.feature.account.RegistrationStepScreen
+import kz.yerek.aireply.ui.feature.account.LegalConsentScreen
 import kz.yerek.aireply.ui.feature.account.SignInScreen
 import kz.yerek.aireply.ui.feature.account.SubscriptionScreen
 import kz.yerek.aireply.ui.feature.account.VerifyCodeScreen
@@ -37,16 +43,22 @@ fun AppNavHost(deepLink: String? = null) {
     val configuration by services.configuration.configuration.collectAsStateWithLifecycle()
     val navController = rememberNavController()
 
-    // The account gate is transparent unless this build is pointed at our
-    // service: a user with their own key never meets a sign-in screen, and an
-    // existing install keeps the product it was installed as.
-    if (services.aiConfiguration.requiresAccount) {
-        val accountState by services.account.state.collectAsStateWithLifecycle()
-        var completingRegistration by rememberSaveable { mutableStateOf(false) }
+    val accountState by services.account.state.collectAsStateWithLifecycle()
+    var completingRegistration by rememberSaveable { mutableStateOf(false) }
 
-        LaunchedEffect(Unit) { services.account.refresh() }
+    LaunchedEffect(Unit) { services.account.bootstrap() }
 
-        when {
+    when {
+            !accountState.bootstrapComplete -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+                return
+            }
+            !accountState.hasAcceptedLegal -> {
+                LegalConsentScreen()
+                return
+            }
             completingRegistration -> {
                 RegistrationStepScreen(onFinished = { completingRegistration = false })
                 return
@@ -59,12 +71,10 @@ fun AppNavHost(deepLink: String? = null) {
                 val phase = accountState.phase as AccountController.Phase.AwaitingCode
                 VerifyCodeScreen(
                     masked = phase.masked,
-                    demoMode = phase.demoMode,
                     onVerified = { isNewUser -> completingRegistration = isNewUser }
                 )
                 return
             }
-        }
     }
 
     // Onboarding runs once. `hasCompletedOnboarding` lives with the profile, so

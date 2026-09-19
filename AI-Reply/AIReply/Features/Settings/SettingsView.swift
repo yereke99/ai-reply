@@ -4,17 +4,12 @@ struct SettingsView: View {
 
     @Environment(AppSettings.self) private var settings
     @Environment(ReplyConfigurationModel.self) private var model
-
-    @State private var model_name: String = AIConfiguration.shared.model
-    @State private var transportMode: AITransportMode = AIConfiguration.shared.mode
+    @Environment(AccountModel.self) private var account
+    @Environment(\.openURL) private var openURL
 
     var body: some View {
         Form {
-            if transportMode == .backend && AIConfiguration.shared.backendBaseURL != nil {
-                AccountSettingsSection()
-            }
-
-            ServiceModeEditor(mode: $transportMode)
+            AccountSettingsSection()
 
             Section {
                 NavigationLink { ProfileEditorView() } label: {
@@ -38,36 +33,6 @@ struct SettingsView: View {
                 Text("settings.setup")
             } footer: {
                 Text("settings.setup.footer")
-            }
-
-            // Only direct mode has a key or a model to configure: in service
-            // mode both live on the server, and showing them here would invite
-            // a user to change something that has no effect.
-            if transportMode == .direct {
-                Section {
-                    APIKeyEditor()
-                } header: {
-                    Text("settings.ai")
-                } footer: {
-                    Text("settings.ai.key.footer")
-                }
-
-                Section {
-                    TextField("settings.ai.model", text: $model_name)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .onSubmit { AIConfiguration.shared.setModel(model_name) }
-                    if model_name != AIConfiguration.defaultModel {
-                        Button("settings.ai.reset") {
-                            model_name = AIConfiguration.defaultModel
-                            AIConfiguration.shared.setModel(model_name)
-                        }
-                    }
-                } header: {
-                    Text("settings.ai.model")
-                } footer: {
-                    Text("settings.ai.model.footer")
-                }
             }
 
             Section("settings.appearance") {
@@ -99,6 +64,8 @@ struct SettingsView: View {
                 Text("settings.privacy.body")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
+                Button("legal.terms") { openLegal(account.legalConfig.termsURL) }
+                Button("legal.privacy") { openLegal(account.legalConfig.privacyURL) }
             } header: {
                 Text("settings.privacy.title")
             }
@@ -119,9 +86,6 @@ struct SettingsView: View {
         }
         .navigationTitle("settings.title")
         .navigationBarTitleDisplayMode(.inline)
-        // Committed on the way out as well as on submit, so a model typed
-        // without pressing return is not silently discarded.
-        .onDisappear { AIConfiguration.shared.setModel(model_name) }
     }
 
     private var appearanceBinding: Binding<AppearancePreference> {
@@ -130,5 +94,11 @@ struct SettingsView: View {
 
     private var languageBinding: Binding<AppLanguage?> {
         Binding(get: { settings.language }, set: { settings.setLanguage($0) })
+    }
+
+    private func openLegal(_ rawURL: String) {
+        guard var components = URLComponents(string: rawURL) else { return }
+        components.queryItems = [URLQueryItem(name: "lang", value: settings.effectiveLanguage.rawValue)]
+        if let url = components.url { openURL(url) }
     }
 }

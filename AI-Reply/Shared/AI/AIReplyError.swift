@@ -13,7 +13,7 @@ enum AIReplyError: Error, Equatable, Sendable {
     case messageTooLong(limit: Int)
     /// The keyboard cannot read the clipboard without Full Access.
     case fullAccessRequired
-    /// No API key entered (direct mode) or no service URL set (backend mode).
+    /// The account is not ready to make a request.
     case notConfigured
     /// Device is offline.
     case offline
@@ -21,9 +21,9 @@ enum AIReplyError: Error, Equatable, Sendable {
     case timedOut
     /// The user or the keyboard cancelled before a reply arrived.
     case cancelled
-    /// Credential rejected: the key is wrong, revoked or out of quota.
+    /// The account session is missing, expired or rejected.
     case authenticationFailed
-    /// Too many requests, ours or OpenAI's.
+    /// The account limit or request rate limit has been reached.
     case rateLimited
     /// The service answered, but not with a usable reply.
     case emptyResponse
