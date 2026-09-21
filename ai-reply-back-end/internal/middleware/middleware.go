@@ -97,19 +97,28 @@ func SecurityHeaders(production bool) func(http.Handler) http.Handler {
 			h.Set("X-Content-Type-Options", "nosniff")
 			h.Set("X-Frame-Options", "DENY")
 			h.Set("Referrer-Policy", "strict-origin-when-cross-origin")
-			h.Set("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+			// Микрофон тек симуляторда ашылады: Android демонстрациясындағы
+			// дауыспен нұсқау беру браузердің өз танушысын пайдаланады, дәл
+			// қосымшадағыдай — құрылғының өзінде. Қалған беттерде жабық.
+			permissions := "camera=(), microphone=(), geolocation=()"
+			if strings.HasPrefix(r.URL.Path, "/simulator") {
+				permissions = "camera=(), microphone=(self), geolocation=()"
+			}
+			h.Set("Permissions-Policy", permissions)
 			// Барлық стиль мен скрипт өз доменімізден: сыртқы CDN жоқ.
 			//
-			// The admin panel gets one extra source, and only it: Vue's runtime
+			// The admin panel and the product simulator get one extra source,
+			// and only they: Vue's runtime
 			// template compiler builds render functions with `new Function`,
 			// which 'unsafe-eval' is what permits. The trade is deliberate and
 			// contained — the landing page, the mobile API and everything a
 			// signed-out visitor can reach keep the strict policy, and the
-			// admin panel is same-origin, behind a session, and renders every
-			// value through Vue's escaped interpolation rather than raw HTML.
+			// admin panel and the simulator are same-origin, behind a session,
+			// and render every value through Vue's escaped interpolation rather
+			// than raw HTML.
 			// Precompiling the templates at build time removes this line.
 			script := "script-src 'self'"
-			if strings.HasPrefix(r.URL.Path, "/admin") {
+			if strings.HasPrefix(r.URL.Path, "/admin") || strings.HasPrefix(r.URL.Path, "/simulator") {
 				script = "script-src 'self' 'unsafe-eval'"
 			}
 			h.Set("Content-Security-Policy",

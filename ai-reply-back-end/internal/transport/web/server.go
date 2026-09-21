@@ -56,6 +56,9 @@ func New(d Deps) (*Server, error) {
 		"legal":       {"templates/public_layout.gohtml", "templates/legal.gohtml"},
 		"admin_login": {"templates/admin_login.gohtml"},
 		"admin_app":   {"templates/admin_app.gohtml"},
+		// Интерактивті өнім симуляторы — бөлек қабық, әкімші панелін қозғамайды.
+		"simulator_login": {"templates/simulator_login.gohtml"},
+		"simulator_app":   {"templates/simulator_app.gohtml"},
 	}
 	for name, files := range pages {
 		tpl, err := template.New(name).Funcs(funcs()).ParseFS(assets, files...)
@@ -96,6 +99,13 @@ func (s *Server) Register(mux *http.ServeMux) {
 	// Барлық /admin/* беті — бір Vue қосымшасы (деректер /api/v1/admin/* арқылы келеді).
 	mux.Handle("GET /admin", s.guard(s.handleAdminApp))
 	mux.Handle("GET /admin/{path...}", s.guard(s.handleAdminApp))
+
+	// Интерактивті өнім симуляторы. Кіру — әкімші тіркелгісімен, сол шектеумен.
+	mux.HandleFunc("GET /simulator/login", s.handleSimulatorLoginForm)
+	mux.Handle("POST /simulator/login", loginLimit(http.HandlerFunc(s.handleSimulatorLogin)))
+	mux.HandleFunc("POST /simulator/logout", s.handleSimulatorLogout)
+	mux.Handle("GET /simulator", s.simulatorGuard(s.handleSimulatorApp))
+	mux.Handle("GET /simulator/{path...}", s.simulatorGuard(s.handleSimulatorApp))
 }
 
 func cacheStatic(next http.Handler) http.Handler {

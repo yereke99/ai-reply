@@ -1,0 +1,29 @@
+{{define "simulator_app"}}<!doctype html>
+<html lang="{{.Locale}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>AI Reply — {{call .T "sim.title"}}</title>
+<link rel="stylesheet" href="/static/simulator.css">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+<script id="boot" type="application/json">{{.Boot}}</script>
+<script src="/static/vendor/vue.global.prod.js"></script>
+<script src="/static/simulator/core.js" defer></script>
+<script src="/static/simulator/device.js" defer></script>
+<script src="/static/simulator/messenger.js" defer></script>
+<script src="/static/simulator/voice.js" defer></script>
+<script src="/static/simulator/keyboard.js" defer></script>
+<script src="/static/simulator/phone.js" defer></script>
+<script src="/static/simulator/views-product.js" defer></script>
+<script src="/static/simulator/views-explain.js" defer></script>
+<script src="/static/simulator/views-admin.js" defer></script>
+<script src="/static/simulator/app.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#sim-content">{{call .T "sim.a11y.skip"}}</a>
+<div id="app" class="app-loading">
+  <div class="boot-spinner"><span></span></div>
+</div>
+</body>
+</html>{{end}}

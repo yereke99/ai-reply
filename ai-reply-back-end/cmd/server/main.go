@@ -25,9 +25,11 @@ import (
 	"github.com/aireply/ai-reply-back-end/internal/payments"
 	"github.com/aireply/ai-reply-back-end/internal/plans"
 	"github.com/aireply/ai-reply-back-end/internal/repository"
+	"github.com/aireply/ai-reply-back-end/internal/simulator"
 	"github.com/aireply/ai-reply-back-end/internal/subscriptions"
 	"github.com/aireply/ai-reply-back-end/internal/transport/adminapi"
 	"github.com/aireply/ai-reply-back-end/internal/transport/api"
+	"github.com/aireply/ai-reply-back-end/internal/transport/simulatorapi"
 	"github.com/aireply/ai-reply-back-end/internal/transport/web"
 	"github.com/aireply/ai-reply-back-end/internal/users"
 	"github.com/aireply/ai-reply-back-end/migrations"
@@ -85,6 +87,9 @@ func run(envFile string) error {
 	paymentSvc := payments.New(store, subSvc, payments.DemoProvider{}, cfg.Payments.Mode)
 	notifySvc := notifications.New(store)
 	adminSvc := admin.New(store, subSvc, planSvc, cfg, log)
+	simulatorSvc := simulator.New(simulator.Deps{
+		Repo: store, Users: userSvc, Subs: subSvc, Plans: planSvc, AI: aiSvc, Config: cfg, Log: log,
+	})
 
 	if err := adminSvc.Bootstrap(ctx); err != nil {
 		return fmt.Errorf("admin bootstrap: %w", err)
@@ -105,6 +110,10 @@ func run(envFile string) error {
 
 	adminapi.New(adminapi.Deps{
 		Config: cfg, Admin: adminSvc, Notifications: notifySvc, Log: log,
+	}).Register(mux)
+
+	simulatorapi.New(simulatorapi.Deps{
+		Config: cfg, Admin: adminSvc, Simulator: simulatorSvc, Limiter: limiter, Log: log,
 	}).Register(mux)
 
 	webServer, err := web.New(web.Deps{

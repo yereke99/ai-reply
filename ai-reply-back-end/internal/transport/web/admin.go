@@ -87,6 +87,12 @@ func (s *Server) guard(next http.HandlerFunc) http.Handler {
 	})
 }
 
+// withAdmin — аутентификация нәтижесін контекстке салу (бір ғана жер).
+func withAdmin(ctx context.Context, adminUser domain.AdminUser, session repository.AdminSession) context.Context {
+	ctx = context.WithValue(ctx, adminKey, adminUser)
+	return context.WithValue(ctx, sessionKey, session)
+}
+
 func adminFrom(ctx context.Context) domain.AdminUser {
 	v, _ := ctx.Value(adminKey).(domain.AdminUser)
 	return v

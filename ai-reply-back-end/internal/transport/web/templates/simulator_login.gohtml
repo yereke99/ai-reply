@@ -1,0 +1,50 @@
+{{define "simulator_login"}}<!doctype html>
+<html lang="{{.Locale}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>AI Reply — {{call .T "sim.title"}}</title>
+<link rel="stylesheet" href="/static/simulator.css">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+</head>
+<body>
+<main class="login-page">
+  <aside class="login-aside">
+    <div class="mark-row"><span class="mark">AI</span><span>AI&nbsp;Reply</span></div>
+    <h2>{{call .T "sim.login.headline"}}</h2>
+    <p>{{call .T "sim.login.blurb"}}</p>
+    <div class="login-flow">
+      <span>{{call .T "sim.flow.message"}}</span>
+      <span>{{call .T "sim.flow.keyboard"}}</span>
+      <span>{{call .T "sim.flow.instruction"}}</span>
+      <span>{{call .T "sim.flow.generate"}}</span>
+      <span>{{call .T "sim.flow.insert"}}</span>
+      <span>{{call .T "sim.flow.send"}}</span>
+    </div>
+    <div class="login-foot">{{call .T "sim.login.foot"}}</div>
+  </aside>
+
+  <section class="login-main">
+    <form class="login-card" method="post" action="/simulator/login">
+      <h1>{{call .T "sim.login.title"}}</h1>
+      <p class="sub">{{call .T "sim.login.subtitle"}}</p>
+      {{if .Error}}<div class="login-error" role="alert">{{.Error}}</div>{{end}}
+      <input type="hidden" name="csrf" value="{{.CSRF}}">
+      <div class="field">
+        <label for="email">{{call .T "admin.login.email"}}</label>
+        <input id="email" name="email" type="email" autocomplete="username" required autofocus>
+      </div>
+      <div class="field">
+        <label for="password">{{call .T "admin.login.password"}}</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="btn btn-primary" style="width:100%;min-height:46px" type="submit">{{call .T "admin.login.submit"}}</button>
+      <div class="login-lang">
+        {{range .Locales}}<a href="?lang={{.}}" class="{{if eq . $.Locale}}is-active{{end}}">{{.}}</a>{{end}}
+      </div>
+    </form>
+  </section>
+</main>
+</body>
+</html>{{end}}

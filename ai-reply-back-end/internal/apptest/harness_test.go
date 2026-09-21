@@ -26,10 +26,12 @@ import (
 	"github.com/aireply/ai-reply-back-end/internal/payments"
 	"github.com/aireply/ai-reply-back-end/internal/plans"
 	"github.com/aireply/ai-reply-back-end/internal/repository"
+	"github.com/aireply/ai-reply-back-end/internal/simulator"
 	"github.com/aireply/ai-reply-back-end/internal/subscriptions"
 	"github.com/aireply/ai-reply-back-end/internal/traits"
 	"github.com/aireply/ai-reply-back-end/internal/transport/adminapi"
 	"github.com/aireply/ai-reply-back-end/internal/transport/api"
+	"github.com/aireply/ai-reply-back-end/internal/transport/simulatorapi"
 	"github.com/aireply/ai-reply-back-end/internal/transport/web"
 	"github.com/aireply/ai-reply-back-end/internal/users"
 	"github.com/aireply/ai-reply-back-end/migrations"
@@ -135,6 +137,9 @@ func newHarness(t *testing.T) *harness {
 	paymentSvc := payments.New(store, subSvc, payments.DemoProvider{}, cfg.Payments.Mode)
 	notifySvc := notifications.New(store)
 	adminSvc := admin.New(store, subSvc, planSvc, cfg, log)
+	simulatorSvc := simulator.New(simulator.Deps{
+		Repo: store, Users: userSvc, Subs: subSvc, Plans: planSvc, AI: aiSvc, Config: cfg, Log: log,
+	})
 	if err := adminSvc.Bootstrap(context.Background()); err != nil {
 		t.Fatalf("admin bootstrap: %v", err)
 	}
@@ -150,6 +155,8 @@ func newHarness(t *testing.T) *harness {
 		AI: aiSvc, Payments: paymentSvc, Limiter: limiter, Log: log,
 		Ping: func(ctx context.Context) error { return db.Reader().PingContext(ctx) }}).Register(mux)
 	adminapi.New(adminapi.Deps{Config: cfg, Admin: adminSvc, Notifications: notifySvc, Log: log}).Register(mux)
+	simulatorapi.New(simulatorapi.Deps{Config: cfg, Admin: adminSvc, Simulator: simulatorSvc,
+		Limiter: limiter, Log: log}).Register(mux)
 	webServer, err := web.New(web.Deps{Config: cfg, Admin: adminSvc, Plans: planSvc,
 		Notifications: notifySvc, Bundle: bundle, Limiter: limiter, Log: log})
 	if err != nil {
@@ -157,7 +164,8 @@ func newHarness(t *testing.T) *harness {
 	}
 	webServer.Register(mux)
 
-	handler := middleware.Chain(mux, middleware.RequestID, middleware.Recover(log), middleware.Logging(log))
+	handler := middleware.Chain(mux, middleware.RequestID, middleware.Recover(log), middleware.Logging(log),
+		middleware.SecurityHeaders(cfg.App.IsProduction()))
 	server := httptest.NewServer(handler)
 
 	h := &harness{t: t, cfg: cfg, server: server, store: store, db: db,
