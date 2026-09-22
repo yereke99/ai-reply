@@ -3,23 +3,31 @@ import UIKit
 protocol KeyboardActionBarDelegate: AnyObject {
     func actionBar(_ bar: KeyboardActionBar, didSelectTemplateID id: String)
     func actionBarDidRequestNewTemplate(_ bar: KeyboardActionBar)
-    func actionBarDidTapInsert(_ bar: KeyboardActionBar)
+    /// Discard the whole session and go back to the template row.
+    func actionBarDidTapClose(_ bar: KeyboardActionBar)
+    /// Keep the session, show the template row so the audience can be changed.
+    func actionBarDidRequestTemplateChange(_ bar: KeyboardActionBar)
+    func actionBarDidTapPasteSource(_ bar: KeyboardActionBar)
+    func actionBarDidTapGenerate(_ bar: KeyboardActionBar)
     func actionBarDidTapRegenerate(_ bar: KeyboardActionBar)
-    func actionBarDidReopenTemplateSelection(_ bar: KeyboardActionBar)
+    func actionBarDidTapInsert(_ bar: KeyboardActionBar)
+    func actionBarDidTapBack(_ bar: KeyboardActionBar)
+    func actionBarDidEditText(_ bar: KeyboardActionBar)
     func actionBarDidChangeHeight(_ bar: KeyboardActionBar)
     func actionBar(_ bar: KeyboardActionBar, didResolveConflictWith choice: HostTextChoice)
 }
 
 /// The contextual area above the keys. It has exactly two shapes:
 ///
-/// * IDLE - a 36pt horizontal template row: Friend | Client | Business | Work | +
-///   plus a transient status line that changes no geometry.
-/// * COMPOSING - the reply composer, with the chosen template collapsed into a
-///   chip so the draft gets the space.
+/// * COMPACT - a 36pt horizontal template row: Friend | Client | Business | Work
+///   | + plus a transient status line that changes no geometry. This is the
+///   keyboard at rest, and its height is what gets cached for the next launch.
+/// * COMPOSER - the AI reply composer, which is itself a small state machine
+///   (source + instruction, generating, result, conflict).
 ///
 /// Neither shape ever takes height from the keys. The keyboard grows instead,
-/// which is the rule that keeps typing comfortable no matter what the AI UI is
-/// doing.
+/// up to the ceiling the controller hands down, which is the rule that keeps
+/// typing comfortable no matter what the AI UI is doing.
 final class KeyboardActionBar: UIView {
 
     weak var delegate: KeyboardActionBarDelegate?
@@ -40,8 +48,14 @@ final class KeyboardActionBar: UIView {
         isComposing ? composer.preferredHeight : idleHeight
     }
 
+    /// The height the COMPACT bar needs. The controller caches this one and
+    /// never the composer's, so a future launch opens at the right size.
+    var compactHeight: CGFloat { idleHeight }
+
+    var sourceText: String { composer.sourceText }
+    var instructionText: String { composer.instructionText }
     var draftText: String { composer.replyDraft }
-    var composerMode: ReplyComposerView.Mode { composer.mode }
+    var composerStage: ReplyComposerView.Stage { composer.stage }
 
     // MARK: Init
 
@@ -119,22 +133,41 @@ final class KeyboardActionBar: UIView {
         composer.layout(forWidth: width)
     }
 
+    /// The tallest the composer may become, worked out by the controller from
+    /// the screen height.
+    func setMaximumComposerHeight(_ height: CGFloat) {
+        composer.setMaximumHeight(height)
+    }
+
     // MARK: Composer state
 
-    /// Opens the composer straight into its loading state: the user tapped a
-    /// template, so a request is already in flight.
-    func beginComposing(sourceMessage: String, templateName: String) {
+    /// Opens the composer. Nothing is generated: the user writes the
+    /// instruction first, which is the whole point of this flow.
+    func beginComposing(
+        sourceMessage: String,
+        instruction: String,
+        draft: String,
+        templateName: String
+    ) {
         cancelToast()
         isComposing = true
         composer.isHidden = false
         templateBar.isHidden = true
-        composer.begin(sourceMessage: sourceMessage, templateName: templateName)
+        composer.begin(
+            sourceMessage: sourceMessage,
+            instruction: instruction,
+            draft: draft,
+            templateName: templateName
+        )
     }
 
-    func showDraft(_ draft: String) { composer.showDraft(draft) }
-    func beginRegenerating() { composer.beginRegenerating() }
-    func endGenerating() { composer.endGenerating() }
+    func setSourceMessage(_ text: String) { composer.setSourceMessage(text) }
+    func beginGenerating() { composer.beginGenerating() }
+    func showResult(_ draft: String) { composer.showResult(draft) }
+    func showError(_ message: String) { composer.showError(message) }
     func showConflictChoice() { composer.showConflictChoice() }
+    func returnToComposing() { composer.returnToComposing() }
+    func returnToResult() { composer.returnToResult() }
     func setTemplateName(_ name: String) { composer.setTemplateName(name) }
 
     func endComposing() {
@@ -150,15 +183,18 @@ final class KeyboardActionBar: UIView {
     func deleteBackward() { composer.deleteBackward() }
     var textBeforeCursor: String? { composer.textBeforeCursor }
 
-    /// Whether a keystroke should edit the local draft rather than the host
-    /// field. False while a request is in flight, so keys typed during
-    /// generation are simply ignored instead of leaking into WhatsApp.
-    var acceptsDraftInput: Bool { isComposing && composer.mode == .editing }
+    /// Whether a keystroke should edit one of the composer's own fields rather
+    /// than the host field. False while a request is in flight and during the
+    /// conflict prompt, so keys typed then are ignored instead of leaking into
+    /// WhatsApp.
+    var acceptsTextInput: Bool { isComposing && composer.acceptsTextInput }
 
     // MARK: Transient status
 
-    /// Short-lived status message. It never changes the keyboard geometry, so
-    /// the typing area is untouched while it is on screen.
+    /// Short-lived status message for the COMPACT bar. It never changes the
+    /// keyboard geometry, so the typing area is untouched while it is on
+    /// screen. Failures that happen with the composer open are shown inline
+    /// there instead, where the user's typing is still in front of them.
     func showToast(_ message: String) {
         guard !isComposing, !message.isEmpty else { return }
         cancelToast()
@@ -211,19 +247,35 @@ extension KeyboardActionBar: TemplateBarViewDelegate {
 extension KeyboardActionBar: ReplyComposerViewDelegate {
 
     func composerDidTapClose(_ composer: ReplyComposerView) {
-        delegate?.actionBarDidReopenTemplateSelection(self)
+        delegate?.actionBarDidTapClose(self)
     }
 
-    func composerDidTapTemplateChip(_ composer: ReplyComposerView) {
-        delegate?.actionBarDidReopenTemplateSelection(self)
+    func composerDidTapChangeTemplate(_ composer: ReplyComposerView) {
+        delegate?.actionBarDidRequestTemplateChange(self)
+    }
+
+    func composerDidTapPasteSource(_ composer: ReplyComposerView) {
+        delegate?.actionBarDidTapPasteSource(self)
+    }
+
+    func composerDidTapGenerate(_ composer: ReplyComposerView) {
+        delegate?.actionBarDidTapGenerate(self)
+    }
+
+    func composerDidTapRegenerate(_ composer: ReplyComposerView) {
+        delegate?.actionBarDidTapRegenerate(self)
     }
 
     func composerDidTapInsert(_ composer: ReplyComposerView) {
         delegate?.actionBarDidTapInsert(self)
     }
 
-    func composerDidTapRegenerate(_ composer: ReplyComposerView) {
-        delegate?.actionBarDidTapRegenerate(self)
+    func composerDidTapBack(_ composer: ReplyComposerView) {
+        delegate?.actionBarDidTapBack(self)
+    }
+
+    func composerDidEditText(_ composer: ReplyComposerView) {
+        delegate?.actionBarDidEditText(self)
     }
 
     func composerDidChangeHeight(_ composer: ReplyComposerView) {

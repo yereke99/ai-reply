@@ -68,6 +68,38 @@ struct KeyboardTheme: Equatable {
         isDark ? .reply(0.039, 0.518, 1.000) : .reply(0.000, 0.478, 1.000)
     }
 
+    // Composer surfaces
+    //
+    // Three surfaces, three jobs, and they must never be confused for each
+    // other: the QUOTED source is recessed and low contrast, an EDITABLE FIELD
+    // is raised and reads like a key, and the panel sits between them.
+
+    /// Raised surface for a field the user types into.
+    var fieldBackground: UIColor { letterKey }
+
+    /// Recessed surface for the quoted source message.
+    var quoteBackground: UIColor {
+        isDark ? UIColor(white: 0.0, alpha: 0.22) : UIColor(white: 1.0, alpha: 0.42)
+    }
+
+    /// Quoted text: readable, but deliberately quieter than anything the user
+    /// is about to send.
+    var quoteText: UIColor {
+        isDark ? UIColor(white: 1.0, alpha: 0.80) : UIColor(white: 0.0, alpha: 0.72)
+    }
+
+    var fieldBorder: UIColor {
+        isDark ? UIColor(white: 1.0, alpha: 0.10) : UIColor(white: 0.0, alpha: 0.10)
+    }
+
+    /// Focus ring on the field the keys are currently editing.
+    var fieldBorderFocused: UIColor { accent.withAlphaComponent(0.9) }
+
+    /// Errors and the over-limit character counter.
+    var destructive: UIColor {
+        isDark ? .reply(1.000, 0.412, 0.380) : .reply(0.804, 0.153, 0.129)
+    }
+
     // Action bar
 
     var actionBarKey: UIColor { specialKey }

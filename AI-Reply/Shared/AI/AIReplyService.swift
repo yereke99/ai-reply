@@ -21,8 +21,9 @@ struct AIReplyService: Sendable {
         /// prompt the way the user saw it on the chip. It is NOT the reply
         /// language: that follows the incoming message, always.
         var uiLanguage: AppLanguage
-        /// What the user asked for in THIS reply, if anything ("reply briefly",
-        /// "say I am busy"). Empty for the plain one-tap flow.
+        /// What the user asked for in THIS reply, in their own words ("ответь
+        /// вежливо, что согласен"). Raw as typed: `generate` prepares it. Empty
+        /// for the plain one-tap flow.
         var instruction: String = ""
         /// Injectable so working-hours behaviour is testable without waiting
         /// for 18:30.
@@ -78,6 +79,10 @@ struct AIReplyService: Sendable {
         let profile = request.configuration.profile
         let templateName = request.template.displayName(appLanguage: request.uiLanguage)
 
+        // Prepared ONCE, here, and then used for both the local prompt and the
+        // backend request. Preparing it twice is how the two would drift.
+        let instruction = ReplyInstruction.prepare(request.instruction)
+
         // The template's own schedule wins when it has one; otherwise the
         // profile's applies. Resolved HERE, deterministically, so the model is
         // never asked to work out what "after hours" means - it is told.
@@ -90,6 +95,7 @@ struct AIReplyService: Sendable {
         let prompt = ReplyPromptBuilder.build(
             ReplyPromptBuilder.Input(
                 message: message,
+                instruction: instruction,
                 template: request.template,
                 templateName: templateName,
                 profileDescription: profile.promptDescription,
@@ -102,7 +108,13 @@ struct AIReplyService: Sendable {
         )
 
         let transport = transportOverride?(request, prompt)
-            ?? makeTransport(request: request, message: message, templateName: templateName, business: business)
+            ?? makeTransport(
+                request: request,
+                message: message,
+                instruction: instruction,
+                templateName: templateName,
+                business: business
+            )
 
         do {
             let reply = try await transport.generate(prompt: prompt)
@@ -120,6 +132,7 @@ struct AIReplyService: Sendable {
     private func makeTransport(
         request: Request,
         message: String,
+        instruction: String,
         templateName: String,
         business: WorkingHours.Context?
     ) -> ReplyTransport {
@@ -128,7 +141,7 @@ struct AIReplyService: Sendable {
         return AccountReplyTransport(
             context: AccountReplyTransport.RequestContext(
                 message: message,
-                instruction: request.instruction,
+                instruction: instruction,
                 templateID: template.id,
                 templateName: templateName,
                 templateRelationship: template.relationship.rawValue,

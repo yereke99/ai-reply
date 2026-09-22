@@ -114,6 +114,12 @@ final class KeyboardViewController: UIInputViewController {
     private var lastHostMutationTime: TimeInterval = 0
     private var lastAppearanceProbe: TimeInterval = 0
 
+    /// Height of the screen this keyboard is on, cached because the composer's
+    /// ceiling is derived from it and `view.window` is nil before the first
+    /// appearance. The default is a mid-size iPhone; the first layout pass with
+    /// a window replaces it.
+    private var screenHeight: CGFloat = 812
+
     // MARK: Lifecycle
 
     override func loadView() {
@@ -147,6 +153,7 @@ final class KeyboardViewController: UIInputViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         lastAppearanceProbe = Date.timeIntervalSinceReferenceDate
+        refreshScreenHeight()
         refreshUILanguageIfNeeded()
         refreshThemeIfNeeded()
         refreshAutoShift(allowProxyRead: true)
@@ -156,11 +163,17 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        // The host can take the keyboard away mid-touch, in which case the
+        // touch-up that would have stopped this never arrives. Left running,
+        // its next tick re-reads `inputTarget` - which by then says hostField -
+        // and it starts eating the user's message in WhatsApp.
+        deleteRepeatTimer?.invalidate()
+        deleteRepeatTimer = nil
         // The keyboard is going away. Cancel any request in flight and drop the
         // copied message and the draft with it - there is nothing left to show
         // them in, and holding private text past the moment it is useful is
         // exactly what this app promises not to do.
-        if replyCoordinator.isComposing || replyCoordinator.isGenerating {
+        if replyCoordinator.session != nil {
             replyCoordinator.clear()
             pendingInsertion = nil
             actionBar.endComposing()
@@ -241,6 +254,7 @@ final class KeyboardViewController: UIInputViewController {
 
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
+        refreshScreenHeight()
         let width = view.bounds.width
         guard width > 0 else { return }
         if abs(width - renderedWidth) > 0.5 {
@@ -377,17 +391,54 @@ final class KeyboardViewController: UIInputViewController {
         scheduleIdlePrewarm()
     }
 
+    /// Reads the screen this keyboard is actually on. No `UIScreen.main`: an
+    /// extension has a window scene, and the deprecated global is both wrong on
+    /// a second display and a build warning.
+    private func refreshScreenHeight() {
+        guard let bounds = view.window?.windowScene?.screen.bounds, bounds.height > 0 else { return }
+        screenHeight = bounds.height
+    }
+
+    /// The tallest the AI area is allowed to become.
+    ///
+    /// THE RULE: the keyboard may grow for the composer, but the conversation
+    /// above it must stay legible. Everything is derived from the live screen
+    /// height, so a 6.7" phone gets a four-line source message and an iPhone SE
+    /// gets a two-line one instead of both getting whichever number was
+    /// hard-coded. The composer fits itself inside this budget; when even its
+    /// minimum does not fit it returns that minimum rather than clipping, which
+    /// is the one case where this is a target and not a hard cap.
+    private func maximumActionBarHeight(rowsHeight: CGFloat) -> CGFloat {
+        let fraction: CGFloat
+        if screenHeight >= 850 {
+            fraction = 0.55
+        } else if screenHeight >= 800 {
+            fraction = 0.56
+        } else if screenHeight >= 700 {
+            fraction = 0.60
+        } else {
+            fraction = 0.64
+        }
+        let fixed = metrics.actionBarGap + metrics.topPadding + rowsHeight + metrics.bottomPadding
+        return max(metrics.actionBarHeight, (screenHeight * fraction - fixed).rounded(.down))
+    }
+
     private func updateGeometry() {
         isUpdatingGeometry = true
         defer { isUpdatingGeometry = false }
 
-        actionBar.layout(forWidth: metrics.width)
         activePage?.stack.spacing = metrics.rowGap
         rowsTopConstraint?.constant = metrics.actionBarGap + metrics.topPadding
 
         let rows = CGFloat(metrics.rowCount)
         let rowsHeight = rows * metrics.keyHeight + (rows - 1) * metrics.rowGap
         rowsHeightConstraint?.constant = rowsHeight
+
+        // Width first, then the ceiling, then read what the bar settled on:
+        // both of those can change the composer's answer, and asking before
+        // telling would install last frame's height.
+        actionBar.layout(forWidth: metrics.width)
+        actionBar.setMaximumComposerHeight(maximumActionBarHeight(rowsHeight: rowsHeight))
 
         // The keys never give up height: the keyboard grows for the composer.
         let barHeight = max(metrics.actionBarHeight, actionBar.preferredHeight)
@@ -788,33 +839,35 @@ final class KeyboardViewController: UIInputViewController {
     /// draft inside the composer.
     private var isComposing: Bool { actionBar.isComposing }
 
-    /// Where a keystroke goes. While the composer is open and editable, keys
-    /// edit the LOCAL DRAFT and never reach WhatsApp; while a request is in
-    /// flight they are dropped rather than leaking into the host field.
+    /// Where a keystroke goes. While the composer is open and a field is
+    /// focused, keys edit THAT FIELD - the instruction, the quoted source or
+    /// the generated draft - and never reach WhatsApp; while a request is in
+    /// flight, or the conflict prompt is up, they are dropped rather than
+    /// leaking into the host field.
     private enum InputTarget {
         case hostField
-        case replyDraft
+        case composerField
         case discarded
     }
 
     private var inputTarget: InputTarget {
         guard actionBar.isComposing else { return .hostField }
-        return actionBar.acceptsDraftInput ? .replyDraft : .discarded
+        return actionBar.acceptsTextInput ? .composerField : .discarded
     }
 
     private func targetInsert(_ text: String) {
         switch inputTarget {
-        case .hostField:  insertIntoHost(text)
-        case .replyDraft: actionBar.insertText(text)
-        case .discarded:  break
+        case .hostField:     insertIntoHost(text)
+        case .composerField: actionBar.insertText(text)
+        case .discarded:     break
         }
     }
 
     private func targetDeleteBackward() {
         switch inputTarget {
-        case .hostField:  deleteFromHost()
-        case .replyDraft: actionBar.deleteBackward()
-        case .discarded:  break
+        case .hostField:     deleteFromHost()
+        case .composerField: actionBar.deleteBackward()
+        case .discarded:     break
         }
     }
 
@@ -869,7 +922,13 @@ final class KeyboardViewController: UIInputViewController {
     // MARK: Key handling
 
     @objc private func keyPressed(_ sender: KeyButton) {
-        UIDevice.current.playInputClick()
+        // Silence on a dropped key is the only signal the keyboard has that
+        // the key went nowhere. Clicking for input that is discarded - which
+        // is every key in the result and generating stages - reads as a broken
+        // keyboard rather than "tap Edit first".
+        if inputTarget != .discarded || !sender.key.editsText {
+            UIDevice.current.playInputClick()
+        }
         switch sender.key {
         case .character(let value):
             insertCharacter(plane == .letters ? displayed(value) : value)
@@ -961,6 +1020,9 @@ final class KeyboardViewController: UIInputViewController {
     // MARK: Delete repeat
 
     @objc private func backspaceDown(_ sender: KeyButton) {
+        // Nothing to delete from, so no click and - more importantly - no
+        // repeat timer for a key that will do nothing 12 times a second.
+        guard inputTarget != .discarded else { return }
         UIDevice.current.playInputClick()
         targetDeleteBackward()
         deleteRepeatTimer?.invalidate()
@@ -1056,13 +1118,16 @@ final class KeyboardViewController: UIInputViewController {
 
 extension KeyboardViewController: KeyboardActionBarDelegate {
 
-    /// THE one place a network request can start. Nothing else in this file
-    /// calls the AI service, and nothing starts one without this tap.
+    /// Picking an audience OPENS THE COMPOSER. It is not a network request.
+    ///
+    /// This is the behavioural change at the heart of the redesign: a template
+    /// used to fire a generation straight away, which meant the only thing the
+    /// user could ever say about a reply was who it was for. Now the tap sets
+    /// up the composer, and the user gets to say HOW they want to answer before
+    /// anything is spent.
     func actionBar(_ bar: KeyboardActionBar, didSelectTemplateID id: String) {
         guard let template = resolveTemplate(id: id) else { return }
-        // The template row is only on screen when no composer is open - tapping
-        // the chip closes one - so this is always the start of a new reply.
-        replyCoordinator.start(
+        replyCoordinator.open(
             template: template,
             proxy: textDocumentProxy,
             hasFullAccess: hasFullAccess
@@ -1089,23 +1154,68 @@ extension KeyboardViewController: KeyboardActionBarDelegate {
         bar.showToast(aiStrings.addTemplateHint)
     }
 
+    /// THE one place a network request can start. Nothing else in this file
+    /// calls the AI service, and nothing starts one without this tap.
+    func actionBarDidTapGenerate(_ bar: KeyboardActionBar) {
+        syncComposerText(from: bar)
+        replyCoordinator.generate()
+    }
+
     func actionBarDidTapRegenerate(_ bar: KeyboardActionBar) {
-        replyCoordinator.updateDraft(bar.draftText)
+        syncComposerText(from: bar)
         replyCoordinator.regenerate()
     }
 
-    /// Reopens template selection, discarding the draft but keeping nothing:
-    /// the source message goes with it.
-    func actionBarDidReopenTemplateSelection(_ bar: KeyboardActionBar) {
+    /// The second and last place the clipboard is read, and like the first one
+    /// it only runs from a direct tap.
+    func actionBarDidTapPasteSource(_ bar: KeyboardActionBar) {
+        syncComposerText(from: bar)
+        replyCoordinator.pasteSource(proxy: textDocumentProxy, hasFullAccess: hasFullAccess)
+    }
+
+    func actionBarDidEditText(_ bar: KeyboardActionBar) {
+        syncComposerText(from: bar)
+    }
+
+    /// Back from the result. The source and the instruction are still in the
+    /// session and still on screen, so a disappointing answer costs one tap to
+    /// rephrase rather than a retype.
+    func actionBarDidTapBack(_ bar: KeyboardActionBar) {
+        bar.returnToComposing()
+        animateBarHeightChange()
+    }
+
+    /// Change the audience without losing the work: the session survives, the
+    /// template row comes back, and picking a chip resumes exactly where the
+    /// user was.
+    func actionBarDidRequestTemplateChange(_ bar: KeyboardActionBar) {
+        syncComposerText(from: bar)
+        pendingInsertion = nil
+        replyCoordinator.suspend()
+        bar.endComposing()
+        animateBarHeightChange()
+    }
+
+    /// The explicit discard. Everything goes: source, instruction and draft.
+    func actionBarDidTapClose(_ bar: KeyboardActionBar) {
         closeComposer()
+    }
+
+    /// Mirrors the three texts into the session, so a request, a regeneration
+    /// or an insertion always uses exactly what is on screen.
+    private func syncComposerText(from bar: KeyboardActionBar) {
+        replyCoordinator.updateSource(bar.sourceText)
+        replyCoordinator.updateInstruction(bar.instructionText)
+        replyCoordinator.updateDraft(bar.draftText)
     }
 
     /// The one place the reply draft reaches the host application.
     ///
-    /// The source message is never what gets inserted, and nothing is ever
-    /// sent: the messenger's own Send button stays under the user's control.
+    /// The source message and the instruction are never what gets inserted, and
+    /// nothing is ever sent: the messenger's own Send button stays under the
+    /// user's control.
     func actionBarDidTapInsert(_ bar: KeyboardActionBar) {
-        replyCoordinator.updateDraft(bar.draftText)
+        syncComposerText(from: bar)
         guard let draft = replyCoordinator.draftForInsertion() else { return }
 
         // Never destroy what the user already typed. If the field looks
@@ -1131,8 +1241,8 @@ extension KeyboardViewController: KeyboardActionBarDelegate {
 
         switch choice {
         case .cancel:
-            // Back to editing with the draft intact. Nothing was touched.
-            bar.endGenerating()
+            // Back to the result with the draft intact. Nothing was touched.
+            bar.returnToResult()
             animateBarHeightChange()
             return
 
@@ -1214,8 +1324,18 @@ extension KeyboardViewController: KeyboardActionBarDelegate {
         animateBarHeightChange()
     }
 
+    /// Animates only when the keyboard's height actually moved.
+    ///
+    /// A stage change reaches here twice: once through the composer's own
+    /// height notification and once from the delegate method that caused it.
+    /// Both used to start a 0.18s animation on the same constraint, so every
+    /// transition ran two overlapping animations. The second call now finds
+    /// nothing to animate and returns; the constraint constants it did change
+    /// are picked up by the next ordinary layout pass.
     private func animateBarHeightChange() {
+        let before = heightConstraint?.constant
         updateGeometry()
+        guard heightConstraint?.constant != before else { return }
         UIView.animate(withDuration: 0.18) { self.view.layoutIfNeeded() }
     }
 }
@@ -1224,37 +1344,47 @@ extension KeyboardViewController: KeyboardActionBarDelegate {
 
 extension KeyboardViewController: ReplyFlowCoordinatorDelegate {
 
-    func coordinator(_ coordinator: ReplyFlowCoordinator, didBeginFor context: ReplyContext, template: ReplyTemplate) {
+    func coordinator(_ coordinator: ReplyFlowCoordinator, didOpen session: ReplySession) {
         actionBar.beginComposing(
-            sourceMessage: context.text,
-            templateName: template.displayName(appLanguage: uiLanguage)
+            sourceMessage: session.sourceMessage,
+            instruction: session.instruction,
+            // Reopening after an audience change: the reply the user already
+            // paid a generation for comes back with it.
+            draft: session.replyDraft,
+            templateName: session.template.displayName(appLanguage: uiLanguage)
         )
         animateBarHeightChange()
     }
 
-    func coordinatorDidBeginRegenerating(_ coordinator: ReplyFlowCoordinator) {
-        actionBar.beginRegenerating()
+    func coordinator(_ coordinator: ReplyFlowCoordinator, didUpdateSource text: String) {
+        actionBar.setSourceMessage(text)
+        animateBarHeightChange()
+    }
+
+    func coordinatorDidBeginGenerating(_ coordinator: ReplyFlowCoordinator) {
+        actionBar.beginGenerating()
         animateBarHeightChange()
     }
 
     func coordinator(_ coordinator: ReplyFlowCoordinator, didProduce draft: String) {
-        actionBar.showDraft(draft)
+        actionBar.showResult(draft)
         animateBarHeightChange()
         refreshAutoShift()
     }
 
+    /// A failure never costs the user their typing.
+    ///
+    /// With the composer open the message is shown INSIDE it, the source and
+    /// the instruction stay exactly where they were, and the primary button
+    /// becomes Retry. The old behaviour - tear the composer down and flash a
+    /// toast - threw away the one thing that was expensive to produce.
     func coordinator(_ coordinator: ReplyFlowCoordinator, didFailWith error: AIReplyError) {
         let message = aiStrings.message(for: error)
+        guard !message.isEmpty else { return }
 
         if actionBar.isComposing {
-            // A regeneration failed. Keep the composer and whatever draft was
-            // already there rather than throwing the user's work away.
-            actionBar.endGenerating()
+            actionBar.showError(message)
             animateBarHeightChange()
-            if coordinator.session?.usableDraft == nil {
-                closeComposer()
-                actionBar.showToast(message)
-            }
             return
         }
 

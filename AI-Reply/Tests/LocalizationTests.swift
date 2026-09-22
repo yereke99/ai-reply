@@ -82,6 +82,61 @@ final class LocalizationTests: XCTestCase {
         }
     }
 
+    // MARK: Composer vocabulary
+
+    /// The composer's own labels. The instruction placeholder is the single
+    /// most important string in the new flow: it is what tells the user the
+    /// field is for what THEY want said, not for the reply itself.
+    func testComposerStringsAreTranslatedInEveryLanguage() {
+        XCTAssertEqual(AIReplyStrings.forLanguage(.english).instructionPlaceholder, "How should I reply?")
+        XCTAssertEqual(AIReplyStrings.forLanguage(.russian).instructionPlaceholder, "Как ответить?")
+        XCTAssertEqual(AIReplyStrings.forLanguage(.kazakh).instructionPlaceholder, "Қалай жауап беру керек?")
+
+        let english = AIReplyStrings.forLanguage(.english)
+        for language in AppLanguage.allCases where language != .english {
+            let strings = AIReplyStrings.forLanguage(language)
+            for (label, own, en) in [
+                ("instructionPlaceholder", strings.instructionPlaceholder, english.instructionPlaceholder),
+                ("copiedMessage", strings.copiedMessage, english.copiedMessage),
+                ("pasteMessage", strings.pasteMessage, english.pasteMessage),
+                ("clearSource", strings.clearSource, english.clearSource),
+                ("back", strings.back, english.back),
+                ("editReply", strings.editReply, english.editReply),
+                ("retry", strings.retry, english.retry)
+            ] {
+                XCTAssertFalse(own.isEmpty, "\(label) is empty in \(language.rawValue)")
+                XCTAssertNotEqual(own, en, "\(label) is untranslated in \(language.rawValue)")
+            }
+        }
+    }
+
+    /// Quick intents are presets for the INSTRUCTION, so every language needs
+    /// the same set - a Kazakh user must not silently get fewer options - and
+    /// the phrase that lands in the field has to be in their language.
+    func testQuickIntentsAreCompleteAndTranslated() {
+        let english = AIReplyStrings.forLanguage(.english).quickIntents
+        XCTAssertEqual(english.count, 8)
+        let expected = english.map(\.id)
+
+        for language in AppLanguage.allCases {
+            let intents = AIReplyStrings.forLanguage(language).quickIntents
+            XCTAssertEqual(intents.map(\.id), expected, "\(language.rawValue) has a different intent set")
+            for intent in intents {
+                XCTAssertFalse(intent.label.isEmpty, "\(intent.id) has no label in \(language.rawValue)")
+                XCTAssertFalse(intent.phrase.isEmpty, "\(intent.id) has no phrase in \(language.rawValue)")
+                // A pill has to fit a keyboard-width row next to Generate.
+                XCTAssertLessThanOrEqual(intent.label.count, 18, "\(intent.id) label is too long")
+            }
+        }
+
+        for language in AppLanguage.allCases where language != .english {
+            let intents = AIReplyStrings.forLanguage(language).quickIntents
+            for (own, en) in zip(intents, english) {
+                XCTAssertNotEqual(own.phrase, en.phrase, "\(own.id) is untranslated in \(language.rawValue)")
+            }
+        }
+    }
+
     // MARK: Language resolution
 
     func testAppLanguageMapsToTheRightLayoutVocabulary() {

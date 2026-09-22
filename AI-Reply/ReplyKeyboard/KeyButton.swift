@@ -17,6 +17,20 @@ enum KeyboardKey: Equatable {
         return false
     }
 
+    /// Keys whose only job is to put characters somewhere. When there is
+    /// nowhere to put them - the composer is showing a result, or a request is
+    /// in flight - these are the keys that must stay silent, while shift, the
+    /// plane switch and the language key keep clicking because they still do
+    /// something visible.
+    var editsText: Bool {
+        switch self {
+        case .character, .backspace, .space, .ret:
+            return true
+        case .shift, .plane, .globe, .language:
+            return false
+        }
+    }
+
     /// Keys that fire immediately on touch-down, matching the system keyboard.
     /// Keys that rebuild the whole keyboard fire on touch-up instead, so the
     /// button is never torn out from under the finger.

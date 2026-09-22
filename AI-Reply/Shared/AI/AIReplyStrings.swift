@@ -20,6 +20,21 @@ import Foundation
 /// Resolved from a table rather than `NSLocalizedString` because the keyboard
 /// extension has to show the language the user PICKED IN THE APP, which iOS
 /// bundle lookup knows nothing about.
+/// A one-tap phrasing of a reply INSTRUCTION.
+///
+/// Quick intents answer "how should I reply", which is a different question
+/// from the one `ReplyTemplate` answers ("who am I replying to"). They are not
+/// stored per user and never become saved configuration: tapping one writes its
+/// `phrase` into the instruction field, where it can be edited, combined with
+/// another intent, or deleted. The source message is never touched.
+struct QuickIntent: Sendable, Equatable, Identifiable {
+    let id: String
+    /// What the pill says. Short enough to fit a keyboard-width row.
+    let label: String
+    /// What is written into the instruction field, in the app's language.
+    let phrase: String
+}
+
 struct AIReplyStrings: Sendable {
 
     // Actions
@@ -35,12 +50,25 @@ struct AIReplyStrings: Sendable {
     let replaceExisting: String
     let appendToExisting: String
     let keepTyping: String
+    /// Explicit, user-initiated clipboard read inside the composer.
+    let pasteMessage: String
+    let clearSource: String
+    let back: String
+    let editReply: String
+    /// Shown on the primary button after a failure, so one tap retries with
+    /// everything the user typed still there.
+    let retry: String
 
     // Status
     let generating: String
     let draftTitle: String
     let sourceTitle: String
     let chooseTemplate: String
+    /// Caption over the quoted source message.
+    let copiedMessage: String
+    /// Placeholder of the reply-instruction field. This is the sentence that
+    /// tells the user the field is for what THEY want said, not for the reply.
+    let instructionPlaceholder: String
 
     // Errors
     let noSourceMessage: String
@@ -61,6 +89,9 @@ struct AIReplyStrings: Sendable {
 
     // Host-field conflict
     let hostFieldNotEmpty: String
+
+    // Quick intents
+    let quickIntents: [QuickIntent]
 
     static func forLanguage(_ language: AppLanguage) -> AIReplyStrings {
         switch language {
@@ -99,10 +130,17 @@ struct AIReplyStrings: Sendable {
         replaceExisting: "Replace",
         appendToExisting: "Add",
         keepTyping: "Cancel",
+        pasteMessage: "Paste message",
+        clearSource: "Clear message",
+        back: "Back",
+        editReply: "Edit reply",
+        retry: "Try again",
         generating: "Generating…",
         draftTitle: "Your reply",
         sourceTitle: "Reply to",
         chooseTemplate: "Choose who you are replying to",
+        copiedMessage: "Copied message",
+        instructionPlaceholder: "How should I reply?",
         noSourceMessage: "Copy a message first",
         // Wording taken from the brief, verbatim.
         messageTooLong: "Message is too long. Please select or copy up to 300 characters.",
@@ -116,7 +154,17 @@ struct AIReplyStrings: Sendable {
         serviceUnavailable: "The service is unavailable right now. Try again.",
         signInRequired: "Open the AI Reply app and sign in to keep replying.",
         quotaExhausted: "You have used today's replies. They come back tomorrow, or change your plan in the app.",
-        hostFieldNotEmpty: "There is already text in this field."
+        hostFieldNotEmpty: "There is already text in this field.",
+        quickIntents: [
+            QuickIntent(id: "agree", label: "Agree", phrase: "Reply that I agree."),
+            QuickIntent(id: "decline", label: "Decline", phrase: "Decline politely."),
+            QuickIntent(id: "details", label: "Ask details", phrase: "Ask for more details."),
+            QuickIntent(id: "brief", label: "Briefly", phrase: "Keep the reply short."),
+            QuickIntent(id: "professional", label: "Professional", phrase: "Answer professionally."),
+            QuickIntent(id: "friendly", label: "Friendly", phrase: "Answer in a warm, friendly way."),
+            QuickIntent(id: "thanks", label: "Thank them", phrase: "Thank them."),
+            QuickIntent(id: "reschedule", label: "Another time", phrase: "Suggest a different time.")
+        ]
     )
 
     private static let russian = AIReplyStrings(
@@ -129,10 +177,17 @@ struct AIReplyStrings: Sendable {
         replaceExisting: "Заменить",
         appendToExisting: "Добавить",
         keepTyping: "Отмена",
+        pasteMessage: "Вставить сообщение",
+        clearSource: "Очистить сообщение",
+        back: "Назад",
+        editReply: "Изменить ответ",
+        retry: "Повторить",
         generating: "Создаю ответ…",
         draftTitle: "Ваш ответ",
         sourceTitle: "Ответ на",
         chooseTemplate: "Выберите, кому вы отвечаете",
+        copiedMessage: "Скопированное сообщение",
+        instructionPlaceholder: "Как ответить?",
         noSourceMessage: "Сначала скопируйте сообщение",
         messageTooLong: "Сообщение слишком длинное. Скопируйте не более 300 символов.",
         fullAccessRequired: "Чтобы использовать скопированное сообщение, включите полный доступ для клавиатуры в настройках iOS.",
@@ -145,7 +200,17 @@ struct AIReplyStrings: Sendable {
         serviceUnavailable: "Сервис сейчас недоступен. Попробуйте позже.",
         signInRequired: "Откройте приложение AI Reply и войдите, чтобы продолжить.",
         quotaExhausted: "Ответы на сегодня закончились. Они обновятся завтра — или смените тариф в приложении.",
-        hostFieldNotEmpty: "В этом поле уже есть текст."
+        hostFieldNotEmpty: "В этом поле уже есть текст.",
+        quickIntents: [
+            QuickIntent(id: "agree", label: "Согласиться", phrase: "Ответь, что я согласен."),
+            QuickIntent(id: "decline", label: "Отказать", phrase: "Вежливо откажи."),
+            QuickIntent(id: "details", label: "Уточнить", phrase: "Уточни детали."),
+            QuickIntent(id: "brief", label: "Коротко", phrase: "Ответь коротко."),
+            QuickIntent(id: "professional", label: "По-деловому", phrase: "Ответь по-деловому."),
+            QuickIntent(id: "friendly", label: "Дружелюбно", phrase: "Ответь тепло и дружелюбно."),
+            QuickIntent(id: "thanks", label: "Поблагодарить", phrase: "Поблагодари."),
+            QuickIntent(id: "reschedule", label: "Другое время", phrase: "Предложи другое время.")
+        ]
     )
 
     private static let kazakh = AIReplyStrings(
@@ -158,10 +223,17 @@ struct AIReplyStrings: Sendable {
         replaceExisting: "Ауыстыру",
         appendToExisting: "Қосу",
         keepTyping: "Бас тарту",
+        pasteMessage: "Хабарламаны қою",
+        clearSource: "Хабарламаны тазалау",
+        back: "Артқа",
+        editReply: "Жауапты өңдеу",
+        retry: "Қайталау",
         generating: "Жауап дайындалуда…",
         draftTitle: "Сіздің жауабыңыз",
         sourceTitle: "Хабарламаға жауап",
         chooseTemplate: "Кімге жауап беретініңізді таңдаңыз",
+        copiedMessage: "Көшірілген хабарлама",
+        instructionPlaceholder: "Қалай жауап беру керек?",
         noSourceMessage: "Алдымен хабарламаны көшіріңіз",
         messageTooLong: "Хабарлама тым ұзын. 300 таңбаға дейінгі мәтінді көшіріңіз.",
         fullAccessRequired: "Көшірілген хабарламаны пайдалану үшін iOS баптауларында пернетақтаға толық рұқсат беріңіз.",
@@ -174,7 +246,17 @@ struct AIReplyStrings: Sendable {
         serviceUnavailable: "Қызмет қазір қолжетімсіз. Кейінірек көріңіз.",
         signInRequired: "Жалғастыру үшін AI Reply қолданбасын ашып, кіріңіз.",
         quotaExhausted: "Бүгінгі жауаптар бітті. Ертең жаңарады немесе қолданбадан тарифті ауыстырыңыз.",
-        hostFieldNotEmpty: "Бұл өрісте мәтін бар."
+        hostFieldNotEmpty: "Бұл өрісте мәтін бар.",
+        quickIntents: [
+            QuickIntent(id: "agree", label: "Келісу", phrase: "Келісетінімді жаз."),
+            QuickIntent(id: "decline", label: "Бас тарту", phrase: "Сыпайы түрде бас тарт."),
+            QuickIntent(id: "details", label: "Нақтылау", phrase: "Толығырақ сұра."),
+            QuickIntent(id: "brief", label: "Қысқа", phrase: "Қысқа жауап бер."),
+            QuickIntent(id: "professional", label: "Іскери", phrase: "Іскери тілмен жауап бер."),
+            QuickIntent(id: "friendly", label: "Достық", phrase: "Жылы, достық үнмен жауап бер."),
+            QuickIntent(id: "thanks", label: "Алғыс айту", phrase: "Алғыс айт."),
+            QuickIntent(id: "reschedule", label: "Басқа уақыт", phrase: "Басқа уақыт ұсын.")
+        ]
     )
 
     private static let uzbek = AIReplyStrings(
@@ -187,10 +269,17 @@ struct AIReplyStrings: Sendable {
         replaceExisting: "Almashtirish",
         appendToExisting: "Qo‘shish",
         keepTyping: "Bekor qilish",
+        pasteMessage: "Xabarni joylash",
+        clearSource: "Xabarni tozalash",
+        back: "Orqaga",
+        editReply: "Javobni tahrirlash",
+        retry: "Qayta urinish",
         generating: "Javob tayyorlanmoqda…",
         draftTitle: "Javobingiz",
         sourceTitle: "Xabarga javob",
         chooseTemplate: "Kimga javob berayotganingizni tanlang",
+        copiedMessage: "Nusxalangan xabar",
+        instructionPlaceholder: "Qanday javob beraman?",
         noSourceMessage: "Avval xabarni nusxalang",
         messageTooLong: "Xabar juda uzun. 300 belgigacha matnni nusxalang.",
         fullAccessRequired: "Nusxalangan xabardan foydalanish uchun iOS sozlamalarida klaviaturaga to‘liq ruxsat bering.",
@@ -203,6 +292,16 @@ struct AIReplyStrings: Sendable {
         serviceUnavailable: "Xizmat hozir mavjud emas. Keyinroq urinib ko‘ring.",
         signInRequired: "Davom etish uchun AI Reply ilovasini ochib, tizimga kiring.",
         quotaExhausted: "Bugungi javoblar tugadi. Ular ertaga yangilanadi yoki ilovada tarifni o‘zgartiring.",
-        hostFieldNotEmpty: "Bu maydonda matn bor."
+        hostFieldNotEmpty: "Bu maydonda matn bor.",
+        quickIntents: [
+            QuickIntent(id: "agree", label: "Rozilik", phrase: "Rozi ekanimni yoz."),
+            QuickIntent(id: "decline", label: "Rad etish", phrase: "Muloyim rad et."),
+            QuickIntent(id: "details", label: "Aniqlashtirish", phrase: "Batafsil so‘ra."),
+            QuickIntent(id: "brief", label: "Qisqa", phrase: "Qisqa javob ber."),
+            QuickIntent(id: "professional", label: "Ishchan", phrase: "Ishchan uslubda javob ber."),
+            QuickIntent(id: "friendly", label: "Do‘stona", phrase: "Iliq, do‘stona javob ber."),
+            QuickIntent(id: "thanks", label: "Minnatdorchilik", phrase: "Minnatdorchilik bildir."),
+            QuickIntent(id: "reschedule", label: "Boshqa vaqt", phrase: "Boshqa vaqt taklif qil.")
+        ]
     )
 }
