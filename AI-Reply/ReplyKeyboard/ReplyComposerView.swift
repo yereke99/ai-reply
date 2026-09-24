@@ -86,6 +86,11 @@ final class ReplyComposerView: UIView {
     private(set) var stage: Stage = .composing
     private(set) var focus: Field = .instruction
 
+    /// True while the user has asked to see the whole copied message. The
+    /// controller allows the keyboard a little more height in that state,
+    /// because it is an explicit and momentary request.
+    var wantsExpandedContext: Bool { isSourceExpanded && stage != .conflict }
+
     var sourceText: String { sourceTextView.text ?? "" }
     var instructionText: String { instructionTextView.text ?? "" }
     var replyDraft: String { draftTextView.text ?? "" }
@@ -123,6 +128,10 @@ final class ReplyComposerView: UIView {
 
     // Header
     private let templateChip = UIButton(type: .system)
+    /// The COLLAPSED form of the copied message: one quiet line beside the
+    /// audience chip. This is the default in every stage; the full card below
+    /// only appears when the user asks for it.
+    private let contextPreview = UIButton(type: .system)
     private let closeButton = UIButton(type: .system)
 
     // Source
@@ -131,6 +140,7 @@ final class ReplyComposerView: UIView {
     private let sourceCounter = UILabel()
     private let pasteButton = UIButton(type: .system)
     private let clearSourceButton = UIButton(type: .system)
+    private let sourceCollapseButton = UIButton(type: .system)
     private let quoteBar = UIView()
     private let sourceTextView = UITextView()
     private let sourcePlaceholder = UILabel()
@@ -151,8 +161,7 @@ final class ReplyComposerView: UIView {
 
     // Compose actions
     private let composeActionRow = UIView()
-    private let intentScrollView = UIScrollView()
-    private let intentStack = UIStackView()
+    private let quickActions = QuickActionRow()
     private let generateButton = UIButton(type: .system)
 
     // Result actions
@@ -177,14 +186,16 @@ final class ReplyComposerView: UIView {
     private var instructionHeight: NSLayoutConstraint?
     private var draftHeight: NSLayoutConstraint?
     private var errorHeight: NSLayoutConstraint?
+    private var errorBottom: NSLayoutConstraint?
 
     private var theme = KeyboardTheme(isDark: true)
     private var strings = AIReplyStrings.forLanguage(.english)
     private var layoutWidth: CGFloat = 0
     private var caretTimer: Timer?
-    private var intentPills: [UIButton] = []
     private var errorMessage: String?
     private var isSourceExpanded = false
+    private var sourceNaturalLines = 1
+    private var draftNaturalLines = 3
     /// Where to go back to when the conflict prompt is cancelled.
     private var stageBeforeConflict: Stage?
 
@@ -207,10 +218,22 @@ final class ReplyComposerView: UIView {
     private let quoteGap: CGFloat = 8
     private let cardPadding: CGFloat = 10
 
-    private let headerHeight: CGFloat = 30
+    private let headerHeight: CGFloat = 26
     private let captionHeight: CGFloat = 16
     private let actionRowHeight: CGFloat = 38
     private let gap: CGFloat = 6
+
+    /// Quick actions on their own line above a full-width primary button.
+    ///
+    /// They used to share one 38pt row, which is what forced the intents into
+    /// a scroll view and put the primary action shoulder to shoulder with its
+    /// own secondary options. Separating them costs 36pt here and saves more
+    /// than that by collapsing the quoted message into the header.
+    private var composeActionRowHeight: CGFloat {
+        QuickActionRow.preferredHeight + 6 + primaryButtonHeight
+    }
+
+    private let primaryButtonHeight: CGFloat = 38
 
     /// Height this view needs right now. The controller adds it to the keyboard
     /// height, so the keys keep their full size in every state.
@@ -259,7 +282,7 @@ final class ReplyComposerView: UIView {
         // rather than a retype.
         var chip = UIButton.Configuration.plain()
         chip.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 11, bottom: 0, trailing: 8)
-        chip.background.cornerRadius = 12
+        chip.background.cornerRadius = 13
         chip.imagePlacement = .trailing
         chip.imagePadding = 5
         chip.image = UIImage(
@@ -270,6 +293,23 @@ final class ReplyComposerView: UIView {
         templateChip.translatesAutoresizingMaskIntoConstraints = false
         templateChip.addTarget(self, action: #selector(templateChipTapped), for: .touchUpInside)
         container.addSubview(templateChip)
+
+        // The copied message, collapsed onto the header line. One tap opens
+        // the full card; when there is nothing copied yet the same control is
+        // the Paste affordance, so the empty state costs no height at all.
+        var preview = UIButton.Configuration.plain()
+        preview.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 9, bottom: 0, trailing: 7)
+        preview.background.cornerRadius = 8
+        preview.imagePlacement = .trailing
+        preview.imagePadding = 6
+        preview.titleLineBreakMode = .byTruncatingTail
+        contextPreview.configuration = preview
+        contextPreview.translatesAutoresizingMaskIntoConstraints = false
+        contextPreview.contentHorizontalAlignment = .leading
+        contextPreview.addTarget(self, action: #selector(contextPreviewTapped), for: .touchUpInside)
+        contextPreview.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        contextPreview.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        container.addSubview(contextPreview)
 
         configureIconButton(closeButton, symbol: "xmark", pointSize: 12)
         closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
@@ -294,6 +334,10 @@ final class ReplyComposerView: UIView {
         sourceCounter.isHidden = true
         sourceCard.addSubview(sourceCounter)
 
+        configureIconButton(sourceCollapseButton, symbol: "chevron.up", pointSize: 11, diameter: 22)
+        sourceCollapseButton.addTarget(self, action: #selector(collapseSourceTapped), for: .touchUpInside)
+        sourceCard.addSubview(sourceCollapseButton)
+
         configureIconButton(pasteButton, symbol: "doc.on.clipboard", pointSize: 12, diameter: 22)
         pasteButton.addTarget(self, action: #selector(pasteTapped), for: .touchUpInside)
         sourceCard.addSubview(pasteButton)
@@ -312,7 +356,7 @@ final class ReplyComposerView: UIView {
 
         sourcePlaceholder.translatesAutoresizingMaskIntoConstraints = false
         sourcePlaceholder.font = sourceFont
-        sourcePlaceholder.numberOfLines = 2
+        sourcePlaceholder.numberOfLines = 1
         sourcePlaceholder.isUserInteractionEnabled = false
         sourceCard.addSubview(sourcePlaceholder)
     }
@@ -374,36 +418,24 @@ final class ReplyComposerView: UIView {
         composeActionRow.translatesAutoresizingMaskIntoConstraints = false
         container.addSubview(composeActionRow)
 
+        // Quick intents. They WRITE INTO THE INSTRUCTION and never touch the
+        // source message - that is the whole rule for presets here. They get
+        // their own line: sharing one with the primary button is what made a
+        // third pill impossible to draw whole.
+        quickActions.delegate = self
+        composeActionRow.addSubview(quickActions)
+
+        // The primary action, full width and unmistakable. No trailing arrow:
+        // a button that says "Жауап беру" across the whole panel does not need
+        // a glyph to explain that it is the thing to press.
         var generate = UIButton.Configuration.plain()
-        generate.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 14)
-        generate.background.cornerRadius = 17
-        generate.imagePlacement = .trailing
-        generate.imagePadding = 6
-        generate.image = UIImage(
-            systemName: "arrow.right",
-            withConfiguration: UIImage.SymbolConfiguration(pointSize: 12, weight: .bold)
-        )
+        generate.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 14, bottom: 0, trailing: 14)
+        generate.background.cornerRadius = 12
+        generate.titleAlignment = .center
         generateButton.configuration = generate
         generateButton.translatesAutoresizingMaskIntoConstraints = false
         generateButton.addTarget(self, action: #selector(generateTapped), for: .touchUpInside)
-        generateButton.setContentCompressionResistancePriority(.required, for: .horizontal)
-        generateButton.setContentHuggingPriority(.required, for: .horizontal)
         composeActionRow.addSubview(generateButton)
-
-        // Quick intents. They WRITE INTO THE INSTRUCTION and never touch the
-        // source message - that is the whole rule for presets here.
-        intentScrollView.translatesAutoresizingMaskIntoConstraints = false
-        intentScrollView.showsHorizontalScrollIndicator = false
-        intentScrollView.alwaysBounceHorizontal = true
-        intentScrollView.delaysContentTouches = false
-        intentScrollView.canCancelContentTouches = true
-        composeActionRow.addSubview(intentScrollView)
-
-        intentStack.translatesAutoresizingMaskIntoConstraints = false
-        intentStack.axis = .horizontal
-        intentStack.alignment = .center
-        intentStack.spacing = 6
-        intentScrollView.addSubview(intentStack)
     }
 
     private func buildResultActions() {
@@ -516,6 +548,14 @@ final class ReplyComposerView: UIView {
         let instructionH = instructionTextView.heightAnchor.constraint(equalToConstant: 51)
         let draftH = draftTextView.heightAnchor.constraint(equalToConstant: 72)
         let errorH = errorLabel.heightAnchor.constraint(equalToConstant: 0)
+        // Sits above whichever action row the current stage is showing. The
+        // compose row and the result row are no longer the same height, so
+        // this follows the stage rather than one particular row.
+        let errorB = errorLabel.bottomAnchor.constraint(
+            equalTo: container.bottomAnchor,
+            constant: -(8 + composeActionRowHeight + 4)
+        )
+        errorBottom = errorB
         let draftCaptionH = draftCaption.heightAnchor.constraint(equalToConstant: captionHeight)
         draftCaptionHeight = draftCaptionH
         sourceCardHeight = sourceCardH
@@ -530,11 +570,19 @@ final class ReplyComposerView: UIView {
             container.topAnchor.constraint(equalTo: topAnchor, constant: 2),
             container.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -2),
 
-            // Header
+            // Header: audience, collapsed message, close.
             templateChip.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: cardInset),
             templateChip.topAnchor.constraint(equalTo: container.topAnchor, constant: 4),
-            templateChip.heightAnchor.constraint(equalToConstant: 24),
-            templateChip.trailingAnchor.constraint(lessThanOrEqualTo: closeButton.leadingAnchor, constant: -8),
+            templateChip.heightAnchor.constraint(equalToConstant: headerHeight),
+            // A long audience name yields to the message preview rather than
+            // pushing it off the row.
+            templateChip.widthAnchor.constraint(lessThanOrEqualToConstant: 150),
+
+            contextPreview.leadingAnchor.constraint(equalTo: templateChip.trailingAnchor, constant: 6),
+            contextPreview.trailingAnchor.constraint(equalTo: closeButton.leadingAnchor, constant: -6),
+            contextPreview.centerYAnchor.constraint(equalTo: templateChip.centerYAnchor),
+            contextPreview.heightAnchor.constraint(equalToConstant: headerHeight),
+
             closeButton.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -cardInset),
             closeButton.centerYAnchor.constraint(equalTo: templateChip.centerYAnchor),
 
@@ -549,8 +597,11 @@ final class ReplyComposerView: UIView {
             sourceCaption.heightAnchor.constraint(equalToConstant: 14),
             sourceCaption.trailingAnchor.constraint(lessThanOrEqualTo: sourceCounter.leadingAnchor, constant: -6),
 
-            sourceCounter.trailingAnchor.constraint(equalTo: pasteButton.leadingAnchor, constant: -2),
+            sourceCounter.trailingAnchor.constraint(equalTo: sourceCollapseButton.leadingAnchor, constant: -2),
             sourceCounter.centerYAnchor.constraint(equalTo: sourceCaption.centerYAnchor),
+
+            sourceCollapseButton.trailingAnchor.constraint(equalTo: pasteButton.leadingAnchor, constant: -2),
+            sourceCollapseButton.centerYAnchor.constraint(equalTo: sourceCaption.centerYAnchor),
 
             pasteButton.trailingAnchor.constraint(equalTo: clearSourceButton.leadingAnchor, constant: -2),
             pasteButton.centerYAnchor.constraint(equalTo: sourceCaption.centerYAnchor),
@@ -599,7 +650,7 @@ final class ReplyComposerView: UIView {
             composeActionRow.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: cardInset),
             composeActionRow.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -cardInset),
             composeActionRow.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -8),
-            composeActionRow.heightAnchor.constraint(equalToConstant: actionRowHeight),
+            composeActionRow.heightAnchor.constraint(equalToConstant: composeActionRowHeight),
 
             resultActionRow.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: cardInset),
             resultActionRow.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -cardInset),
@@ -608,24 +659,19 @@ final class ReplyComposerView: UIView {
 
             errorLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: cardInset),
             errorLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -cardInset),
-            errorLabel.bottomAnchor.constraint(equalTo: composeActionRow.topAnchor, constant: -4),
+            errorB,
             errorH,
 
-            // Compose actions
+            // Compose actions: secondary line, then the primary button.
+            quickActions.leadingAnchor.constraint(equalTo: composeActionRow.leadingAnchor),
+            quickActions.trailingAnchor.constraint(equalTo: composeActionRow.trailingAnchor),
+            quickActions.topAnchor.constraint(equalTo: composeActionRow.topAnchor),
+            quickActions.heightAnchor.constraint(equalToConstant: QuickActionRow.preferredHeight),
+
+            generateButton.leadingAnchor.constraint(equalTo: composeActionRow.leadingAnchor),
             generateButton.trailingAnchor.constraint(equalTo: composeActionRow.trailingAnchor),
-            generateButton.centerYAnchor.constraint(equalTo: composeActionRow.centerYAnchor),
-            generateButton.heightAnchor.constraint(equalToConstant: 34),
-
-            intentScrollView.leadingAnchor.constraint(equalTo: composeActionRow.leadingAnchor),
-            intentScrollView.trailingAnchor.constraint(equalTo: generateButton.leadingAnchor, constant: -8),
-            intentScrollView.topAnchor.constraint(equalTo: composeActionRow.topAnchor),
-            intentScrollView.bottomAnchor.constraint(equalTo: composeActionRow.bottomAnchor),
-
-            intentStack.leadingAnchor.constraint(equalTo: intentScrollView.contentLayoutGuide.leadingAnchor),
-            intentStack.trailingAnchor.constraint(equalTo: intentScrollView.contentLayoutGuide.trailingAnchor),
-            intentStack.topAnchor.constraint(equalTo: intentScrollView.contentLayoutGuide.topAnchor),
-            intentStack.bottomAnchor.constraint(equalTo: intentScrollView.contentLayoutGuide.bottomAnchor),
-            intentStack.heightAnchor.constraint(equalTo: intentScrollView.frameLayoutGuide.heightAnchor),
+            generateButton.bottomAnchor.constraint(equalTo: composeActionRow.bottomAnchor),
+            generateButton.heightAnchor.constraint(equalToConstant: primaryButtonHeight),
 
             // Result actions
             backButton.leadingAnchor.constraint(equalTo: resultActionRow.leadingAnchor),
@@ -663,8 +709,8 @@ final class ReplyComposerView: UIView {
         self.theme = theme
         self.strings = AIReplyStrings.forLanguage(uiLanguage)
         applyStrings()
-        rebuildIntentPills()
-        // After the pills exist: `applyTheme` is what colours them.
+        // `applyTheme` configures the quick-action row; doing it twice here
+        // would just make the row rebuild for nothing.
         applyTheme()
         refreshControls()
     }
@@ -677,6 +723,7 @@ final class ReplyComposerView: UIView {
         conflictLabel.text = strings.hostFieldNotEmpty
 
         closeButton.accessibilityLabel = strings.cancel
+        sourceCollapseButton.accessibilityLabel = strings.hideFullMessage
         pasteButton.accessibilityLabel = strings.pasteMessage
         clearSourceButton.accessibilityLabel = strings.clearSource
         backButton.accessibilityLabel = strings.back
@@ -686,7 +733,8 @@ final class ReplyComposerView: UIView {
         sourceTextView.accessibilityLabel = strings.copiedMessage
         draftTextView.accessibilityLabel = strings.draftTitle
 
-        applyTitle(strings.insert, to: insertButton, size: 14, weight: .semibold)
+        refreshContextPreview()
+        applyTitle(strings.insert, to: insertButton, size: 15, weight: .semibold)
         applyTitle(strings.replaceExisting, to: replaceButton, size: 13, weight: .semibold)
         applyTitle(strings.appendToExisting, to: appendButton, size: 13, weight: .semibold)
         applyTitle(strings.keepTyping, to: conflictCancelButton, size: 13, weight: .semibold)
@@ -700,7 +748,12 @@ final class ReplyComposerView: UIView {
         templateChip.configuration?.baseForegroundColor = theme.primaryText
         templateChip.tintColor = theme.primaryText
 
+        contextPreview.configuration?.background.backgroundColor = theme.quoteBackground
+        contextPreview.configuration?.baseForegroundColor = theme.quoteText
+        contextPreview.tintColor = theme.secondaryText
+
         styleIconButton(closeButton, prominent: false)
+        styleIconButton(sourceCollapseButton, prominent: false)
         styleIconButton(pasteButton, prominent: false)
         styleIconButton(clearSourceButton, prominent: false)
         styleIconButton(backButton, prominent: false)
@@ -738,10 +791,7 @@ final class ReplyComposerView: UIView {
         conflictCancelButton.configuration?.background.backgroundColor = theme.fieldBackground
         conflictCancelButton.configuration?.baseForegroundColor = theme.primaryText
 
-        for pill in intentPills {
-            pill.configuration?.background.backgroundColor = theme.fieldBackground
-            pill.configuration?.baseForegroundColor = theme.primaryText
-        }
+        quickActions.configure(theme: theme, strings: strings)
         refreshFieldBorders()
     }
 
@@ -770,7 +820,7 @@ final class ReplyComposerView: UIView {
         } else {
             title = strings.generate
         }
-        applyTitle(title, to: generateButton, size: 14, weight: .semibold)
+        applyTitle(title, to: generateButton, size: 16, weight: .semibold)
     }
 
     // MARK: Quick intents
@@ -778,27 +828,47 @@ final class ReplyComposerView: UIView {
     /// Presets WRITE INTO THE INSTRUCTION. They never replace the source
     /// message and they never become the reply: the user can read what was
     /// added, edit it, and add a second intent on top.
-    private func rebuildIntentPills() {
-        for view in intentStack.arrangedSubviews {
-            intentStack.removeArrangedSubview(view)
-            view.removeFromSuperview()
-        }
-        intentPills.removeAll(keepingCapacity: true)
+    ///
+    /// The row itself owns its layout (see `QuickActionRow`), which is what
+    /// guarantees that no action is ever drawn half-clipped whatever the
+    /// language or the screen width.
+    private func applyIntent(_ intent: QuickIntent) {
+        guard stage == .composing else { return }
+        setFocus(.instruction)
+        let current = instructionText.trimmingCharacters(in: .whitespacesAndNewlines)
+        let combined = current.isEmpty ? intent.phrase : current + " " + intent.phrase
+        instructionTextView.text = ReplyInstruction.clamp(combined)
+        moveCaretToEnd(instructionTextView)
+        textsDidChange(remeasure: true)
+    }
 
-        for (index, intent) in strings.quickIntents.enumerated() {
-            let pill = UIButton(type: .system)
-            pill.translatesAutoresizingMaskIntoConstraints = false
-            var configuration = UIButton.Configuration.plain()
-            configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 11, bottom: 0, trailing: 11)
-            configuration.background.cornerRadius = 14
-            pill.configuration = configuration
-            applyTitle(intent.label, to: pill, size: 12.5, weight: .medium)
-            pill.tag = index
-            pill.heightAnchor.constraint(equalToConstant: 28).isActive = true
-            pill.addTarget(self, action: #selector(intentTapped(_:)), for: .touchUpInside)
-            intentStack.addArrangedSubview(pill)
-            intentPills.append(pill)
-        }
+    // MARK: Collapsed context
+
+    /// The one-line form of the copied message that lives on the header row.
+    ///
+    /// When nothing has been copied it becomes the Paste control, so the empty
+    /// state costs a single line instead of an empty quote card with a caption
+    /// over it.
+    private func refreshContextPreview() {
+        let trimmed = sourceText.trimmingCharacters(in: .whitespacesAndNewlines)
+        let hasSource = !trimmed.isEmpty
+        let symbol = hasSource ? "chevron.down" : "doc.on.clipboard"
+        contextPreview.configuration?.image = UIImage(
+            systemName: symbol,
+            withConfiguration: UIImage.SymbolConfiguration(pointSize: 10, weight: .semibold)
+        )
+        // One line, whitespace flattened: a pasted message with newlines in it
+        // must not be able to change the height of the header.
+        let preview = hasSource
+            ? trimmed.split(whereSeparator: \.isNewline).joined(separator: " ")
+            : strings.pasteMessage
+        var attributes = AttributeContainer()
+        attributes.font = .systemFont(ofSize: 13, weight: hasSource ? .regular : .medium)
+        contextPreview.configuration?.attributedTitle = AttributedString(preview, attributes: attributes)
+        contextPreview.accessibilityLabel = hasSource
+            ? "\(strings.copiedMessage): \(preview)"
+            : strings.pasteMessage
+        contextPreview.accessibilityHint = hasSource ? strings.showFullMessage : nil
     }
 
     /// Re-measures for the given keyboard width. Safe to call repeatedly.
@@ -855,7 +925,7 @@ final class ReplyComposerView: UIView {
         isSourceExpanded = false
         errorMessage = nil
         if stage == .composing { setFocus(.instruction) }
-        textsDidChange()
+        textsDidChange(remeasure: true)
     }
 
     func beginGenerating() {
@@ -941,7 +1011,9 @@ final class ReplyComposerView: UIView {
         let result = newStage == .result || newStage == .editing
         let conflict = newStage == .conflict
 
-        sourceCard.isHidden = conflict
+        // `sourceCard` / `contextPreview` visibility is decided in
+        // `refreshControls`, which runs at the end of this method and is the
+        // single place that knows whether the quote is expanded.
         instructionTextView.isHidden = !composing
         instructionPlaceholder.isHidden = true
         composeActionRow.isHidden = !composing
@@ -967,6 +1039,7 @@ final class ReplyComposerView: UIView {
         conflictStack.isHidden = !conflict
 
         errorLabel.isHidden = conflict || errorMessage == nil
+        errorBottom?.constant = -(8 + (result ? actionRowHeight : composeActionRowHeight) + 4)
 
         switch newStage {
         case .composing:  setFocus(.instruction)
@@ -1052,6 +1125,15 @@ final class ReplyComposerView: UIView {
         instructionPlaceholder.isHidden = !(stage == .composing || stage == .generating)
             || !instructionText.isEmpty
 
+        refreshContextPreview()
+        // The header preview and the full card are two views of one thing and
+        // are never on screen together.
+        let showsCard = isSourceExpanded && stage != .conflict
+        sourceCard.isHidden = !showsCard
+        contextPreview.isHidden = showsCard || stage == .conflict
+        contextPreview.isEnabled = stage == .composing || stage == .result || stage == .editing
+        sourceCollapseButton.isHidden = !showsCard
+
         pasteButton.isHidden = !composing
         clearSourceButton.isHidden = !composing || sourceText.isEmpty
 
@@ -1070,10 +1152,7 @@ final class ReplyComposerView: UIView {
         generateButton.configuration?.showsActivityIndicator = stage == .generating
         generateButton.alpha = canGenerate || stage == .generating ? 1 : 0.8
 
-        for pill in intentPills {
-            pill.isEnabled = composing
-            pill.alpha = composing ? 1 : 0.45
-        }
+        quickActions.setEnabled(composing)
 
         let canInsert = result && hasUsableDraft
         insertButton.isEnabled = canInsert
@@ -1152,7 +1231,11 @@ final class ReplyComposerView: UIView {
         return range
     }
 
-    private func textsDidChange() {
+    /// - Parameter remeasure: `true` only when the text changed because of a
+    ///   paste, a clear, a quick intent or a generated result - i.e. an event,
+    ///   not a keystroke. Typing deliberately does not re-measure, so it cannot
+    ///   move the keyboard.
+    private func textsDidChange(remeasure: Bool = false) {
         // Typing is the user saying "I know, let me fix it". The message goes,
         // the content stays.
         if errorMessage != nil {
@@ -1161,7 +1244,7 @@ final class ReplyComposerView: UIView {
         }
         refreshControls()
         refreshGenerateTitle()
-        recalculate()
+        recalculate(remeasure: remeasure)
         if let view = focusedTextView {
             view.scrollRangeToVisible(view.selectedRange)
         }
@@ -1220,20 +1303,64 @@ final class ReplyComposerView: UIView {
         return (first - firstCut, second - secondCut)
     }
 
+    /// Chrome that does not depend on content, read straight off the
+    /// constraints above so the two cannot drift apart. There is no auto-layout
+    /// chain from the instruction down to the action row - the panel's height
+    /// is solved here - so these have to be right.
+    private var composingChrome: CGFloat {
+        // container insets 2+2, chip top 4, header, card top gap 4,
+        // card->instruction gap, instruction->actions gap, action block,
+        // bottom 8.
+        4 + 4 + headerHeight + 4 + gap + gap + composeActionRowHeight + 8
+    }
+
+    private var resultChrome: CGFloat {
+        // ... caption top gap, caption->draft 2, draft->actions gap, row, 8.
+        4 + 4 + headerHeight + 4 + gap + 2 + gap + actionRowHeight + 8
+    }
+
+    /// Natural line counts of the two long texts.
+    ///
+    /// PERFORMANCE / STABILITY. These are refreshed on CONTENT events - a
+    /// paste, a generated result, a width change - and never from a keystroke.
+    /// The composer used to re-measure both text views inside `textsDidChange`,
+    /// which meant every character typed into the instruction could change the
+    /// panel's height and animate the whole keyboard. Pinning the measurement
+    /// to content events is what makes the keyboard stand still while the user
+    /// types; past the pinned size the field simply scrolls.
+    private func remeasureContent(cardWidth: CGFloat) {
+        let sourceWidth = cardWidth - cardPadding * 2 - quoteBarWidth - quoteGap
+        sourceNaturalLines = naturalLines(sourceTextView, font: sourceFont, width: sourceWidth, inset: sourceInsetV)
+        draftNaturalLines = naturalLines(draftTextView, font: draftFont, width: cardWidth, inset: fieldInsetV)
+    }
+
+    private func naturalLines(_ view: UITextView, font: UIFont, width: CGFloat, inset: CGFloat) -> Int {
+        let measured = ceil(
+            view.sizeThatFits(CGSize(width: max(width, 1), height: .greatestFiniteMagnitude)).height
+        )
+        let text = max(0, measured - inset)
+        return max(1, Int((text / font.lineHeight).rounded(.up)))
+    }
+
     private func solveHeights(cardWidth: CGFloat) -> Heights {
         var heights = Heights()
 
+        // One quoted line is always solved for, even while the card is
+        // collapsed and hidden: the quote bar is pinned 3pt inside the text
+        // view, so a zero-height text view would ask Auto Layout for a bar of
+        // height -6.
+        let oneSourceLine = lines(sourceFont, 1, inset: sourceInsetV)
+
         if stage == .conflict {
             heights.total = 122
-            heights.sourceCard = sourceCardHeight?.constant ?? 79
-            heights.sourceText = sourceTextHeight?.constant ?? 27
+            heights.sourceCard = 0
+            heights.sourceText = oneSourceLine
             heights.instruction = instructionHeight?.constant ?? 51
             heights.draft = draftHeight?.constant ?? 72
             heights.draftCaption = draftCaptionHeight?.constant ?? captionHeight
             return heights
         }
 
-        let sourceWidth = cardWidth - cardPadding * 2 - quoteBarWidth - quoteGap
         let isResult = stage == .result || stage == .editing
         let captionH: CGFloat = showsDraftCaption ? captionHeight : 0
 
@@ -1246,90 +1373,83 @@ final class ReplyComposerView: UIView {
         }
         let errorBlock = heights.error > 0 ? heights.error + 4 : 0
 
-        // Source: one line minimum so a short message never floats in a tall
-        // box, four when it needs them, and it scrolls beyond that.
-        let sourceMinimumLines = sourceText.isEmpty ? 2 : 1
-        let sourceMaximumLines: Int
-        if isResult {
-            sourceMaximumLines = isSourceExpanded ? 3 : 1
-        } else {
-            sourceMaximumLines = 4
+        // THE COMPACT RULE. Collapsed, the copied message costs NOTHING here:
+        // it is the one line beside the audience chip in the header. The card
+        // only exists while the user has asked to read or edit the whole
+        // message.
+        let sourceCeilingLines = isResult ? 3 : 4
+        var sourceCardH: CGFloat = 0
+        var sourceTextH = oneSourceLine
+        if isSourceExpanded {
+            sourceTextH = lines(
+                sourceFont,
+                min(max(sourceNaturalLines, 1), sourceCeilingLines),
+                inset: sourceInsetV
+            )
+            sourceCardH = sourceTextH + sourceCardChrome
         }
-        let sourceNatural = ceil(
-            sourceTextView.sizeThatFits(
-                CGSize(width: max(sourceWidth, 1), height: .greatestFiniteMagnitude)
-            ).height
-        )
-        let sourceMinimum = lines(sourceFont, sourceMinimumLines, inset: sourceInsetV)
-        let sourceCeiling = lines(sourceFont, sourceMaximumLines, inset: sourceInsetV)
-        var sourceHeight = min(max(sourceNatural, sourceMinimum), sourceCeiling)
+        let sourceFloor = isSourceExpanded ? oneSourceLine + sourceCardChrome : 0
 
         if isResult {
-            let draftNatural = ceil(
-                draftTextView.sizeThatFits(
-                    CGSize(width: max(cardWidth, 1), height: .greatestFiniteMagnitude)
-                ).height
-            )
             // Three lines of reply is the comfortable floor and two is the
             // survivable one. An iPhone SE cannot afford three without the
-            // keyboard eating most of the conversation, so it gets two rather
-            // than getting three and overflowing the budget anyway.
+            // keyboard eating most of the conversation.
             let draftMinimumLines = maximumHeight < 215 ? 2 : 3
             let draftMinimum = lines(draftFont, draftMinimumLines, inset: fieldInsetV)
-            let draftCeiling = lines(draftFont, 7, inset: fieldInsetV)
-            var draftHeightValue = min(max(draftNatural, draftMinimum), draftCeiling)
-
-            let fixed = 92 + captionH + 4 + errorBlock + sourceCardChrome
-            // Expanding the quote is an explicit "let me read that again", so
-            // while it is expanded the quote stops being the thing that gets
-            // cut first. Without this the fit immediately gave the space back
-            // to the reply and the tap did nothing at all on most screens.
-            let sourceFloor = isSourceExpanded ? sourceHeight : lines(sourceFont, 1, inset: sourceInsetV)
-            (sourceHeight, draftHeightValue) = Self.fit(
-                first: sourceHeight, firstMinimum: sourceFloor,
-                second: draftHeightValue, secondMinimum: draftMinimum,
+            var draftH = lines(
+                draftFont,
+                min(max(draftNaturalLines, draftMinimumLines), 7),
+                inset: fieldInsetV
+            )
+            let fixed = resultChrome + captionH + errorBlock
+            (sourceCardH, draftH) = Self.fit(
+                first: sourceCardH, firstMinimum: sourceFloor,
+                second: draftH, secondMinimum: draftMinimum,
                 budget: max(60, maximumHeight - fixed)
             )
-            heights.sourceText = sourceHeight
-            heights.sourceCard = sourceHeight + sourceCardChrome
-            heights.draft = draftHeightValue
+            heights.sourceCard = sourceCardH
+            heights.sourceText = max(oneSourceLine, sourceCardH - sourceCardChrome)
+            heights.draft = draftH
             heights.draftCaption = captionH
             heights.instruction = instructionHeight?.constant ?? 51
-            heights.total = heights.sourceCard + draftHeightValue + captionH + 92 + 4 + errorBlock
+            heights.total = fixed + sourceCardH + draftH
             return heights
         }
 
-        let instructionNatural = ceil(
-            instructionTextView.sizeThatFits(
-                CGSize(width: max(cardWidth, 1), height: .greatestFiniteMagnitude)
-            ).height
-        )
-        let instructionMinimum = lines(instructionFont, 2, inset: fieldInsetV)
-        let instructionCeiling = lines(instructionFont, 4, inset: fieldInsetV)
-        var instructionHeightValue = min(max(instructionNatural, instructionMinimum), instructionCeiling)
-
-        let fixed = 90 + 4 + errorBlock + sourceCardChrome
-        (sourceHeight, instructionHeightValue) = Self.fit(
-            first: sourceHeight, firstMinimum: sourceMinimum,
-            second: instructionHeightValue, secondMinimum: instructionMinimum,
+        // Composing / generating.
+        //
+        // The instruction field's height is a function of the BUDGET, never of
+        // what has been typed into it. That is deliberate: it is a single
+        // comfortable field that scrolls, rather than a field that grows a line
+        // at a time and takes the whole keyboard with it.
+        let instructionMinimum = lines(instructionFont, 1, inset: fieldInsetV)
+        var instructionH = lines(instructionFont, maximumHeight < 200 ? 1 : 2, inset: fieldInsetV)
+        let fixed = composingChrome + errorBlock
+        (sourceCardH, instructionH) = Self.fit(
+            first: sourceCardH, firstMinimum: sourceFloor,
+            second: instructionH, secondMinimum: instructionMinimum,
             budget: max(60, maximumHeight - fixed)
         )
 
-        heights.sourceText = sourceHeight
-        heights.sourceCard = sourceHeight + sourceCardChrome
-        heights.instruction = instructionHeightValue
+        heights.sourceCard = sourceCardH
+        heights.sourceText = max(oneSourceLine, sourceCardH - sourceCardChrome)
+        heights.instruction = instructionH
         heights.draft = draftHeight?.constant ?? 72
         heights.draftCaption = captionH
-        heights.total = heights.sourceCard + instructionHeightValue + 90 + 4 + errorBlock
+        heights.total = fixed + sourceCardH + instructionH
         return heights
     }
 
-    private func recalculate(force: Bool = false) {
+    /// - Parameter remeasure: whether the long texts should be measured again.
+    ///   A keystroke passes `false`; a content event passes `true`. See
+    ///   `remeasureContent`.
+    private func recalculate(force: Bool = false, remeasure: Bool = false) {
         guard layoutWidth > 0 else { return }
         let containerWidth = layoutWidth - outerInset * 2
         let cardWidth = containerWidth - cardInset * 2
         guard cardWidth > 60 else { return }
 
+        if remeasure || force { remeasureContent(cardWidth: cardWidth) }
         let heights = solveHeights(cardWidth: cardWidth)
         let heightChanged = abs(heights.total - measuredHeight) > 0.5
 
@@ -1424,8 +1544,8 @@ final class ReplyComposerView: UIView {
     @objc private func clearSourceTapped() {
         sourceTextView.text = ""
         isSourceExpanded = false
-        setFocus(.source)
-        textsDidChange()
+        setFocus(.instruction)
+        textsDidChange(remeasure: true)
     }
 
     @objc private func generateTapped() {
@@ -1475,16 +1595,35 @@ final class ReplyComposerView: UIView {
         delegate?.composer(self, didResolveConflictWith: .cancel)
     }
 
+    /// The collapsed preview in the header: Paste when there is nothing
+    /// copied yet, otherwise open the full card.
+    @objc private func contextPreviewTapped() {
+        guard stage != .generating, stage != .conflict else { return }
+        if hasUsableSource {
+            isSourceExpanded = true
+            refreshControls()
+            recalculate(force: true)
+        } else {
+            delegate?.composerDidTapPasteSource(self)
+        }
+    }
+
+    @objc private func collapseSourceTapped() {
+        isSourceExpanded = false
+        if focus == .source { setFocus(.instruction) }
+        refreshControls()
+        recalculate(force: true)
+    }
+
     @objc private func sourceTapped(_ recognizer: UITapGestureRecognizer) {
         switch stage {
         case .composing:
             setFocus(.source)
             placeCaret(in: sourceTextView, at: recognizer.location(in: sourceTextView))
         case .result, .editing:
-            // In the result the quote is collapsed to a line; a tap is the only
-            // way to read the rest of it without going back.
-            isSourceExpanded.toggle()
-            recalculate(force: true)
+            // The card is only on screen here because the user expanded it, and
+            // the chevron in its caption row is what closes it again.
+            break
         case .generating, .conflict:
             break
         }
@@ -1514,5 +1653,14 @@ extension ReplyComposerView: UITextViewDelegate {
 
     func textViewDidChangeSelection(_ textView: UITextView) {
         updateFallbackCaret()
+    }
+}
+
+// MARK: - Quick actions
+
+extension ReplyComposerView: QuickActionRowDelegate {
+
+    func quickActionRow(_ row: QuickActionRow, didSelect intent: QuickIntent) {
+        applyIntent(intent)
     }
 }

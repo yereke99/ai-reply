@@ -52,6 +52,10 @@ final class KeyboardActionBar: UIView {
     /// never the composer's, so a future launch opens at the right size.
     var compactHeight: CGFloat { idleHeight }
 
+    /// True while the composer is showing the full copied message, which the
+    /// controller allows a little extra keyboard height for.
+    var wantsExpandedContext: Bool { isComposing && composer.wantsExpandedContext }
+
     var sourceText: String { composer.sourceText }
     var instructionText: String { composer.instructionText }
     var draftText: String { composer.replyDraft }

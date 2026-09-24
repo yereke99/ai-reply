@@ -58,6 +58,12 @@ struct AIReplyStrings: Sendable {
     /// Shown on the primary button after a failure, so one tap retries with
     /// everything the user typed still there.
     let retry: String
+    /// Title of the overflow menu that holds the quick intents which did not
+    /// fit the row at this width in this language.
+    let moreActions: String
+    /// Expand / collapse the quoted source message.
+    let showFullMessage: String
+    let hideFullMessage: String
 
     // Status
     let generating: String
@@ -135,6 +141,9 @@ struct AIReplyStrings: Sendable {
         back: "Back",
         editReply: "Edit reply",
         retry: "Try again",
+        moreActions: "More",
+        showFullMessage: "Show full message",
+        hideFullMessage: "Collapse message",
         generating: "Generating…",
         draftTitle: "Your reply",
         sourceTitle: "Reply to",
@@ -182,6 +191,9 @@ struct AIReplyStrings: Sendable {
         back: "Назад",
         editReply: "Изменить ответ",
         retry: "Повторить",
+        moreActions: "Ещё",
+        showFullMessage: "Показать полностью",
+        hideFullMessage: "Свернуть сообщение",
         generating: "Создаю ответ…",
         draftTitle: "Ваш ответ",
         sourceTitle: "Ответ на",
@@ -228,6 +240,9 @@ struct AIReplyStrings: Sendable {
         back: "Артқа",
         editReply: "Жауапты өңдеу",
         retry: "Қайталау",
+        moreActions: "Тағы",
+        showFullMessage: "Толық көрсету",
+        hideFullMessage: "Хабарламаны жию",
         generating: "Жауап дайындалуда…",
         draftTitle: "Сіздің жауабыңыз",
         sourceTitle: "Хабарламаға жауап",
@@ -274,6 +289,9 @@ struct AIReplyStrings: Sendable {
         back: "Orqaga",
         editReply: "Javobni tahrirlash",
         retry: "Qayta urinish",
+        moreActions: "Yana",
+        showFullMessage: "To‘liq ko‘rsatish",
+        hideFullMessage: "Xabarni yig‘ish",
         generating: "Javob tayyorlanmoqda…",
         draftTitle: "Javobingiz",
         sourceTitle: "Xabarga javob",

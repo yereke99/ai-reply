@@ -126,6 +126,10 @@ struct KeyboardMetrics {
     let width: CGFloat
     /// Letter/number rows, excluding the bottom control row.
     let contentRowCount: Int
+    /// Slots on the widest row of this page. Cyrillic layouts use 12, Latin and
+    /// the symbol planes use 10, and the gap between keys is sized from it so a
+    /// 12-column row does not spend a fifth of the screen on whitespace.
+    var gridColumns: Int = 10
 
     var rowCount: Int { contentRowCount + 1 }
 
@@ -133,11 +137,36 @@ struct KeyboardMetrics {
     var topPadding: CGFloat { 5 }
     var bottomPadding: CGFloat { 5 }
 
-    var columnGap: CGFloat { width >= 375 ? 6 : 5 }
-    var rowGap: CGFloat { rowCount >= 5 ? 8 : 11 }
+    /// ONE gap for the whole page, derived from its widest row.
+    ///
+    /// It has to be page-wide rather than per-row: every row is solved against
+    /// the same unit width, so giving rows their own gaps would put the columns
+    /// out of alignment with each other. A 12-column Cyrillic row at the Latin
+    /// 6pt gap spends 66pt of a 390pt screen on gaps and leaves 26.5pt keys;
+    /// at 4pt it spends 44pt and leaves 28.3pt keys, which is the difference
+    /// between mistyping `ъ` and not.
+    var columnGap: CGFloat {
+        if gridColumns >= 12 {
+            return width >= 390 ? 4 : 3.5
+        }
+        return width >= 375 ? 6 : 5
+    }
 
-    /// Native iOS portrait keys are ~42-46pt tall. We stay in that band and only
-    /// compress for the taller 5-row Kazakh layout.
+    var rowGap: CGFloat { rowCount >= 5 ? 7 : 11 }
+
+    /// The shortest key this keyboard will ever draw. Below this the keys stop
+    /// being comfortable to hit, and no amount of AI chrome above them is worth
+    /// that: the AI area is what gives way, never this.
+    static let minimumComfortableKeyHeight: CGFloat = 42
+
+    /// Native iOS portrait keys are ~42-48pt tall.
+    ///
+    /// The 5-row Kazakh layout used to be scaled to 85.5% of the base height,
+    /// which took a 46pt key down to 39pt - noticeably smaller than the same
+    /// user's Russian keyboard and the single loudest complaint about this
+    /// keyboard. The extra row is now paid for out of the row GAPS and 3pt of
+    /// key height, with a hard floor underneath, so Kazakh keys stay in the
+    /// same band as every other layout.
     var keyHeight: CGFloat {
         let base: CGFloat
         if width >= 410 {
@@ -147,7 +176,8 @@ struct KeyboardMetrics {
         } else {
             base = 43
         }
-        return rowCount >= 5 ? (base * 0.855).rounded() : base
+        guard rowCount >= 5 else { return base }
+        return max(Self.minimumComfortableKeyHeight, base - 3)
     }
 
     var typingHeight: CGFloat {
@@ -182,7 +212,9 @@ struct KeyboardMetrics {
         case .character:
             return keyHeight >= 44 ? 23 : 21
         case .compactCharacter:
-            return keyHeight >= 44 ? 20 : 18
+            // The tighter 12-column gap bought ~2pt of key width back, which
+            // is enough to stop shrinking Cyrillic glyphs quite so far.
+            return keyHeight >= 44 ? 20 : 19
         case .control:
             return 15
         case .space:

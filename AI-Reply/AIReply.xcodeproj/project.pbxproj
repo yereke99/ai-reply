@@ -83,6 +83,7 @@
 		F72E10673C97DC256B5C60A5 /* ReplyTransport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1180B013DC019C3D7F3C19B7 /* ReplyTransport.swift */; };
 		F8B0410EFE3FD558306E8E80 /* BusinessContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56B2FC5E2AB5555C2807CD36 /* BusinessContext.swift */; };
 		F9C08C12FDB7B7ED2DEB3AA4 /* KeyboardActionBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D232A0E7FFFC95C7AB549C /* KeyboardActionBar.swift */; };
+		854BCFACD421467DAE64B800 /* QuickActionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FAA486EB7E24A46BE208D4D /* QuickActionRow.swift */; };
 		FB68C3381390555C81D77917 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4871B7428808BDBAA314E78 /* DesignSystem.swift */; };
 		FEF45880C36B767675C5DCD3 /* CommunicationTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90E39000C4ED61ADBA6BA9DB /* CommunicationTypes.swift */; };
 		F3FBEA90B20DB4838F8E6484 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = D79CAFADAE0D0010BC1CE45D /* APIClient.swift */; };
@@ -160,6 +161,7 @@
 		4764601C3E9C73FC93190203 /* TemplateSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateSummary.swift; sourceTree = "<group>"; };
 		4DF5C58251599513C8873CED /* SecureCredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecureCredentialStore.swift; sourceTree = "<group>"; };
 		50D232A0E7FFFC95C7AB549C /* KeyboardActionBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardActionBar.swift; sourceTree = "<group>"; };
+		6FAA486EB7E24A46BE208D4D /* QuickActionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionRow.swift; sourceTree = "<group>"; };
 		50D3D2C111D29A7911D507A8 /* AIReplyServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIReplyServiceTests.swift; sourceTree = "<group>"; };
 		53F7E07689CE9B522244F3DA /* AIReplyService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIReplyService.swift; sourceTree = "<group>"; };
 		56B2FC5E2AB5555C2807CD36 /* BusinessContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusinessContext.swift; sourceTree = "<group>"; };
@@ -338,6 +340,7 @@
 				67FD1E127D47C9EC00B66392 /* KeyboardTheme.swift */,
 				E0B09DA09802A451D1A5DC4D /* KeyboardViewController.swift */,
 				E0C55849FB32AC9B82420270 /* KeyButton.swift */,
+				6FAA486EB7E24A46BE208D4D /* QuickActionRow.swift */,
 				7B2A3BF3800661B3D311B44C /* ReplyComposerView.swift */,
 				B7785D61C26FC89396FE9CD3 /* ReplyContext.swift */,
 				1B5B97E2C49D4BC68B094D40 /* TemplateBarView.swift */,
@@ -631,6 +634,7 @@
 				0BEC991734DCB83CA0A899DE /* KeyboardStrings.swift in Sources */,
 				6DA44B1E7DC2E286D5B2F66E /* KeyboardTheme.swift in Sources */,
 				4A04FFCBE457A4EDEFCEFE16 /* KeyboardViewController.swift in Sources */,
+				854BCFACD421467DAE64B800 /* QuickActionRow.swift in Sources */,
 				57F13181CF26203F625242F1 /* ProfileStore.swift in Sources */,
 				ED170315BF59C4EA9D283084 /* ReplyComposerView.swift in Sources */,
 				DA2A3CD236D4535B23E54134 /* ReplyContext.swift in Sources */,

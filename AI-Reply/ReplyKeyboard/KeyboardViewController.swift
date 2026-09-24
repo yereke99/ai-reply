@@ -75,7 +75,7 @@ final class KeyboardViewController: UIInputViewController {
 
     private var theme = KeyboardTheme(isDark: true)
     private var strings = KeyboardStrings.forLanguage(.english)
-    private var metrics = KeyboardMetrics(width: 375, contentRowCount: 3)
+    private var metrics = KeyboardMetrics(width: 375, contentRowCount: 3, gridColumns: 10)
 
     // MARK: Views
 
@@ -385,7 +385,11 @@ final class KeyboardViewController: UIInputViewController {
     }
 
     private func rebuild() {
-        metrics = KeyboardMetrics(width: max(view.bounds.width, 1), contentRowCount: contentRowCount)
+        metrics = KeyboardMetrics(
+            width: max(view.bounds.width, 1),
+            contentRowCount: contentRowCount,
+            gridColumns: activePageIdentity.gridColumns
+        )
         displayActiveKeyboardPage()
         updateGeometry()
         scheduleIdlePrewarm()
@@ -409,7 +413,7 @@ final class KeyboardViewController: UIInputViewController {
     /// minimum does not fit it returns that minimum rather than clipping, which
     /// is the one case where this is a target and not a hard cap.
     private func maximumActionBarHeight(rowsHeight: CGFloat) -> CGFloat {
-        let fraction: CGFloat
+        var fraction: CGFloat
         if screenHeight >= 850 {
             fraction = 0.55
         } else if screenHeight >= 800 {
@@ -418,6 +422,13 @@ final class KeyboardViewController: UIInputViewController {
             fraction = 0.60
         } else {
             fraction = 0.64
+        }
+        // Reading the whole copied message is an explicit, momentary request
+        // for room, and the keyboard takes it straight back on collapse. At
+        // rest the composer now sits well under this ceiling, so the ordinary
+        // budget stays where it was.
+        if actionBar.wantsExpandedContext {
+            fraction = min(0.72, fraction + 0.09)
         }
         let fixed = metrics.actionBarGap + metrics.topPadding + rowsHeight + metrics.bottomPadding
         return max(metrics.actionBarHeight, (screenHeight * fraction - fixed).rounded(.down))
@@ -518,7 +529,11 @@ final class KeyboardViewController: UIInputViewController {
             return cached
         }
 
-        let pageMetrics = KeyboardMetrics(width: max(width, 1), contentRowCount: identity.contentRowCount)
+        let pageMetrics = KeyboardMetrics(
+            width: max(width, 1),
+            contentRowCount: identity.contentRowCount,
+            gridColumns: identity.gridColumns
+        )
         let page = makeKeyboardPage(for: identity, metrics: pageMetrics)
         // Deliberately NOT added to the hierarchy here. A cached page that is
         // not on screen must cost construction only; `install` puts it in when
